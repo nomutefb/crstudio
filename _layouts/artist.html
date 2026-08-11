@@ -29,12 +29,16 @@ layout: default
 </section>
 
 {% if a.gallery and a.gallery != empty %}
-<section class="wrap">
-  <p class="label label--muted reveal" style="margin-bottom:24px">WORKS</p>
-  <div class="gallery-grid">
+<section class="wrap carousel carousel--works">
+  <p class="label label--muted reveal" style="margin-bottom:20px">WORKS — {{ a.gallery | size }}</p>
+  <div class="carousel-track reveal">
     {% for g in a.gallery %}
-    <figure class="reveal"><img src="{{ g | relative_url }}" alt="{{ a.title }} 작업" loading="lazy"></figure>
+    <figure><img src="{{ g | relative_url }}" alt="{{ a.title }} 작업" loading="lazy"></figure>
     {% endfor %}
+  </div>
+  <div class="carousel-nav">
+    <button class="carousel-btn" data-dir="prev" aria-label="이전">←</button>
+    <button class="carousel-btn" data-dir="next" aria-label="다음">→</button>
   </div>
 </section>
 {% endif %}
