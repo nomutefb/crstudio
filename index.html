@@ -53,26 +53,29 @@ body_class: book
   </div>
 </section>
 
-<!-- 03 · PROJECTS 소식 -->
-<section class="book-page wrap" id="projects">
-  <div class="section-head reveal">
-    <h2 class="section-title display">Projects</h2>
-    <a class="section-link label" href="{{ '/projects/' | relative_url }}">Explore All {{ site.projects | size }} →</a>
+<!-- 03 · PROJECTS 소식 — 포스터 벨트 -->
+<section class="book-page" id="projects">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title display">Projects</h2>
+      <a class="section-link label" href="{{ '/projects/' | relative_url }}">Explore All {{ site.projects | size }} →</a>
+    </div>
   </div>
-  <div class="card-grid">
-    {% assign posts = site.projects | sort: "date" | reverse %}
-    {% for p in posts limit: 3 %}
-    {% assign phn = forloop.index | modulo: 6 | plus: 1 %}
-    {% if p.cover and p.cover != "" %}{% assign pimg = p.cover | relative_url %}{% else %}{% assign pimg = '/assets/img/ph/ph-' | append: phn | append: '.svg' | relative_url %}{% endif %}
-    <a class="post-card reveal" href="{{ p.url | relative_url }}">
-      <div class="thumb"><img src="{{ pimg }}" alt="{{ p.title }}" loading="lazy"></div>
-      <div class="meta">
-        <span class="label label--muted">{{ p.category }}</span>
-        <span class="label label--muted">{{ p.date | date: "%Y.%m" }}</span>
-      </div>
-      <h3 class="title">{{ p.title }}</h3>
-    </a>
-    {% endfor %}
+  <div class="poster-belt reveal" data-belt>
+    <div class="poster-track" data-belt-track>
+      {% assign posts = site.projects | sort: "date" | reverse %}
+      {% for p in posts %}
+      {% assign phn = forloop.index | modulo: 6 | plus: 1 %}
+      {% if p.cover and p.cover != "" %}{% assign pimg = p.cover | relative_url %}{% else %}{% assign pimg = '/assets/img/ph/ph-' | append: phn | append: '.svg' | relative_url %}{% endif %}
+      <a class="poster-card" href="{{ p.url | relative_url }}">
+        <figure><img src="{{ pimg }}" alt="{{ p.title }}" loading="lazy"></figure>
+        <span class="pcap">
+          <span class="label label--muted">{{ p.category }} · {{ p.date | date: "%Y.%m" }}</span>
+          <span class="pt">{{ p.title }}</span>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
   </div>
 </section>
 
@@ -86,20 +89,8 @@ body_class: book
     </div>
   </div>
   <p class="prog-note reveal">{{ site.data.program.note }}</p>
-  <div class="prog-list reveal">
-    {% for y in site.data.program.years limit: 4 %}
-    {% assign cohort_artists = site.artists | where: "cohort", y.cohort %}
-    <div class="prog-row">
-      <span class="py display">{{ y.year }}</span>
-      <span class="pc">
-        <span class="t">{{ y.cohort }}기 입주작가</span>
-        <span class="a">{% for ca in cohort_artists %}{{ ca.title }}{% unless forloop.last %} · {% endunless %}{% endfor %}</span>
-      </span>
-      <span class="pe">
-        {% for ev in y.events %}<span class="prog-chip">{{ ev }}</span>{% endfor %}
-      </span>
-    </div>
-    {% endfor %}
+  <div class="reveal">
+    {% include program-gantt.html limit=4 %}
   </div>
 </section>
 

@@ -1,0 +1,31 @@
+{% assign lim = include.limit | default: 99 %}
+<div class="pg">
+  <div class="pg-row pg-headrow" aria-hidden="true">
+    <div class="pg-info"><span class="label label--muted">YEAR — 기수</span></div>
+    <div class="pg-months">
+      {% for m in (1..12) %}<span>{{ m }}</span>{% endfor %}
+    </div>
+  </div>
+  {% for y in site.data.program.years limit: lim %}
+  {% assign cohort_artists = site.artists | where: "cohort", y.cohort %}
+  <div class="pg-row">
+    <div class="pg-info">
+      <span class="py display">{{ y.year }}</span>
+      <span class="pc">
+        <span class="t">{{ y.cohort }}기 입주작가</span>
+        <span class="a">{% for ca in cohort_artists %}<a href="{{ ca.url | relative_url }}">{{ ca.title }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}</span>
+      </span>
+    </div>
+    <div class="pg-trackwrap">
+      <div class="pg-track">
+        {% for ev in y.events %}{% if ev.from %}
+        {% assign colend = ev.to | default: ev.from | plus: 1 %}
+        <span class="pg-pill" style="grid-column: {{ ev.from }} / {{ colend }};" title="{{ ev.label }}">{{ ev.label }}</span>
+        {% endif %}{% endfor %}
+      </div>
+      {% capture undated %}{% for ev in y.events %}{% unless ev.from %}<span class="prog-chip">{{ ev.label }}</span>{% endunless %}{% endfor %}{% endcapture %}
+      {% if undated contains "prog-chip" %}<div class="pg-extra">{{ undated }}</div>{% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>

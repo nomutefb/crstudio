@@ -36,21 +36,9 @@ permalink: /program/
 </section>
 
 <section class="wrap" style="padding-bottom:clamp(72px,12vh,140px)">
-  <p class="label label--muted reveal" style="margin-bottom:24px">TIMELINE — 연도별 흐름</p>
-  <div class="prog-list reveal">
-    {% for y in site.data.program.years %}
-    {% assign cohort_artists = site.artists | where: "cohort", y.cohort %}
-    <div class="prog-row">
-      <span class="py display">{{ y.year }}</span>
-      <span class="pc">
-        <span class="t">{{ y.cohort }}기 입주작가</span>
-        <span class="a">{% for ca in cohort_artists %}<a href="{{ ca.url | relative_url }}" style="border-bottom:1px solid var(--line)">{{ ca.title }}</a>{% unless forloop.last %} · {% endunless %}{% endfor %}</span>
-      </span>
-      <span class="pe">
-        {% for ev in y.events %}<span class="prog-chip">{{ ev }}</span>{% endfor %}
-      </span>
-    </div>
-    {% endfor %}
+  <p class="label label--muted reveal" style="margin-bottom:24px">TIMELINE — 연도별 흐름 (1–12월)</p>
+  <div class="reveal">
+    {% include program-gantt.html %}
   </div>
   <p class="label label--muted reveal" style="margin-top:28px">자료 기준 — GS칼텍스 예울마루 창작스튜디오 아카이브. 세부 일정은 관리자에서 계속 보완됩니다.</p>
 </section>
