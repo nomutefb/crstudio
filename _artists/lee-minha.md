@@ -1,14 +1,26 @@
 ---
 title: "이민하"
-ename: ""
+ename: "MINHA LEE"
 cohort: 1
 year: 2020
-genre: ""
-thumb: ""
-ph: 3
-gallery: []
+genre: "서양화"
+thumb: "/assets/uploads/artists/lee-minha/portrait.jpg"
+ph: 4
+gallery:
+  - "/assets/uploads/artists/lee-minha/work-01.png"
+  - "/assets/uploads/artists/lee-minha/work-02.png"
+  - "/assets/uploads/artists/lee-minha/work-03.png"
+  - "/assets/uploads/artists/lee-minha/work-04.png"
+  - "/assets/uploads/artists/lee-minha/work-05.png"
 links: []
 ---
-작가 소개가 아직 등록되지 않았습니다.
+닮음과 닮지 않음의 사이(似與不似之間)에서 장소의 감정과 기억을 그리는 바다 풍경.
 
-관리자 페이지(`/admin`)에서 이 작가 문서를 열어 소개 글, 장르, 프로필 사진(thumb), 작업 이미지(gallery)를 채워 주세요.
+**주요 이력**
+
+- 경기대학교 서양화과 · 조형대학원 미술학 석사
+- 개인전 23회(1991–2019) — 2018 달빛갤러리 여수 · 2002 신세계갤러리 광주
+- 단체전 440여 회 참여
+- 2014 국립현대미술관 미술은행 선정 · 2006 구상전 대상
+
+*자료 기준: GS칼텍스 예울마루 창작스튜디오 아카이브*

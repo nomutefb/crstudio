@@ -35,39 +35,33 @@ nav: home
   </div>
 </section>
 
-<!-- ARTISTS -->
+<!-- ARTISTS — 현재 기수 -->
 <section class="section wrap" id="artists">
   <div class="section-head reveal">
-    <h2 class="section-title display">Artists <span class="count">{{ site.artists | size }}</span></h2>
-    <a class="section-link label" href="{{ '/artists/' | relative_url }}">All Artists →</a>
+    <h2 class="section-title display">Artists <span class="count">{{ latest_cohort.cohort }}기</span></h2>
+    <div style="text-align:right">
+      <span class="label label--muted" style="display:block;margin-bottom:8px">NOW IN RESIDENCE — {{ latest_cohort.year }}</span>
+      <a class="section-link label" href="{{ '/artists/' | relative_url }}">All Artists {{ site.artists | size }} →</a>
+    </div>
   </div>
 
-  <div class="cohort-tabs reveal" data-cohort-tabs data-target="#home-artist-list">
-    <button class="cohort-tab is-active" data-filter="{{ latest_cohort.cohort }}">현 기수 · {{ latest_cohort.cohort }}기</button>
-    {% assign cohorts = site.artists | map: "cohort" | uniq | sort | reverse %}
-    {% for c in cohorts %}{% unless c == latest_cohort.cohort %}
-    <button class="cohort-tab" data-filter="{{ c }}">{{ c }}기</button>
-    {% endunless %}{% endfor %}
-    <button class="cohort-tab" data-filter="all">전체</button>
-  </div>
-
-  <div class="artist-list reveal" id="home-artist-list">
-    {% assign idx = 0 %}
-    {% for a in artists_sorted %}
-      {% assign idx = idx | plus: 1 %}
-      {% capture idxs %}{% if idx < 10 %}0{% endif %}{{ idx }}{% endcapture %}
-      {% include artist-row.html artist=a idx=idxs %}
+  {% assign current = site.artists | where: "cohort", latest_cohort.cohort | sort: "ename" %}
+  <div class="artist-card-grid">
+    {% for a in current %}
+    {% if a.thumb and a.thumb != "" %}{% assign cimg = a.thumb | relative_url %}{% else %}{% assign cimg = '/assets/img/ph/ph-' | append: a.ph | append: '.svg' | relative_url %}{% endif %}
+    <a class="artist-card reveal" href="{{ a.url | relative_url }}">
+      <figure class="ac-photo"><img src="{{ cimg }}" alt="{{ a.title }}" loading="lazy"></figure>
+      <div class="ac-meta">
+        <span class="ac-name">{% if a.ename and a.ename != "" %}{{ a.ename }}{% else %}{{ a.title }}{% endif %}</span>
+        <span class="ac-sub label label--muted">{{ a.title }}{% if a.genre and a.genre != "" %} · {{ a.genre }}{% endif %}</span>
+      </div>
+    </a>
     {% endfor %}
   </div>
-  <script>
-    /* 초기 상태: 현 기수만 표시 */
-    document.addEventListener("DOMContentLoaded", function () {
-      var latest = "{{ latest_cohort.cohort }}";
-      document.querySelectorAll("#home-artist-list [data-cohort]").forEach(function (r) {
-        if (r.getAttribute("data-cohort") !== latest) r.classList.add("is-hidden");
-      });
-    });
-  </script>
+
+  <div class="section-cta reveal">
+    <a class="btn" href="{{ '/artists/' | relative_url }}">All Cohorts · 전체 아카이브</a>
+  </div>
 </section>
 
 <!-- PROJECTS / 게시물 -->

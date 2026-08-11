@@ -472,6 +472,45 @@ ul { list-style: none; }
 
 .cursor-img img { width: 100%; height: 100%; object-fit: cover; }
 
+/* current cohort photo cards (home) */
+
+.artist-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-md);
+}
+
+.artist-card { display: block; }
+
+.artist-card .ac-photo {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--paper-2);
+  margin-bottom: 16px;
+}
+
+.artist-card .ac-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+
+.artist-card:hover .ac-photo img { transform: scale(1.05); }
+
+.artist-card .ac-name {
+  display: block;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(20px, 2.2vw, 34px);
+  line-height: 1.05;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.artist-card:hover .ac-name { opacity: 0.55; }
+
+.artist-card .ac-sub { display: block; margin-top: 8px; }
+
 /* cohort group heading (artists index) */
 
 .cohort-group { margin-bottom: clamp(40px, 8vh, 90px); }
@@ -896,6 +935,7 @@ html.js.gsap-on .reveal { transition: none; }
 
 @media (max-width: 900px) {
   .card-grid { grid-template-columns: 1fr 1fr; }
+  .artist-card-grid { grid-template-columns: 1fr 1fr; }
   .stat-grid { grid-template-columns: 1fr 1fr; }
   .intro-grid, .project-cols, .detail-cols, .artist-grid { grid-template-columns: 1fr; }
   .artist-photo, .detail-cols .side, .intro-label { position: static; }
