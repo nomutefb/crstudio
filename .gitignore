@@ -1,7 +1,9 @@
 _site/
 .jekyll-cache/
 .jekyll-metadata
-vendor/
+/vendor/
 node_modules/
 .DS_Store
 _to_delete/
+_incoming*
+_v2b*

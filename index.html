@@ -10,8 +10,8 @@ nav: home
 <section class="hero wrap">
   <p class="hero-kicker label">{{ s.hero.kicker }}</p>
   <h1 class="hero-title display">
-    <span class="row">{{ s.hero.line1 }}</span>
-    <span class="row row--indent outline-text">{{ s.hero.line2 }}</span>
+    <span class="row-mask"><span class="row" data-hero-row>{{ s.hero.line1 }}</span></span>
+    <span class="row-mask"><span class="row row--indent outline-text" data-hero-row>{{ s.hero.line2 }}</span></span>
   </h1>
   <div class="hero-sub">
     <p class="hero-tagline">{{ s.hero.tagline }}</p>

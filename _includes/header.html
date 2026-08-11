@@ -6,5 +6,16 @@
     <a class="nav-hide-m" href="{{ '/#about' | relative_url }}">About</a>
     <a class="nav-hide-m" href="{{ '/#contact' | relative_url }}">Contact</a>
     <a class="nav-admin" href="{{ '/admin/' | relative_url }}" title="관리자">Admin</a>
+    <button class="nav-burger" type="button" aria-label="메뉴 열기" data-menu-open>Menu</button>
   </nav>
 </header>
+
+<div class="mobile-menu" data-mobile-menu aria-hidden="true">
+  <button class="mobile-menu-close" type="button" aria-label="메뉴 닫기" data-menu-close>Close</button>
+  <p class="label mm-label">{{ site.data.settings.site_name }} — MENU</p>
+  <a href="{{ '/' | relative_url }}">Home</a>
+  <a href="{{ '/artists/' | relative_url }}">Artists</a>
+  <a href="{{ '/projects/' | relative_url }}">Projects</a>
+  <a href="{{ '/#contact' | relative_url }}">Contact</a>
+  <a href="{{ '/admin/' | relative_url }}">Admin</a>
+</div>

@@ -1,37 +1,38 @@
 /* ─────────────────────────────────────────────
    CREATIVE STUDIO — original design system
    paper & ink, editorial display type
+   값은 tokens.css의 변수만 사용한다 (DESIGN.md 참고)
    ───────────────────────────────────────────── */
-
-:root {
-  --paper: #f4f1ea;
-  --paper-2: #ebe7dd;
-  --ink: #141311;
-  --muted: #7d786e;
-  --line: rgba(20, 19, 17, 0.14);
-  --line-strong: rgba(20, 19, 17, 0.55);
-  --dark: #161511;
-  --dark-line: rgba(244, 241, 234, 0.16);
-  --font-display: "Anton", "Pretendard Variable", Pretendard, sans-serif;
-  --font-label: "Jost", "Pretendard Variable", Pretendard, sans-serif;
-  --font-body: "Pretendard Variable", Pretendard, "Jost", -apple-system, sans-serif;
-  --pad: clamp(20px, 4vw, 64px);
-  --head-h: 72px;
-}
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
+html.js.lenis-on { scroll-behavior: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto; }
+.lenis.lenis-stopped { overflow: hidden; }
 
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--fs-body);
   line-height: 1.75;
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+/* film grain — 종이 질감 오버레이 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
 }
 
 img { display: block; max-width: 100%; }
@@ -93,14 +94,17 @@ ul { list-style: none; }
 .site-head {
   position: fixed;
   inset: 0 0 auto 0;
-  z-index: 100;
+  z-index: var(--z-head);
   height: var(--head-h);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--pad);
-  transition: background 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
+  transition: background var(--dur-fast) ease, box-shadow var(--dur-fast) ease,
+    height var(--dur-fast) ease, transform var(--dur-med) var(--ease-inout);
 }
+
+.site-head.is-hidden { transform: translateY(-110%); }
 
 .site-head.is-scrolled {
   background: rgba(244, 241, 234, 0.92);
@@ -147,7 +151,77 @@ ul { list-style: none; }
 
 .nav-admin { color: var(--muted); }
 
-.nav-toggle { display: none; }
+/* mobile menu */
+
+.nav-burger {
+  display: none;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  padding: 8px 18px;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-menu);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--pad);
+  gap: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-med) var(--ease-out), visibility 0s linear var(--dur-med);
+}
+
+.mobile-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dur-med) var(--ease-out);
+}
+
+.mobile-menu a {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(44px, 13vw, 80px);
+  line-height: 1.05;
+  transform: translateY(24px);
+  opacity: 0;
+  transition: transform var(--dur-med) var(--ease-out), opacity var(--dur-med) var(--ease-out);
+}
+
+.mobile-menu.is-open a { transform: none; opacity: 1; }
+.mobile-menu.is-open a:nth-child(2) { transition-delay: 0.06s; }
+.mobile-menu.is-open a:nth-child(3) { transition-delay: 0.12s; }
+.mobile-menu.is-open a:nth-child(4) { transition-delay: 0.18s; }
+.mobile-menu.is-open a:nth-child(5) { transition-delay: 0.24s; }
+
+.mobile-menu .mm-label { margin-bottom: 18px; color: var(--muted); }
+
+.mobile-menu-close {
+  position: absolute;
+  top: 20px;
+  right: var(--pad);
+  background: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  padding: 8px 18px;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+}
 
 /* ── hero ─────────────────────────────────── */
 
@@ -158,6 +232,29 @@ ul { list-style: none; }
   justify-content: flex-end;
   padding-top: var(--head-h);
   position: relative;
+  overflow: hidden;
+}
+
+/* smoke — 히어로 뒤에서 천천히 떠다니는 잉크 안개 */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 6%;
+  right: -12%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 860px;
+  max-height: 860px;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(20, 19, 17, 0.075), rgba(20, 19, 17, 0) 68%);
+  filter: blur(28px);
+  animation: smoke-drift 26s var(--ease-inout) infinite alternate;
+}
+
+@keyframes smoke-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(-10vw, 6vh, 0) scale(1.18); }
+  to   { transform: translate3d(-4vw, -4vh, 0) scale(0.94); }
 }
 
 .hero-kicker {
@@ -174,11 +271,13 @@ ul { list-style: none; }
 }
 
 .hero-title {
-  font-size: clamp(64px, 16.5vw, 240px);
+  font-size: var(--fs-hero);
   margin-left: -0.04em;
+  position: relative;
 }
 
 .hero-title .row { display: block; }
+.hero-title .row-mask { display: block; overflow: hidden; }
 
 .hero-title .row--indent { padding-left: clamp(40px, 12vw, 200px); }
 
@@ -361,17 +460,15 @@ ul { list-style: none; }
 
 .cursor-img {
   position: fixed;
-  z-index: 60;
+  top: 0;
+  left: 0;
+  z-index: var(--z-float);
   width: 240px;
   height: 300px;
   pointer-events: none;
   overflow: hidden;
   opacity: 0;
-  transform: scale(0.92);
-  transition: opacity 0.25s ease, transform 0.25s ease;
 }
-
-.cursor-img.is-on { opacity: 1; transform: scale(1); }
 
 .cursor-img img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -776,14 +873,23 @@ ul { list-style: none; }
 
 .page-hero .desc { max-width: 52ch; color: var(--muted); margin-top: 20px; word-break: keep-all; }
 
-/* ── reveal animation ─────────────────────── */
+/* ── reveal animation (html.js일 때만 숨김 → JS 없으면 항상 보임) ── */
 
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.65, 0.25, 1); }
-.reveal.is-in { opacity: 1; transform: none; }
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-y));
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+
+html.js .reveal.is-in { opacity: 1; transform: none; }
+
+/* GSAP가 제어할 때는 CSS 트랜지션을 끈다 */
+html.js.gsap-on .reveal { transition: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
+  html.js .reveal { opacity: 1; transform: none; transition: none; }
   .marquee-track { animation: none; }
+  .hero::before { animation: none; }
 }
 
 /* ── responsive ───────────────────────────── */
@@ -798,12 +904,19 @@ ul { list-style: none; }
 }
 
 @media (max-width: 640px) {
-  .site-nav { gap: 14px; }
-  .site-nav .nav-hide-m { display: none; }
+  .site-nav a { display: none; }
+  .site-nav .nav-burger { display: inline-block; }
   .card-grid { grid-template-columns: 1fr; }
   .artist-row { grid-template-columns: 1fr auto; }
   .artist-row .idx { display: none; }
-  .hero { min-height: 80vh; }
+  .artist-meta .kname { font-size: 12px; }
+  .hero { min-height: 82vh; }
+  .hero-sub { flex-direction: column; align-items: flex-start; gap: 14px; }
   .gallery-grid { grid-template-columns: 1fr; }
   .gallery-grid figure:nth-child(3n) { grid-column: auto; }
+  .stat .num { font-size: clamp(38px, 12vw, 64px); }
+  .pn a { padding-left: 0; }
+  .pn a + a { padding-left: 16px; }
+  .foot-links { flex-wrap: wrap; gap: 16px; }
+  .carousel-track figure { flex-basis: 84vw; }
 }
