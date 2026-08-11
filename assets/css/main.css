@@ -1113,35 +1113,29 @@ ul { list-style: none; }
 .book-dots button.is-active { background: var(--ink); transform: scale(1.35); }
 
 @media (min-width: 901px) {
-  /* JS 페이지 넘김(이징 트윈)과 충돌하지 않도록 네이티브 smooth 해제 */
-  html.snap-on { scroll-behavior: auto; }
+  /* 네이티브 스냅: 관성은 살리고(스냅-스톱 없음) 페이지 경계에 정착 */
+  html.snap-on { scroll-snap-type: y mandatory; }
 
   body.book .book-page,
   body.book .site-foot {
     min-height: 100svh;
+    scroll-snap-align: start;
   }
 
   body.book .book-page {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: safe center;
     padding-top: calc(var(--head-h) + 4px);
-    padding-bottom: 20px;
-    overflow: hidden;
+    padding-bottom: 24px;
   }
 
-  body.book .book-cover { padding-top: 0; padding-bottom: 0; justify-content: flex-end; }
+  body.book .book-cover { padding-top: 0; padding-bottom: 0; justify-content: flex-end; overflow: hidden; }
   body.book .book-cover .hero { min-height: 0; flex: 1; }
 
-  body.book .band { justify-content: center; }
+  body.book .band { justify-content: safe center; }
 
   body.book .section-head { margin-bottom: clamp(18px, 4vh, 40px); }
-
-  /* 사진은 4:5 비율 유지 — 화면이 낮을 때만 높이를 제한하고 상단(얼굴) 기준으로 자름 */
-  body.book .ac-photo { max-height: 52svh; }
-  body.book .ac-photo img { object-position: 50% 12%; }
-  body.book .post-card .thumb { max-height: 44svh; }
-  body.book .post-card .thumb img { object-position: top; }
 
   body.book .site-foot {
     display: flex;

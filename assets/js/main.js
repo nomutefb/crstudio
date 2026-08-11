@@ -11,43 +11,11 @@
   var hasGsap = typeof window.gsap !== "undefined";
   var lenis = null;
 
-  /* ── book(잡지) 모드: 휠 한 번 = 한 페이지, GSAP 이징으로 부드럽게 넘김 ── */
+  /* ── book(잡지) 모드: 네이티브 스냅(관성 유지) + 페이지 도트 ── */
   var bookMode = document.body.classList.contains("book") && window.matchMedia("(min-width: 901px)").matches;
-  if (bookMode && !reduced && hasGsap) {
+  if (bookMode) {
     docEl.classList.add("snap-on");
     var pages = Array.prototype.slice.call(document.querySelectorAll(".book-page, .site-foot"));
-    var current = 0;
-    var flipping = false;
-    var cooldownUntil = 0;
-    var dotEls = [];
-
-    var pageTop = function (i) { return pages[i].getBoundingClientRect().top + window.scrollY; };
-
-    var setDot = function (i) {
-      dotEls.forEach(function (d, j) { d.classList.toggle("is-active", j === i); });
-    };
-
-    var flipTo = function (i, fast) {
-      i = Math.max(0, Math.min(pages.length - 1, i));
-      if (flipping) return;
-      flipping = true;
-      current = i;
-      setDot(i);
-      var state = { y: window.scrollY };
-      window.gsap.to(state, {
-        y: pageTop(i),
-        duration: fast ? 0.7 : 1.05,
-        ease: "power3.inOut",
-        overwrite: true,
-        onUpdate: function () { window.scrollTo(0, state.y); },
-        onComplete: function () {
-          flipping = false;
-          cooldownUntil = performance.now() + 380;
-        }
-      });
-    };
-
-    /* 도트 내비 */
     if (pages.length > 1) {
       var dots = document.createElement("nav");
       dots.className = "book-dots";
@@ -56,53 +24,20 @@
         var b = document.createElement("button");
         b.type = "button";
         b.setAttribute("aria-label", "페이지 " + (i + 1));
-        b.addEventListener("click", function () { flipTo(i); });
+        b.addEventListener("click", function () { pg.scrollIntoView({ behavior: "smooth" }); });
         dots.appendChild(b);
       });
       document.body.appendChild(dots);
-      dotEls = Array.prototype.slice.call(dots.querySelectorAll("button"));
-      setDot(0);
-    }
-
-    /* 휠: 한 제스처 = 한 페이지 */
-    window.addEventListener("wheel", function (e) {
-      e.preventDefault();
-      if (flipping || performance.now() < cooldownUntil) return;
-      if (Math.abs(e.deltaY) < 14) return;
-      flipTo(current + (e.deltaY > 0 ? 1 : -1));
-    }, { passive: false });
-
-    /* 키보드 */
-    window.addEventListener("keydown", function (e) {
-      var tag = (e.target.tagName || "").toLowerCase();
-      if (tag === "input" || tag === "textarea" || tag === "select") return;
-      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); flipTo(current + 1); }
-      else if (e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); flipTo(current - 1); }
-      else if (e.key === "Home") { e.preventDefault(); flipTo(0); }
-      else if (e.key === "End") { e.preventDefault(); flipTo(pages.length - 1); }
-    });
-
-    /* 스크롤바 직접 조작 시 현재 페이지 동기화 */
-    var syncT = null;
-    window.addEventListener("scroll", function () {
-      if (flipping) return;
-      clearTimeout(syncT);
-      syncT = setTimeout(function () {
-        var y = window.scrollY + window.innerHeight * 0.5;
-        for (var i = pages.length - 1; i >= 0; i--) {
-          if (pageTop(i) <= y) { current = i; setDot(i); break; }
-        }
-      }, 120);
-    }, { passive: true });
-
-    /* 해시 직링크 → 해당 페이지로 */
-    if (location.hash) {
-      var ht = document.querySelector(location.hash);
-      if (ht) {
-        var hp = ht.closest(".book-page, .site-foot");
-        var hi = pages.indexOf(hp);
-        if (hi > -1) setTimeout(function () { flipTo(hi, true); }, 350);
-      }
+      var dotEls = Array.prototype.slice.call(dots.querySelectorAll("button"));
+      var pageIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var idx = pages.indexOf(e.target);
+            dotEls.forEach(function (d, j) { d.classList.toggle("is-active", j === idx); });
+          }
+        });
+      }, { threshold: 0.55 });
+      pages.forEach(function (pg) { pageIO.observe(pg); });
     }
   }
 
