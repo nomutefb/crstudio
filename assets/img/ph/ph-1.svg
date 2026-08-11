@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice">
+  <defs><filter id="g1"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0.08 0 0 0 0 0.075 0 0 0 0 0.07 0 0 0 0.05 0"/><feComposite operator="over" in2="SourceGraphic"/></filter></defs>
+  <rect width="800" height="1000" fill="#eae6dc"/>
+  <g filter="url(#g1)"><rect width="800" height="1000" fill="#eae6dc"/><g fill="none" stroke="#141311" stroke-width="2">
+     <circle cx="400" cy="560" r="300" opacity=".9"/>
+     <circle cx="400" cy="560" r="230" opacity=".55"/>
+     <circle cx="400" cy="560" r="160" opacity=".3"/>
+     <circle cx="400" cy="560" r="90" fill="#141311" stroke="none"/>
+   </g></g>
+  <text x="40" y="960" font-family="Arial" font-size="16" letter-spacing="6" fill="#141311" opacity=".45">IMAGE PLACEHOLDER — 01</text>
+</svg>

@@ -1,0 +1,65 @@
+---
+layout: default
+---
+{% assign p = page %}
+{% if p.cover and p.cover != "" %}{% assign pimg = p.cover | relative_url %}{% else %}{% assign pimg = '/assets/img/ph/ph-2.svg' | relative_url %}{% endif %}
+
+<div class="wrap">
+  <figure class="project-hero-cover reveal"><img src="{{ pimg }}" alt="{{ p.title }}"></figure>
+</div>
+
+<section class="wrap">
+  <div class="detail-cols">
+    <aside class="side reveal">
+      <span class="label label--muted">{{ p.category }}</span>
+      <h1 class="t display">{{ p.title }}</h1>
+      <div class="meta-list">
+        <div class="row"><span class="k label label--muted">DATE</span><span>{{ p.date | date: "%Y.%m.%d" }}</span></div>
+        {% if p.artists and p.artists != empty %}
+        <div class="row"><span class="k label label--muted">WITH</span><span>{{ p.artists | join: ", " }}</span></div>
+        {% endif %}
+        {% if p.place and p.place != "" %}
+        <div class="row"><span class="k label label--muted">PLACE</span><span>{{ p.place }}</span></div>
+        {% endif %}
+      </div>
+    </aside>
+    <div class="prose reveal">
+      {{ content }}
+    </div>
+  </div>
+</section>
+
+{% if p.gallery and p.gallery != empty %}
+<section class="wrap carousel">
+  <p class="label label--muted reveal" style="margin-bottom:20px">GALLERY</p>
+  <div class="carousel-track reveal">
+    {% for g in p.gallery %}
+    <figure><img src="{{ g | relative_url }}" alt="{{ p.title }}" loading="lazy"></figure>
+    {% endfor %}
+  </div>
+  <div class="carousel-nav">
+    <button class="carousel-btn" data-dir="prev" aria-label="이전">←</button>
+    <button class="carousel-btn" data-dir="next" aria-label="다음">→</button>
+  </div>
+</section>
+{% endif %}
+
+{% assign posts = site.projects | sort: "date" | reverse %}
+{% for x in posts %}{% if x.url == page.url %}
+  {% unless forloop.first %}
+    {% assign prev_i = forloop.index0 | minus: 1 %}
+    {% assign prev_p = posts[prev_i] %}
+    {% assign has_prev = true %}
+  {% endunless %}
+  {% assign next_i = forloop.index0 | plus: 1 %}
+  {% if next_i < posts.size %}{% assign next_p = posts[next_i] %}{% assign has_next = true %}{% endif %}
+{% endif %}{% endfor %}
+
+<nav class="pn wrap">
+  {% if has_prev %}
+  <a href="{{ prev_p.url | relative_url }}"><span class="label label--muted">← Newer</span><span class="pn-name">{{ prev_p.title }}</span></a>
+  {% else %}<a href="{{ '/projects/' | relative_url }}"><span class="label label--muted">← Index</span><span class="pn-name">All Projects</span></a>{% endif %}
+  {% if has_next %}
+  <a href="{{ next_p.url | relative_url }}"><span class="label label--muted">Older →</span><span class="pn-name">{{ next_p.title }}</span></a>
+  {% else %}<a href="{{ '/projects/' | relative_url }}"><span class="label label--muted">Index →</span><span class="pn-name">All Projects</span></a>{% endif %}
+</nav>

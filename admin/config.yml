@@ -1,0 +1,158 @@
+# ─────────────────────────────────────────────
+# Sveltia CMS 설정 — 관리자(/admin) 페이지
+# 로그인: "Sign In with Token" → GitHub 토큰 붙여넣기
+# ─────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: muteno/creative
+  branch: main
+  automatic_deployments: true
+
+site_url: https://muteno.github.io/creative
+display_url: https://muteno.github.io/creative
+
+media_folder: "assets/uploads"
+public_folder: "/creative/assets/uploads"
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: artists
+    label: 작가
+    label_singular: 작가
+    folder: "_artists"
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{fields.ename | default('artist')}}"
+    identifier_field: title
+    summary: "{{title}} — {{year}} · {{cohort}}기"
+    sortable_fields: [cohort, year, title]
+    view_groups:
+      - label: 기수별
+        field: cohort
+    fields:
+      - { name: title, label: 이름(국문), widget: string, required: true }
+      - { name: ename, label: 이름(영문 표기), widget: string, required: false, default: "", hint: "예: KANG UN — 비워두면 국문 이름이 크게 표시됩니다" }
+      - { name: cohort, label: 기수, widget: number, value_type: int, min: 1, max: 99, required: true }
+      - { name: year, label: 입주 연도, widget: number, value_type: int, min: 2020, max: 2099, required: true }
+      - { name: genre, label: 장르/매체, widget: string, required: false, default: "", hint: "예: 회화, 설치, 미디어" }
+      - { name: thumb, label: 대표 이미지(프로필/작업), widget: image, required: false, default: "" }
+      - { name: ph, label: 기본 플레이스홀더 번호(1–6), widget: number, value_type: int, min: 1, max: 6, default: 1, hint: "대표 이미지가 없을 때 표시되는 기본 그래픽" }
+      - name: gallery
+        label: 작업 이미지
+        widget: list
+        required: false
+        default: []
+        field: { name: image, label: 이미지, widget: image }
+      - name: links
+        label: 외부 링크
+        widget: list
+        required: false
+        default: []
+        fields:
+          - { name: label, label: 표시 이름, widget: string }
+          - { name: url, label: URL, widget: string }
+      - { name: body, label: 소개 글, widget: markdown }
+
+  - name: projects
+    label: 게시물
+    label_singular: 게시물
+    folder: "_projects"
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{fields.title}}"
+    summary: "{{title}} — {{category}} · {{date | date('YYYY.MM.DD')}}"
+    sortable_fields: [date, title, category]
+    view_groups:
+      - label: 유형별
+        field: category
+    fields:
+      - { name: title, label: 제목, widget: string, required: true }
+      - { name: date, label: 날짜, widget: datetime, format: "YYYY-MM-DD", time_format: false, required: true }
+      - { name: category, label: 유형, widget: select, options: ["전시", "프로그램", "소식", "기타"], default: "소식" }
+      - name: artists
+        label: 참여 작가(이름)
+        widget: list
+        required: false
+        default: []
+        field: { name: name, label: 작가 이름, widget: string }
+      - { name: place, label: 장소, widget: string, required: false, default: "" }
+      - { name: cover, label: 커버 이미지, widget: image, required: false, default: "" }
+      - name: gallery
+        label: 갤러리 이미지
+        widget: list
+        required: false
+        default: []
+        field: { name: image, label: 이미지, widget: image }
+      - { name: excerpt_text, label: 요약(목록에 표시), widget: text, required: false, default: "" }
+      - { name: body, label: 본문, widget: markdown }
+
+  - name: settings
+    label: 사이트 설정
+    editor: { preview: false }
+    files:
+      - name: general
+        label: 사이트 문구·정보
+        file: "_data/settings.yml"
+        fields:
+          - { name: site_name, label: 사이트 이름(워드마크), widget: string }
+          - { name: site_name_dot, label: "워드마크 끝에 점(.) 표시", widget: boolean, default: true }
+          - name: hero
+            label: 메인 히어로
+            widget: object
+            fields:
+              - { name: kicker, label: 상단 작은 문구, widget: string }
+              - { name: line1, label: 큰 제목 1줄, widget: string }
+              - { name: line2, label: 큰 제목 2줄(윤곽선), widget: string }
+              - { name: tagline, label: 소개 한 줄, widget: string }
+              - { name: marquee, label: 흐르는 띠 문구, widget: string }
+          - name: intro
+            label: 소개 섹션
+            widget: object
+            fields:
+              - { name: label, label: 섹션 라벨, widget: string }
+              - { name: heading, label: 제목, widget: string }
+              - { name: paragraphs, label: 문단, widget: list, field: { name: p, label: 문단, widget: text } }
+          - name: stats
+            label: 숫자 밴드
+            widget: list
+            fields:
+              - { name: num, label: 숫자, widget: string }
+              - { name: label, label: 라벨, widget: string }
+          - name: quotes
+            label: 인용(Voices)
+            widget: list
+            fields:
+              - { name: text, label: 인용문, widget: text }
+              - { name: name, label: 이름, widget: string }
+              - { name: org, label: 소속, widget: string }
+          - name: program
+            label: 프로그램 아코디언
+            widget: list
+            fields:
+              - { name: title, label: 제목, widget: string }
+              - { name: desc, label: 설명, widget: text }
+          - name: cta
+            label: 문의(Contact) 섹션
+            widget: object
+            fields:
+              - { name: label, label: 라벨, widget: string }
+              - { name: heading, label: 큰 제목, widget: string }
+              - { name: desc, label: 설명, widget: string }
+              - { name: button, label: 버튼 문구, widget: string }
+              - { name: email, label: 이메일, widget: string, required: false, default: "" }
+          - name: footer
+            label: 푸터
+            widget: object
+            fields:
+              - { name: org_line, label: 한 줄 소개, widget: string }
+              - { name: copyright, label: 저작권 문구, widget: string }
+              - { name: instagram, label: 인스타그램 URL, widget: string, required: false, default: "" }
+              - { name: youtube, label: 유튜브 URL, widget: string, required: false, default: "" }

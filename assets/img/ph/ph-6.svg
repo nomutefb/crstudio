@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice">
+  <defs><filter id="g6"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0.08 0 0 0 0 0.075 0 0 0 0 0.07 0 0 0 0.05 0"/><feComposite operator="over" in2="SourceGraphic"/></filter></defs>
+  <rect width="800" height="1000" fill="#eae6dc"/>
+  <g filter="url(#g6)"><rect width="800" height="1000" fill="#eae6dc"/><path d="M 120 820 C 120 380 680 520 660 160" fill="none" stroke="#141311" stroke-width="60" stroke-linecap="round" opacity=".88"/>
+   <circle cx="660" cy="160" r="26" fill="#141311"/></g>
+  <text x="40" y="960" font-family="Arial" font-size="16" letter-spacing="6" fill="#141311" opacity=".45">IMAGE PLACEHOLDER — 06</text>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice">
+  <defs><filter id="g2"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0.08 0 0 0 0 0.075 0 0 0 0 0.07 0 0 0 0.05 0"/><feComposite operator="over" in2="SourceGraphic"/></filter></defs>
+  <rect width="800" height="1000" fill="#eae6dc"/>
+  <g filter="url(#g2)"><rect width="800" height="1000" fill="#eae6dc"/><g stroke="#141311" stroke-width="14">
+     <line x1="-200" y1="1100" x2="300" y2="-100" opacity="0.15"/><line x1="-110" y1="1100" x2="390" y2="-100" opacity="0.35"/><line x1="-20" y1="1100" x2="480" y2="-100" opacity="0.55"/><line x1="70" y1="1100" x2="570" y2="-100" opacity="0.7500000000000001"/><line x1="160" y1="1100" x2="660" y2="-100" opacity="0.15"/><line x1="250" y1="1100" x2="750" y2="-100" opacity="0.35"/><line x1="340" y1="1100" x2="840" y2="-100" opacity="0.55"/><line x1="430" y1="1100" x2="930" y2="-100" opacity="0.7500000000000001"/><line x1="520" y1="1100" x2="1020" y2="-100" opacity="0.15"/><line x1="610" y1="1100" x2="1110" y2="-100" opacity="0.35"/><line x1="700" y1="1100" x2="1200" y2="-100" opacity="0.55"/><line x1="790" y1="1100" x2="1290" y2="-100" opacity="0.7500000000000001"/>
+   </g></g>
+  <text x="40" y="960" font-family="Arial" font-size="16" letter-spacing="6" fill="#141311" opacity=".45">IMAGE PLACEHOLDER — 02</text>
+</svg>

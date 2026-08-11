@@ -1,0 +1,10 @@
+{% assign a = include.artist %}
+{% if a.thumb and a.thumb != "" %}{% assign aimg = a.thumb | relative_url %}{% else %}{% assign aimg = '/assets/img/ph/ph-' | append: a.ph | append: '.svg' | relative_url %}{% endif %}
+<a class="artist-row" href="{{ a.url | relative_url }}" data-cohort="{{ a.cohort }}" data-img="{{ aimg }}">
+  <span class="idx">{{ include.idx }}</span>
+  <span class="artist-name">{% if a.ename and a.ename != "" %}{{ a.ename }}{% else %}{{ a.title }}{% endif %}</span>
+  <span class="artist-meta">
+    <span class="kname">{{ a.title }}</span>
+    <span class="sub">{{ a.year }} · {{ a.cohort }}기{% if a.genre and a.genre != "" %} · {{ a.genre }}{% endif %}</span>
+  </span>
+</a>

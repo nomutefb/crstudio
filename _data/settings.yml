@@ -1,0 +1,62 @@
+# ─────────────────────────────────────────────
+# 사이트 문구 설정 파일
+# /admin(관리자 페이지) → "사이트 설정"에서 그대로 수정할 수 있습니다.
+# ─────────────────────────────────────────────
+
+site_name: "CREATIVE"
+site_name_dot: true
+
+hero:
+  kicker: "CHANGJAK STUDIO · JANGDO, YEOSU"
+  line1: "CREATIVE"
+  line2: "STUDIO"
+  tagline: "섬에 머무는 작가들, 기수로 이어지는 작업의 기록."
+  marquee: "RESIDENCY ARCHIVE — JANGDO · YEOSU — SINCE 2020 — COHORT 01–07"
+
+intro:
+  label: "ABOUT — 소개"
+  heading: "작가가 머무는 시간을 기록합니다"
+  paragraphs:
+    - "여수 장도의 창작스튜디오는 국내외 예술가들에게 안정적인 창작 환경을 제공하는 레지던시입니다. 이 사이트는 그곳을 거쳐 간 기수별 입주작가와 작업을 한 곳에 모아 보여주는 아카이브입니다."
+    - "해마다 새로운 기수의 작가들이 섬에 머물며 작업하고, 시민과 자연, 동료 예술가와 교류합니다. 우리는 그 시간이 흩어지지 않도록, 작가를 가장 앞에 두고 기록합니다."
+
+stats:
+  - num: "07"
+    label: "COHORTS · 기수"
+  - num: "29"
+    label: "ARTISTS · 입주작가"
+  - num: "04"
+    label: "STUDIOS · 스튜디오동"
+  - num: "2020"
+    label: "SINCE · 시작"
+
+quotes:
+  - text: "섬의 시간은 느리게 흐르지만, 작업은 가장 멀리 나아갔다."
+    name: "입주작가"
+    org: "예시 문구 — 관리자에서 수정하세요"
+  - text: "작가와 시민이 같은 풍경 안에서 만난다는 것, 그것이 이 스튜디오의 힘이다."
+    name: "방문 큐레이터"
+    org: "예시 문구 — 관리자에서 수정하세요"
+
+program:
+  - title: "RESIDENCY · 입주 프로그램"
+    desc: "기수별 공모로 선정된 작가들이 일정 기간 스튜디오에 입주해 신작을 제작합니다."
+  - title: "SUPPORT · 창작 지원"
+    desc: "작업 공간과 체류 환경, 제작 실비와 전문가 매칭 등 창작에 필요한 조건을 지원합니다."
+  - title: "EXHIBITION · 전시 연계"
+    desc: "입주 기간의 결과물은 성과전과 기획전, 오픈 스튜디오를 통해 관객과 만납니다."
+  - title: "COMMUNITY · 교류"
+    desc: "시민 참여 프로그램과 워크숍으로 작가와 지역이 서로의 일상에 스며듭니다."
+
+cta:
+  label: "CONTACT"
+  heading: "WORK WITH US"
+  desc: "입주·전시·협업 문의를 기다립니다."
+  button: "WE'D LOVE TO HEAR FROM YOU"
+  email: ""
+
+footer:
+  org_line: "CREATIVE STUDIO — RESIDENCY ARCHIVE"
+  copyright: "© 2026 CREATIVE STUDIO. All rights reserved."
+  instagram: ""
+  youtube: ""

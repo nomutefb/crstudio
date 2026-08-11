@@ -1,0 +1,39 @@
+---
+layout: default
+title: Artists
+nav: artists
+permalink: /artists/
+---
+{% assign cohorts = site.artists | map: "cohort" | uniq | sort | reverse %}
+
+<section class="page-hero wrap">
+  <p class="label label--muted reveal">RESIDENCY ARCHIVE</p>
+  <h1 class="section-title display reveal" style="font-size:clamp(48px,10vw,140px)">Artists <span class="count">{{ site.artists | size }}</span></h1>
+  <p class="desc reveal">기수별 입주작가 아카이브. 이름을 누르면 작가의 소개와 작업을 볼 수 있습니다.</p>
+</section>
+
+<section class="section wrap" style="padding-top:0" id="artist-index">
+  <div class="cohort-tabs reveal" data-cohort-tabs data-target="#artist-index">
+    <button class="cohort-tab is-active" data-filter="all">전체</button>
+    {% for c in cohorts %}
+    <button class="cohort-tab" data-filter="{{ c }}">{{ c }}기</button>
+    {% endfor %}
+  </div>
+
+  {% for c in cohorts %}
+  {% assign group = site.artists | where: "cohort", c | sort: "ename" %}
+  {% assign sample = group | first %}
+  <div class="cohort-group" data-cohort-group>
+    <div class="cohort-head reveal">
+      <span class="year display">{{ sample.year }}</span>
+      <span class="label label--muted">COHORT {{ c }} · {{ c }}기 · {{ group | size }}인</span>
+    </div>
+    <div class="artist-list">
+      {% for a in group %}
+      {% capture idxs %}{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}{% endcapture %}
+      {% include artist-row.html artist=a idx=idxs %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</section>

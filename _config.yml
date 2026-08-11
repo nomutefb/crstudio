@@ -1,0 +1,41 @@
+title: CREATIVE STUDIO
+description: 기수별 입주작가와 그들의 작업을 아카이빙하는 크리에이티브 스튜디오 사이트
+url: "https://muteno.github.io"
+baseurl: "/creative"
+lang: ko
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+collections:
+  artists:
+    output: true
+    permalink: /artists/:name/
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: artists
+    values:
+      layout: artist
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: project
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - node_modules
+  - tools

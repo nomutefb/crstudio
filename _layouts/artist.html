@@ -1,0 +1,78 @@
+---
+layout: default
+---
+{% assign a = page %}
+{% if a.thumb and a.thumb != "" %}{% assign aimg = a.thumb | relative_url %}{% else %}{% assign aimg = '/assets/img/ph/ph-' | append: a.ph | append: '.svg' | relative_url %}{% endif %}
+
+<section class="detail-hero wrap">
+  <div class="detail-kicker reveal">
+    <span class="label label--muted">ARTIST</span>
+    <span class="label">{{ a.year }} · COHORT {{ a.cohort }} · {{ a.cohort }}기</span>
+    {% if a.genre and a.genre != "" %}<span class="label label--muted">{{ a.genre }}</span>{% endif %}
+  </div>
+  <h1 class="detail-title display reveal">{% if a.ename and a.ename != "" %}{{ a.ename }}{% else %}{{ a.title }}{% endif %}</h1>
+  <div class="detail-sub reveal">
+    <span class="kname">{{ a.title }}</span>
+    {% if a.links %}{% for l in a.links %}
+    <a class="label" style="border-bottom:1px solid var(--ink);padding-bottom:2px" href="{{ l.url }}" target="_blank" rel="noopener">{{ l.label }}</a>
+    {% endfor %}{% endif %}
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="artist-grid">
+    <figure class="artist-photo reveal"><img src="{{ aimg }}" alt="{{ a.title }}"></figure>
+    <div class="prose reveal">
+      {{ content }}
+    </div>
+  </div>
+</section>
+
+{% if a.gallery and a.gallery != empty %}
+<section class="wrap">
+  <p class="label label--muted reveal" style="margin-bottom:24px">WORKS</p>
+  <div class="gallery-grid">
+    {% for g in a.gallery %}
+    <figure class="reveal"><img src="{{ g | relative_url }}" alt="{{ a.title }} 작업" loading="lazy"></figure>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% assign siblings = site.artists | where: "cohort", a.cohort | where_exp: "x", "x.url != page.url" %}
+{% if siblings != empty %}
+<section class="wrap" style="padding-bottom:clamp(44px,8vh,90px)">
+  <p class="label label--muted reveal" style="margin-bottom:18px">SAME COHORT — {{ a.cohort }}기</p>
+  <div class="cohort-tabs reveal">
+    {% for sb in siblings %}
+    <a class="cohort-tab" href="{{ sb.url | relative_url }}">{{ sb.title }}</a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% assign all = site.artists | sort: "cohort" | reverse %}
+{% for x in all %}{% if x.url == page.url %}
+  {% unless forloop.first %}
+    {% assign prev_i = forloop.index0 | minus: 1 %}
+    {% assign prev_a = all[prev_i] %}
+    {% assign has_prev = true %}
+  {% endunless %}
+  {% assign next_i = forloop.index0 | plus: 1 %}
+  {% if next_i < all.size %}{% assign next_a = all[next_i] %}{% assign has_next = true %}{% endif %}
+{% endif %}{% endfor %}
+
+<nav class="pn wrap">
+  {% if has_prev %}
+  <a href="{{ prev_a.url | relative_url }}">
+    <span class="label label--muted">← Prev</span>
+    <span class="pn-name">{% if prev_a.ename != "" %}{{ prev_a.ename }}{% else %}{{ prev_a.title }}{% endif %}</span>
+  </a>
+  {% else %}<a href="{{ '/artists/' | relative_url }}"><span class="label label--muted">← Index</span><span class="pn-name">All Artists</span></a>{% endif %}
+  {% if has_next %}
+  <a href="{{ next_a.url | relative_url }}">
+    <span class="label label--muted">Next →</span>
+    <span class="pn-name">{% if next_a.ename != "" %}{{ next_a.ename }}{% else %}{{ next_a.title }}{% endif %}</span>
+  </a>
+  {% else %}<a href="{{ '/artists/' | relative_url }}"><span class="label label--muted">Index →</span><span class="pn-name">All Artists</span></a>{% endif %}
+</nav>

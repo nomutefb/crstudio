@@ -1,0 +1,20 @@
+<footer class="site-foot wrap" id="contact-foot">
+  <div class="foot-grid">
+    <div>
+      <a class="wordmark" href="{{ '/' | relative_url }}">{{ site.data.settings.site_name }}{% if site.data.settings.site_name_dot %}<span>.</span>{% endif %}</a>
+      <p class="label label--muted" style="margin-top:14px">{{ site.data.settings.footer.org_line }}</p>
+    </div>
+    <nav class="foot-links">
+      <a class="label" href="{{ '/artists/' | relative_url }}">Artists</a>
+      <a class="label" href="{{ '/projects/' | relative_url }}">Projects</a>
+      {% if site.data.settings.footer.instagram != "" %}<a class="label" href="{{ site.data.settings.footer.instagram }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+      {% if site.data.settings.footer.youtube != "" %}<a class="label" href="{{ site.data.settings.footer.youtube }}" target="_blank" rel="noopener">YouTube</a>{% endif %}
+      <a class="label" href="{{ '/admin/' | relative_url }}">Admin</a>
+    </nav>
+  </div>
+  <div class="foot-bottom">
+    <span>{{ site.data.settings.footer.copyright }}</span>
+    <span class="label label--muted" style="letter-spacing:.2em">COHORT ARCHIVE — {{ site.artists | size }} ARTISTS</span>
+  </div>
+</footer>
+<script src="{{ '/assets/js/main.js' | relative_url }}"></script>
