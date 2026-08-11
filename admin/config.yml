@@ -126,28 +126,13 @@ collections:
             fields:
               - { name: num, label: 숫자, widget: string }
               - { name: label, label: 라벨, widget: string }
-          - name: quotes
-            label: 인용(Voices)
-            widget: list
-            fields:
-              - { name: text, label: 인용문, widget: text }
-              - { name: name, label: 이름, widget: string }
-              - { name: org, label: 소속, widget: string }
+          - { name: facility, label: 시설 한 줄 소개, widget: string, required: false, default: "" }
           - name: program
             label: 프로그램 아코디언
             widget: list
             fields:
               - { name: title, label: 제목, widget: string }
               - { name: desc, label: 설명, widget: text }
-          - name: cta
-            label: 문의(Contact) 섹션
-            widget: object
-            fields:
-              - { name: label, label: 라벨, widget: string }
-              - { name: heading, label: 큰 제목, widget: string }
-              - { name: desc, label: 설명, widget: string }
-              - { name: button, label: 버튼 문구, widget: string }
-              - { name: email, label: 이메일, widget: string, required: false, default: "" }
           - name: footer
             label: 푸터
             widget: object
@@ -156,3 +141,18 @@ collections:
               - { name: copyright, label: 저작권 문구, widget: string }
               - { name: instagram, label: 인스타그램 URL, widget: string, required: false, default: "" }
               - { name: youtube, label: 유튜브 URL, widget: string, required: false, default: "" }
+      - name: program_timeline
+        label: 연례 프로그램 타임라인
+        file: "_data/program.yml"
+        fields:
+          - { name: note, label: 상단 설명 한 줄, widget: string }
+          - name: years
+            label: 연도별 항목
+            widget: list
+            fields:
+              - { name: year, label: 연도, widget: number, value_type: int }
+              - { name: cohort, label: 기수, widget: number, value_type: int }
+              - name: events
+                label: 행사·프로그램 (전시 사이사이 오픈스튜디오 포함)
+                widget: list
+                field: { name: event, label: 항목, widget: string }

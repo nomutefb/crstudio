@@ -912,6 +912,133 @@ ul { list-style: none; }
 
 .page-hero .desc { max-width: 52ch; color: var(--muted); margin-top: 20px; word-break: keep-all; }
 
+/* ── book / magazine snap mode (홈 전용, 데스크톱) ── */
+
+.book-cover { position: relative; overflow: hidden; }
+
+.cover-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.92) contrast(0.9) brightness(1.05);
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.book-cover .hero { position: relative; }
+.book-cover .marquee { position: relative; background: var(--paper); }
+
+.prog-note { max-width: 60ch; color: var(--muted); margin-bottom: clamp(18px, 3vh, 30px); word-break: keep-all; }
+
+.prog-list { border-top: 1px solid var(--ink); }
+
+.prog-row {
+  display: grid;
+  grid-template-columns: minmax(84px, 0.5fr) minmax(0, 1.1fr) minmax(0, 1.7fr);
+  gap: clamp(12px, 2.5vw, 40px);
+  padding: clamp(14px, 2.6vh, 26px) 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+
+.prog-row .py { font-size: clamp(22px, 3vw, 44px); }
+.prog-row .pc .t { display: block; font-weight: 700; font-size: 14px; letter-spacing: 0.04em; }
+.prog-row .pc .a { display: block; color: var(--muted); font-size: 12.5px; margin-top: 4px; word-break: keep-all; }
+.prog-row .pe { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+
+.prog-chip {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  padding: 5px 14px;
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.band .prog-chip { border-color: var(--dark-line); }
+
+.facility-line {
+  margin-top: clamp(20px, 4vh, 36px);
+  color: var(--dark-muted);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  word-break: keep-all;
+}
+
+.foot-cover {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(56px, 11vw, 168px);
+  line-height: 0.95;
+  margin: 0 0 clamp(24px, 6vh, 56px) -0.03em;
+}
+
+.book-dots {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 90;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.book-dots button {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--ink);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+.book-dots button.is-active { background: var(--ink); transform: scale(1.35); }
+
+@media (min-width: 901px) {
+  html.snap-on { scroll-snap-type: y mandatory; scroll-behavior: auto; }
+
+  body.book .book-page,
+  body.book .site-foot {
+    min-height: 100svh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  body.book .book-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: calc(var(--head-h) + 4px);
+    padding-bottom: 20px;
+    overflow: hidden;
+  }
+
+  body.book .book-cover { padding-top: 0; padding-bottom: 0; justify-content: flex-end; }
+  body.book .book-cover .hero { min-height: 0; flex: 1; }
+
+  body.book .band { justify-content: center; }
+
+  body.book .section-head { margin-bottom: clamp(18px, 4vh, 40px); }
+  body.book .ac-photo { aspect-ratio: auto; height: clamp(240px, 46svh, 560px); }
+  body.book .post-card .thumb { aspect-ratio: auto; height: clamp(200px, 40svh, 500px); }
+
+  body.book .site-foot {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  body.book .book-dots { display: flex; }
+}
+
 /* ── reveal animation (html.js일 때만 숨김 → JS 없으면 항상 보임) ── */
 
 html.js .reveal {

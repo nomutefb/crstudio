@@ -30,13 +30,7 @@ stats:
   - num: "2020"
     label: "SINCE · 시작"
 
-quotes:
-  - text: "섬의 시간은 느리게 흐르지만, 작업은 가장 멀리 나아갔다."
-    name: "입주작가"
-    org: "예시 문구 — 관리자에서 수정하세요"
-  - text: "작가와 시민이 같은 풍경 안에서 만난다는 것, 그것이 이 스튜디오의 힘이다."
-    name: "방문 큐레이터"
-    org: "예시 문구 — 관리자에서 수정하세요"
+facility: "예술의 섬 장도 — 편의동 1동(안내센터 · 작가숙소 3실 · 커뮤니티룸) + 창작스튜디오 4동(각 68㎡) · 전남 여수시 예울마루로 100"
 
 program:
   - title: "RESIDENCY · 입주 프로그램"
@@ -47,13 +41,6 @@ program:
     desc: "입주 기간의 결과물은 성과전과 기획전, 오픈 스튜디오를 통해 관객과 만납니다."
   - title: "COMMUNITY · 교류"
     desc: "시민 참여 프로그램과 워크숍으로 작가와 지역이 서로의 일상에 스며듭니다."
-
-cta:
-  label: "CONTACT"
-  heading: "WORK WITH US"
-  desc: "입주·전시·협업 문의를 기다립니다."
-  button: "WE'D LOVE TO HEAR FROM YOU"
-  email: ""
 
 footer:
   org_line: "CREATIVE STUDIO — RESIDENCY ARCHIVE"

@@ -11,8 +11,39 @@
   var hasGsap = typeof window.gsap !== "undefined";
   var lenis = null;
 
-  /* ── smooth scrolling (Lenis) ────────────── */
-  if (!reduced && typeof window.Lenis !== "undefined") {
+  /* ── book(잡지) 스냅 모드: 홈 데스크톱은 네이티브 스크롤 + CSS 스냅 ── */
+  var bookMode = document.body.classList.contains("book") && window.matchMedia("(min-width: 901px)").matches;
+  if (bookMode) {
+    docEl.classList.add("snap-on");
+    /* 페이지 도트 내비 */
+    var pages = Array.prototype.slice.call(document.querySelectorAll(".book-page, .site-foot"));
+    if (pages.length > 1) {
+      var dots = document.createElement("nav");
+      dots.className = "book-dots";
+      dots.setAttribute("aria-label", "페이지 이동");
+      pages.forEach(function (pg, i) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.setAttribute("aria-label", "페이지 " + (i + 1));
+        b.addEventListener("click", function () { pg.scrollIntoView({ behavior: "smooth" }); });
+        dots.appendChild(b);
+      });
+      document.body.appendChild(dots);
+      var dotEls = dots.querySelectorAll("button");
+      var pageIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            var idx = pages.indexOf(e.target);
+            dotEls.forEach(function (d, j) { d.classList.toggle("is-active", j === idx); });
+          }
+        });
+      }, { threshold: 0.55 });
+      pages.forEach(function (pg) { pageIO.observe(pg); });
+    }
+  }
+
+  /* ── smooth scrolling (Lenis) — 스냅 모드에서는 비활성 ── */
+  if (!bookMode && !reduced && typeof window.Lenis !== "undefined") {
     lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
     docEl.classList.add("lenis-on");
 

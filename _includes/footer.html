@@ -1,4 +1,7 @@
 <footer class="site-foot wrap" id="contact-foot">
+  {% if page.nav == 'home' %}
+  <div class="foot-cover" aria-hidden="true">{{ site.data.settings.site_name }}<span style="color:var(--muted)">.</span></div>
+  {% endif %}
   <div class="foot-grid">
     <div>
       <a class="wordmark" href="{{ '/' | relative_url }}">{{ site.data.settings.site_name }}{% if site.data.settings.site_name_dot %}<span>.</span>{% endif %}</a>

@@ -1,42 +1,35 @@
 ---
 layout: default
 nav: home
+body_class: book
 ---
 {% assign s = site.data.settings %}
 {% assign artists_sorted = site.artists | sort: "cohort" | reverse %}
 {% assign latest_cohort = artists_sorted | first %}
 
-<!-- HERO -->
-<section class="hero wrap">
-  <p class="hero-kicker label">{{ s.hero.kicker }}</p>
-  <h1 class="hero-title display">
-    <span class="row-mask"><span class="row" data-hero-row>{{ s.hero.line1 }}</span></span>
-    <span class="row-mask"><span class="row row--indent outline-text" data-hero-row>{{ s.hero.line2 }}</span></span>
-  </h1>
-  <div class="hero-sub">
-    <p class="hero-tagline">{{ s.hero.tagline }}</p>
-    <span class="hero-scroll label label--muted">Scroll ↓</span>
+<!-- 01 · COVER -->
+<section class="book-page book-cover" id="top">
+  <img class="cover-bg" src="{{ '/assets/uploads/studio/panorama.jpg' | relative_url }}" alt="장도 창작스튜디오 전경">
+  <div class="hero wrap">
+    <p class="hero-kicker label">{{ s.hero.kicker }}</p>
+    <h1 class="hero-title display">
+      <span class="row-mask"><span class="row" data-hero-row>{{ s.hero.line1 }}</span></span>
+      <span class="row-mask"><span class="row row--indent outline-text" data-hero-row>{{ s.hero.line2 }}</span></span>
+    </h1>
+    <div class="hero-sub">
+      <p class="hero-tagline">{{ s.hero.tagline }}</p>
+      <span class="hero-scroll label label--muted">Scroll ↓</span>
+    </div>
   </div>
-</section>
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">
-    <span class="label">{{ s.hero.marquee }}</span><span class="label">{{ s.hero.marquee }}</span><span class="label">{{ s.hero.marquee }}</span><span class="label">{{ s.hero.marquee }}</span>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<section class="section wrap" id="about">
-  <div class="intro-grid">
-    <p class="intro-label label label--muted reveal">{{ s.intro.label }}</p>
-    <div class="intro-body reveal">
-      <h2 class="intro-heading">{{ s.intro.heading }}</h2>
-      {% for p in s.intro.paragraphs %}<p>{{ p }}</p>{% endfor %}
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="label">{{ s.hero.marquee }}</span><span class="label">{{ s.hero.marquee }}</span><span class="label">{{ s.hero.marquee }}</span><span class="label">{{ s.hero.marquee }}</span>
     </div>
   </div>
 </section>
 
-<!-- ARTISTS — 현재 기수 -->
-<section class="section wrap" id="artists">
+<!-- 02 · ARTISTS 현재 기수 -->
+<section class="book-page wrap" id="artists">
   <div class="section-head reveal">
     <h2 class="section-title display">Artists <span class="count">{{ latest_cohort.cohort }}기</span></h2>
     <div style="text-align:right">
@@ -58,22 +51,19 @@ nav: home
     </a>
     {% endfor %}
   </div>
-
-  <div class="section-cta reveal">
-    <a class="btn" href="{{ '/artists/' | relative_url }}">All Cohorts · 전체 아카이브</a>
-  </div>
 </section>
 
-<!-- PROJECTS / 게시물 -->
-<section class="section wrap" id="projects">
+<!-- 03 · PROJECTS 소식 -->
+<section class="book-page wrap" id="projects">
   <div class="section-head reveal">
     <h2 class="section-title display">Projects</h2>
-    <a class="section-link label" href="{{ '/projects/' | relative_url }}">Explore All →</a>
+    <a class="section-link label" href="{{ '/projects/' | relative_url }}">Explore All {{ site.projects | size }} →</a>
   </div>
   <div class="card-grid">
     {% assign posts = site.projects | sort: "date" | reverse %}
     {% for p in posts limit: 3 %}
-    {% if p.cover and p.cover != "" %}{% assign pimg = p.cover | relative_url %}{% else %}{% assign pimg = '/assets/img/ph/ph-' | append: forloop.index | append: '.svg' | relative_url %}{% endif %}
+    {% assign phn = forloop.index | modulo: 6 | plus: 1 %}
+    {% if p.cover and p.cover != "" %}{% assign pimg = p.cover | relative_url %}{% else %}{% assign pimg = '/assets/img/ph/ph-' | append: phn | append: '.svg' | relative_url %}{% endif %}
     <a class="post-card reveal" href="{{ p.url | relative_url }}">
       <div class="thumb"><img src="{{ pimg }}" alt="{{ p.title }}" loading="lazy"></div>
       <div class="meta">
@@ -84,17 +74,41 @@ nav: home
     </a>
     {% endfor %}
   </div>
-  <div class="section-cta reveal">
-    <a class="btn" href="{{ '/projects/' | relative_url }}">Explore All Projects</a>
+</section>
+
+<!-- 04 · PROGRAM 연례 프로그램 -->
+<section class="book-page wrap" id="program">
+  <div class="section-head reveal">
+    <h2 class="section-title display">Program</h2>
+    <div style="text-align:right">
+      <span class="label label--muted" style="display:block;margin-bottom:8px">ANNUAL CYCLE — 연례 프로그램</span>
+      <a class="section-link label" href="{{ '/program/' | relative_url }}">Full Timeline →</a>
+    </div>
+  </div>
+  <p class="prog-note reveal">{{ site.data.program.note }}</p>
+  <div class="prog-list reveal">
+    {% for y in site.data.program.years limit: 4 %}
+    {% assign cohort_artists = site.artists | where: "cohort", y.cohort %}
+    <div class="prog-row">
+      <span class="py display">{{ y.year }}</span>
+      <span class="pc">
+        <span class="t">{{ y.cohort }}기 입주작가</span>
+        <span class="a">{% for ca in cohort_artists %}{{ ca.title }}{% unless forloop.last %} · {% endunless %}{% endfor %}</span>
+      </span>
+      <span class="pe">
+        {% for ev in y.events %}<span class="prog-chip">{{ ev }}</span>{% endfor %}
+      </span>
+    </div>
+    {% endfor %}
   </div>
 </section>
 
-<!-- STATS BAND -->
-<section class="band">
+<!-- 05 · RESIDENCY -->
+<section class="book-page band" id="residency">
   <div class="wrap">
     <div class="section-head reveal">
       <h2 class="section-title display">Residency</h2>
-      <span class="label" style="color:rgba(244,241,234,.5)">IN NUMBERS</span>
+      <span class="label" style="color:rgba(244,241,234,.5)">JANGDO · YEOSU</span>
     </div>
     <div class="stat-grid reveal">
       {% for st in s.stats %}
@@ -104,50 +118,8 @@ nav: home
       </div>
       {% endfor %}
     </div>
+    {% if s.facility and s.facility != "" %}
+    <p class="facility-line reveal">{{ s.facility }}</p>
+    {% endif %}
   </div>
-</section>
-
-<!-- QUOTES -->
-<section class="section wrap">
-  <div class="section-head reveal">
-    <h2 class="section-title display">Voices</h2>
-  </div>
-  <div class="quote-grid">
-    {% for q in s.quotes %}
-    <div class="quote-card reveal">
-      <div class="q-mark">“</div>
-      <p class="q-text">{{ q.text }}</p>
-      <div class="q-name">{{ q.name }}</div>
-      <div class="q-org">{{ q.org }}</div>
-    </div>
-    {% endfor %}
-  </div>
-</section>
-
-<!-- PROGRAM -->
-<section class="section wrap">
-  <div class="section-head reveal">
-    <h2 class="section-title display">Program</h2>
-  </div>
-  <div class="acc reveal">
-    {% for pr in s.program %}
-    <details {% if forloop.first %}open{% endif %}>
-      <summary><span class="chev"></span><span class="acc-title">{{ pr.title }}</span></summary>
-      <p class="acc-body">{{ pr.desc }}</p>
-    </details>
-    {% endfor %}
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="section wrap cta" id="contact">
-  <p class="label label--muted reveal">{{ s.cta.label }}</p>
-  <h2 class="section-title display reveal">{{ s.cta.heading }}</h2>
-  <p class="cta-desc reveal">{{ s.cta.desc }}</p>
-  {% if s.cta.email != "" %}
-  <a class="btn reveal" href="mailto:{{ s.cta.email }}">{{ s.cta.button }}</a>
-  <br><a class="cta-mail reveal" href="mailto:{{ s.cta.email }}">{{ s.cta.email }}</a>
-  {% else %}
-  <span class="btn reveal" style="cursor:default" title="관리자 → 사이트 설정에서 이메일을 등록하세요">{{ s.cta.button }}</span>
-  {% endif %}
 </section>
