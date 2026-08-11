@@ -97,6 +97,26 @@
       }
     });
 
+    /* 해시 직링크·늦은 로드 대비: 레이아웃 확정 후 트리거 재계산 + 화면 안 요소 즉시 표시 */
+    var settleReveals = function () {
+      window.ScrollTrigger.refresh();
+      document.querySelectorAll(".reveal:not(.is-in)").forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) {
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", overwrite: true });
+          el.classList.add("is-in");
+        }
+      });
+    };
+    window.addEventListener("load", function () { setTimeout(settleReveals, 250); });
+    if (location.hash) {
+      setTimeout(function () {
+        var t = document.querySelector(location.hash);
+        if (t && lenis) lenis.scrollTo(t, { offset: -70, duration: 0.9 });
+        setTimeout(settleReveals, 1100);
+      }, 400);
+    }
+
     /* 히어로 인트로 */
     var heroRows = document.querySelectorAll("[data-hero-row]");
     if (heroRows.length) {
