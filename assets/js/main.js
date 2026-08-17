@@ -104,6 +104,12 @@
     docEl.classList.add("snap-on");
   }
 
+  /* 좁은 화면에서는 휠 제스처 플립 대신 네이티브 스크롤 스냅으로 섹션 경계를 맞춘다.
+     터치 관성과 싸우지 않으므로 손맛이 유지된다. */
+  if (document.body.classList.contains("book") && !bookMode) {
+    docEl.classList.add("snap-m");
+  }
+
   /* ── poster belt: 첫 노출 2초 후 우→좌로 도는 컨베이어 ── */
   document.querySelectorAll("[data-belt]").forEach(function (belt) {
     var track = belt.querySelector("[data-belt-track]");
@@ -153,8 +159,11 @@
     io2.observe(belt);
   });
 
-  /* ── smooth scrolling (Lenis) — 스냅 모드에서는 비활성 ── */
-  if (!bookMode && !reduced && typeof window.Lenis !== "undefined") {
+  /* ── smooth scrolling (Lenis) — 스냅 모드·터치에서는 비활성 ──
+     터치 기기에서 Lenis가 관성 스크롤을 감싸면 스크롤이 눌어붙는 느낌이 난다.
+     모바일은 네이티브 스크롤이 항상 낫다. */
+  var coarsePointer = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+  if (!bookMode && !reduced && !coarsePointer && typeof window.Lenis !== "undefined") {
     lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
     docEl.classList.add("lenis-on");
 
@@ -255,6 +264,7 @@
       setTimeout(function () {
         var t = document.querySelector(location.hash);
         if (t && lenis) lenis.scrollTo(t, { offset: -70, duration: 0.9 });
+        else if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
         setTimeout(settleReveals, 1100);
       }, 400);
     }

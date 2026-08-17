@@ -1324,6 +1324,18 @@ html.js.gsap-on .reveal { transition: none; }
   .artist-photo, .detail-cols .side, .intro-label { position: static; }
   .quote-grid { grid-template-columns: 1fr; }
   .cursor-img { display: none; }
+
+  /* 좁은 화면: JS 페이지 플립이 꺼지는 대신 네이티브 스냅이 섹션 경계를 잡는다.
+     proximity라 긴 섹션 안에서는 자유롭게 스크롤되고, 경계 근처에서만 붙는다. */
+  html.snap-m {
+    scroll-snap-type: y proximity;
+    scroll-padding-top: 60px;
+  }
+
+  html.snap-m body.book .book-page,
+  html.snap-m body.book .site-foot {
+    scroll-snap-align: start;
+  }
 }
 
 @media (max-width: 640px) {
