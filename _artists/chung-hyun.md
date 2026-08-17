@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/chung-hyun/work-03.jpg"
   - "/assets/uploads/artists/chung-hyun/work-04.jpg"
   - "/assets/uploads/artists/chung-hyun/work-05.jpg"
+video: ""
 links: []
 ---
 돌이 마모되는 태고의 시간을 3D 작업으로 되살려 자연의 숭고를 묻는다.

@@ -13,6 +13,7 @@ gallery:
   - "/assets/uploads/artists/lee-yeonsook/work-04.jpg"
   - "/assets/uploads/artists/lee-yeonsook/work-05.jpg"
   - "/assets/uploads/artists/lee-yeonsook/work-06.jpg"
+video: "Lgl0iR9t1OQ"
 links: []
 ---
 조각과 기술을 결합해 공간의 변화를 감각의 경험으로 번역한다.

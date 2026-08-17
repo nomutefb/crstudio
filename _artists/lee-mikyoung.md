@@ -13,6 +13,7 @@ gallery:
   - "/assets/uploads/artists/lee-mikyoung/work-04.jpg"
   - "/assets/uploads/artists/lee-mikyoung/work-05.jpg"
   - "/assets/uploads/artists/lee-mikyoung/work-06.jpg"
+video: "7h5EvDf1E5w"
 links: []
 ---
 집과 의자라는 형상 언어로 가족과 자신을 향한 내적 관찰을 그린다.

@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/lee-yulbae/work-03.jpg"
   - "/assets/uploads/artists/lee-yulbae/work-04.jpg"
   - "/assets/uploads/artists/lee-yulbae/work-05.jpg"
+video: "78g0QSciUTY"
 links: []
 ---
 계절과 자연의 섭리를 산수의 형식으로 풀어내는 대형 파노라마 회화.

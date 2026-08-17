@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/aaa-union/work-03.png"
   - "/assets/uploads/artists/aaa-union/work-04.png"
   - "/assets/uploads/artists/aaa-union/work-05.png"
+video: "G72amRXiEAw"
 links: []
 ---
 집단의 사건이 개인의 서사에 남기는 흔적, 장소의 상실감을 리서치 기반으로 탐구하는 4인 콜렉티브.

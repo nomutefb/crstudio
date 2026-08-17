@@ -14,9 +14,10 @@ permalink: /artists/
 
 <section class="section wrap" style="padding-top:0" id="artist-index">
   <div class="cohort-tabs reveal" data-cohort-tabs data-target="#artist-index">
-    <button class="cohort-tab is-active" data-filter="all">전체</button>
+    <button class="cohort-tab is-active" data-filter="all">전체 <b>{{ site.artists | size }}</b></button>
     {% for c in cohorts %}
-    <button class="cohort-tab" data-filter="{{ c }}">{{ c }}기</button>
+    {% assign n = site.artists | where: "cohort", c | size %}
+    <button class="cohort-tab" data-filter="{{ c }}">{{ c }}기 <b>{{ n }}</b></button>
     {% endfor %}
   </div>
 

@@ -17,6 +17,7 @@ gallery:
   - "/assets/uploads/artists/an-minhwan/work-08.jpg"
   - "/assets/uploads/artists/an-minhwan/work-09.jpg"
   - "/assets/uploads/artists/an-minhwan/work-10.jpg"
+video: ""
 links: []
 ---
 조각을 통해 신체와 풍경의 관계, 확장되는 공간성을 탐구한다.

@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/ji-sungbae/work-03.jpg"
   - "/assets/uploads/artists/ji-sungbae/work-04.jpg"
   - "/assets/uploads/artists/ji-sungbae/work-05.jpg"
+video: "Z1vdDZXP-9k"
 links: []
 ---
 만료된 필름의 예측 불가능성으로 여수의 섬·물·태양을 '어떤 날들'로 재현한다.

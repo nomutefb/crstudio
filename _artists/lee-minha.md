@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/lee-minha/work-03.png"
   - "/assets/uploads/artists/lee-minha/work-04.png"
   - "/assets/uploads/artists/lee-minha/work-05.png"
+video: "SmTimAJGjmQ"
 links: []
 ---
 닮음과 닮지 않음의 사이(似與不似之間)에서 장소의 감정과 기억을 그리는 바다 풍경.

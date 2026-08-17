@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/lee-jiyeon-sung-jeongwon/work-03.png"
   - "/assets/uploads/artists/lee-jiyeon-sung-jeongwon/work-04.png"
   - "/assets/uploads/artists/lee-jiyeon-sung-jeongwon/work-05.png"
+video: "gbQpzlRF0jo"
 links: []
 ---
 시간과 장소 경험의 우연한 교집합에서 출발해 물·시간·공간의 관계를 함께 탐색하는 듀오.

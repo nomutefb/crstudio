@@ -17,6 +17,7 @@ gallery:
   - "/assets/uploads/artists/park-keumman/work-08.png"
   - "/assets/uploads/artists/park-keumman/work-09.png"
   - "/assets/uploads/artists/park-keumman/work-10.png"
+video: ""
 links: []
 ---
 사회·역사적 사건과 인권의 기억을 회화로 재해석하는 작가.

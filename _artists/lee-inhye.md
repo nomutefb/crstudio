@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/lee-inhye/work-03.jpg"
   - "/assets/uploads/artists/lee-inhye/work-04.jpg"
   - "/assets/uploads/artists/lee-inhye/work-05.jpg"
+video: ""
 links: []
 ---
 역사적 상처와 애도의 시간을 통과하며 인간의 숭고함을 그린다.

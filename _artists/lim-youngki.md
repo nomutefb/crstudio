@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/lim-youngki/work-03.jpg"
   - "/assets/uploads/artists/lim-youngki/work-04.jpg"
   - "/assets/uploads/artists/lim-youngki/work-05.jpg"
+video: "nrxyDIe5uyE"
 links: []
 ---
 환경과 명상의 이미지로 인간의 내면 풍경을 비추는 사진 작업.

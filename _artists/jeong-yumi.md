@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/jeong-yumi/work-03.jpg"
   - "/assets/uploads/artists/jeong-yumi/work-04.jpg"
   - "/assets/uploads/artists/jeong-yumi/work-05.jpg"
+video: "hRXziUQ5nk0"
 links: []
 ---
 수평선의 시선으로 마주한 물과 섬을 정동의 풍경으로 그리는 작업.

@@ -13,6 +13,7 @@ gallery:
   - "/assets/uploads/artists/kim-heesoo/work-04.jpg"
   - "/assets/uploads/artists/kim-heesoo/work-05.jpg"
   - "/assets/uploads/artists/kim-heesoo/work-06.jpg"
+video: "MakNE8FVuPI"
 links: []
 ---
 소리·영상·신체의 움직임을 엮어 시간과 감정의 층위를 쌓는 다원 창작자.

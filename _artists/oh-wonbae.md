@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/oh-wonbae/work-03.jpg"
   - "/assets/uploads/artists/oh-wonbae/work-04.jpg"
   - "/assets/uploads/artists/oh-wonbae/work-05.jpg"
+video: "U1HLNjvhNio"
 links: []
 ---
 세계화와 전체주의가 낳는 갈등과 부조리 속 인간의 조건을 응시하는 드로잉.

@@ -13,6 +13,7 @@ gallery:
   - "/assets/uploads/artists/hong-wonpey/work-04.jpg"
   - "/assets/uploads/artists/hong-wonpey/work-05.jpg"
   - "/assets/uploads/artists/hong-wonpey/work-06.jpg"
+video: ""
 links: []
 ---
 빛·색·형의 조합으로 바다와 하늘, 섬의 꿈결 같은 풍경을 시각화한다.

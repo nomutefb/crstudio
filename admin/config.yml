@@ -49,6 +49,7 @@ collections:
         required: false
         default: []
         field: { name: image, label: 이미지, widget: image }
+      - { name: video, label: 유튜브 영상, widget: string, required: false, default: "", hint: "유튜브 주소를 그대로 붙여넣으세요 (예: https://youtu.be/hRXziUQ5nk0). 비워두면 영상 칸이 표시되지 않습니다" }
       - name: links
         label: 외부 링크
         widget: list

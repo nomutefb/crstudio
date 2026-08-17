@@ -13,6 +13,7 @@ gallery:
   - "/assets/uploads/artists/kim-youngjin/work-04.jpg"
   - "/assets/uploads/artists/kim-youngjin/work-05.jpg"
   - "/assets/uploads/artists/kim-youngjin/work-06.jpg"
+video: "pTtdGA5IfZE"
 links: []
 ---
 형태의 불완전함과 침묵 속 감정의 결을 탐색하는 시각예술가.

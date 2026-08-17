@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/seo-kukhwa/work-03.jpg"
   - "/assets/uploads/artists/seo-kukhwa/work-04.jpg"
   - "/assets/uploads/artists/seo-kukhwa/work-05.jpg"
+video: "0ZpOtSwO1Q0"
 links: []
 ---
 먹의 농담과 반복의 행위로 자연의 순환을 화면에 옮기는 한국화 작업.

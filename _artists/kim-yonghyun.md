@@ -13,6 +13,7 @@ gallery:
   - "/assets/uploads/artists/kim-yonghyun/work-04.jpg"
   - "/assets/uploads/artists/kim-yonghyun/work-05.jpg"
   - "/assets/uploads/artists/kim-yonghyun/work-06.jpg"
+video: "V4ttlZo7rms"
 links: []
 ---
 사회·문화적 맥락을 유머와 함께 비추는 다층적 시각 작업.

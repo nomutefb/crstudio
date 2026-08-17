@@ -28,6 +28,25 @@ layout: default
   </div>
 </section>
 
+{% assign vid = a.video | default: "" %}
+{% if vid != "" %}
+{% if vid contains "v=" %}{% assign vid = vid | split: "v=" | last | split: "&" | first %}
+{% elsif vid contains "youtu.be/" %}{% assign vid = vid | split: "youtu.be/" | last | split: "?" | first %}
+{% elsif vid contains "/embed/" %}{% assign vid = vid | split: "/embed/" | last | split: "?" | first %}
+{% endif %}
+<section class="wrap">
+  <p class="label label--muted reveal" style="margin-bottom:18px">FILM — 영상</p>
+  <div class="artist-video reveal">
+    <iframe src="https://www.youtube-nocookie.com/embed/{{ vid }}?rel=0"
+            title="{{ a.title }} 영상"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen></iframe>
+  </div>
+</section>
+{% endif %}
+
 {% if a.gallery and a.gallery != empty %}
 <section class="wrap carousel carousel--works">
   <p class="label label--muted reveal" style="margin-bottom:20px">WORKS — {{ a.gallery | size }}</p>
@@ -44,16 +63,25 @@ layout: default
 {% endif %}
 
 {% assign siblings = site.artists | where: "cohort", a.cohort | where_exp: "x", "x.url != page.url" %}
-{% if siblings != empty %}
+{% assign allc = site.artists | map: "cohort" | uniq | sort | reverse %}
 <section class="wrap" style="padding-bottom:clamp(44px,8vh,90px)">
-  <p class="label label--muted reveal" style="margin-bottom:18px">SAME COHORT — {{ a.cohort }}기</p>
+  {% if siblings != empty %}
+  <p class="label label--muted reveal" style="margin-bottom:18px">SAME COHORT — 같은 {{ a.cohort }}기</p>
   <div class="cohort-tabs reveal">
     {% for sb in siblings %}
     <a class="cohort-tab" href="{{ sb.url | relative_url }}">{{ sb.title }}</a>
     {% endfor %}
   </div>
+  {% endif %}
+
+  <p class="label label--muted reveal" style="margin:clamp(28px,5vh,48px) 0 18px">OTHER COHORTS — 다른 기수</p>
+  <div class="cohort-tabs reveal">
+    {% for c in allc %}
+    {% assign n = site.artists | where: "cohort", c | size %}
+    <a class="cohort-tab{% if c == a.cohort %} is-active{% endif %}" href="{{ '/artists/' | relative_url }}#cohort-{{ c }}">{{ c }}기 <b>{{ n }}</b></a>
+    {% endfor %}
+  </div>
 </section>
-{% endif %}
 
 {% assign all = site.artists | sort: "cohort" | reverse %}
 {% for x in all %}{% if x.url == page.url %}

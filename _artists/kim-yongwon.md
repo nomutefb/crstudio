@@ -13,6 +13,7 @@ gallery:
   - "/assets/uploads/artists/kim-yongwon/work-04.jpg"
   - "/assets/uploads/artists/kim-yongwon/work-05.jpg"
   - "/assets/uploads/artists/kim-yongwon/work-06.jpg"
+video: "3BoGwg8c5dw"
 links: []
 ---
 시대의 풍경과 그 정서적 잔상을 회화로 기록한다.

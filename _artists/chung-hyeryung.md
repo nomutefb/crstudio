@@ -17,6 +17,7 @@ gallery:
   - "/assets/uploads/artists/chung-hyeryung/work-08.jpg"
   - "/assets/uploads/artists/chung-hyeryung/work-09.jpg"
   - "/assets/uploads/artists/chung-hyeryung/work-10.jpg"
+video: ""
 links: []
 ---
 버려진 사물의 물성과 기억을 통해 일상과의 대화를 빚어내는 조각 작업.

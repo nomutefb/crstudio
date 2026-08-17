@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/sa-yuntaek/work-03.jpg"
   - "/assets/uploads/artists/sa-yuntaek/work-04.jpg"
   - "/assets/uploads/artists/sa-yuntaek/work-05.jpg"
+video: "Ew0yMkzB2LA"
 links: []
 ---
 회화의 물성을 더듬으며 근원적인 시간을 화면 위로 소환한다.

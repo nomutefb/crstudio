@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/kim-bangjoo/work-03.jpg"
   - "/assets/uploads/artists/kim-bangjoo/work-04.jpg"
   - "/assets/uploads/artists/kim-bangjoo/work-05.jpg"
+video: "hFBFjDbqPwk"
 links: []
 ---
 우연한 만남과 기억을 매개로 나 바깥의 세계를 감각하는 방식을 실험한다.

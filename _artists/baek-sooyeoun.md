@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/baek-sooyeoun/work-03.jpg"
   - "/assets/uploads/artists/baek-sooyeoun/work-04.jpg"
   - "/assets/uploads/artists/baek-sooyeoun/work-05.jpg"
+video: "DbJAbyeuq2E"
 links: []
 ---
 신체와 정체성의 관계를 개념적 언어로 풀어내는 작업.

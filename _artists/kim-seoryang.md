@@ -17,6 +17,7 @@ gallery:
   - "/assets/uploads/artists/kim-seoryang/work-08.jpg"
   - "/assets/uploads/artists/kim-seoryang/work-09.jpg"
   - "/assets/uploads/artists/kim-seoryang/work-10.jpg"
+video: ""
 links: []
 ---
 소리와 영상 기록을 통해 장소의 변화와 집단의 기억을 다감각 설치로 옮기는 사운드 아티스트.

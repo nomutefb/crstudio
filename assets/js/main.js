@@ -320,12 +320,10 @@
   document.querySelectorAll("[data-cohort-tabs]").forEach(function (tabs) {
     var scope = document.querySelector(tabs.getAttribute("data-target"));
     if (!scope) return;
-    tabs.addEventListener("click", function (ev) {
-      var btn = ev.target.closest(".cohort-tab");
-      if (!btn || !btn.hasAttribute("data-filter")) return;
-      var val = btn.getAttribute("data-filter");
+
+    function apply(val, animate) {
       tabs.querySelectorAll(".cohort-tab").forEach(function (b) {
-        b.classList.toggle("is-active", b === btn);
+        b.classList.toggle("is-active", b.getAttribute("data-filter") === val);
       });
       var rows = scope.querySelectorAll("[data-cohort]");
       rows.forEach(function (row) {
@@ -336,12 +334,30 @@
         var visible = g.querySelector("[data-cohort]:not(.is-hidden)");
         g.style.display = visible ? "" : "none";
       });
-      if (hasGsap && !reduced) {
+      if (animate && hasGsap && !reduced) {
         var shown = Array.prototype.filter.call(rows, function (r) { return !r.classList.contains("is-hidden"); });
         window.gsap.fromTo(shown, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.04, overwrite: true });
       }
       if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    }
+
+    tabs.addEventListener("click", function (ev) {
+      var btn = ev.target.closest(".cohort-tab");
+      if (!btn || !btn.hasAttribute("data-filter")) return;
+      var val = btn.getAttribute("data-filter");
+      apply(val, true);
+      // 주소에 남겨서 뒤로가기·공유·작가 페이지에서의 진입이 같은 화면을 연다
+      history.replaceState(null, "", val === "all" ? location.pathname : "#cohort-" + val);
     });
+
+    // 작가 상세에서 "#cohort-3" 으로 들어오면 해당 기수만 펼친 상태로 시작
+    function fromHash() {
+      var m = (location.hash || "").match(/^#cohort-(\d+)$/);
+      var val = m && tabs.querySelector('.cohort-tab[data-filter="' + m[1] + '"]') ? m[1] : "all";
+      apply(val, false);
+    }
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
   });
 
   /* ── floating image on artist rows ───────── */

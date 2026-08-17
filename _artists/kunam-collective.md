@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/kunam-collective/work-03.jpg"
   - "/assets/uploads/artists/kunam-collective/work-04.jpg"
   - "/assets/uploads/artists/kunam-collective/work-05.jpg"
+video: "N3Ut7yyk6yI"
 links: []
 ---
 전통의 미감과 동시대 영상 언어를 겹쳐 놓는 구혜영·김영남의 콜렉티브.

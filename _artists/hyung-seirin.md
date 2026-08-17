@@ -13,6 +13,7 @@ gallery:
   - "/assets/uploads/artists/hyung-seirin/work-04.jpg"
   - "/assets/uploads/artists/hyung-seirin/work-05.jpg"
   - "/assets/uploads/artists/hyung-seirin/work-06.jpg"
+video: "XmS7WmL5bE8"
 links: []
 ---
 일상의 장면을 느린 시선으로 붙잡아 순간의 색과 감정을 화면에 옮긴다.

@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/kim-chaerin/work-03.jpg"
   - "/assets/uploads/artists/kim-chaerin/work-04.jpg"
   - "/assets/uploads/artists/kim-chaerin/work-05.jpg"
+video: "-WRB1IiH0Lc"
 links: []
 ---
 버려진 패각과 복합 재료로 사물의 순환하는 생을 빚는 조각 작업.

@@ -12,6 +12,7 @@ gallery:
   - "/assets/uploads/artists/kang-un/work-03.jpg"
   - "/assets/uploads/artists/kang-un/work-04.jpg"
   - "/assets/uploads/artists/kang-un/work-05.jpg"
+video: ""
 links: []
 ---
 날씨와 기억, 감정 속에서 깨어나는 푸른색으로 삶의 균열과 치유를 그린다.
