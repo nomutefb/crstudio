@@ -1,6 +1,11 @@
 # ─────────────────────────────────────────────
 # 연례 프로그램 타임라인 — /admin → 사이트 설정 → 연례 프로그램에서 수정
-# events: label + from/to(월 1–12). from이 없으면 월 미상 → 트랙 아래 칩으로 표시
+#
+# label   : 항상 같은 이름만 쓴다 (입주 / 프리뷰전 / 오픈스튜디오 / 지역연계 / 입주작가전)
+#           개별 전시 제목이나 장소는 넣지 않는다 — 칸을 넘쳐 잘린다
+# from/to : 월(1–12). from이 없으면 월 미상 → 트랙 아래 칩으로 표시
+# url     : 누르면 이동할 주소 (사이트 내부 경로 또는 외부 링크)
+# artists : 입주작가전처럼 작가마다 기간이 다른 경우, 바로 아래 얇은 줄로 붙는다
 # ─────────────────────────────────────────────
 
 note: "공모 → 입주(OT·프리뷰) → 오픈스튜디오 → 지역연계 프로그램 → 평론가 매칭 → 입주작가전으로 이어지는 연간 사이클"
@@ -9,42 +14,66 @@ years:
   - year: 2026
     cohort: 7
     events:
-      - { label: "입주", from: 4, to: 9 }
-      - { label: "오픈스튜디오", from: 6, to: 6 }
-      - { label: "지역연계", from: 6, to: 6 }
+      - { label: "입주", from: 4, to: 9, url: "/artists/#cohort-7" }
+      - { label: "프리뷰전" }
+      - { label: "오픈스튜디오", from: 6, to: 6, url: "/projects/2026-06-open-studio-7/" }
+      - { label: "지역연계", from: 6, to: 6, url: "/projects/2026-06-community-program-7/" }
+      - label: "입주작가전"
+        from: 8
+        to: 10
+        artists:
+          - { name: "안민환", from: 8, to: 10, url: "https://www.yeulmaru.org/exhibition/" }
+          - { name: "박금만", from: 9, to: 9, url: "https://www.yeulmaru.org/exhibition/" }
+
   - year: 2025
     cohort: 6
     events:
-      - { label: "입주", from: 2, to: 12 }
-      - { label: "오픈스튜디오", from: 5, to: 5 }
-      - { label: "지역연계", from: 5, to: 6 }
-      - { label: "작가와의 대화", from: 8, to: 8 }
-      - { label: "참여작가전 — 금호미술관", from: 10, to: 11 }
+      - { label: "입주", from: 2, to: 12, url: "/artists/#cohort-6" }
+      - { label: "프리뷰전" }
+      - { label: "오픈스튜디오", from: 5, to: 5, url: "/projects/2025-05-open-studio-6/" }
+      - { label: "지역연계", from: 5, to: 6, url: "/projects/2025-04-community-program-6/" }
+      - { label: "작가와의 대화", from: 8, to: 8, url: "/projects/2025-08-artist-talk-6/" }
+      - label: "입주작가전"
+        from: 10
+        to: 12
+        artists:
+          - { name: "참여작가전", from: 10, to: 11, url: "/projects/2025-10-beyond-time-and-space/" }
+          - { name: "형세린", from: 11, to: 12, url: "https://www.yeulmaru.org/exhibition/v/?u=229" }
+
   - year: 2024
     cohort: 5
     events:
-      - { label: "오픈스튜디오", from: 5, to: 5 }
-      - { label: "지역연계", from: 10, to: 10 }
+      - { label: "프리뷰전" }
+      - { label: "오픈스튜디오", from: 5, to: 5, url: "/projects/2024-05-open-studio-5/" }
+      - { label: "지역연계", from: 10, to: 10, url: "/projects/2024-10-community-program-5/" }
       - { label: "평론가 매칭" }
-      - { label: "입주작가전" }
+      - { label: "입주작가전", url: "/artists/#cohort-5" }
+
   - year: 2023
     cohort: 4
     events:
-      - { label: "단기 오픈스튜디오 (정현)", from: 6, to: 6 }
-      - { label: "오픈스튜디오", from: 11, to: 11 }
-      - { label: "입주작가전 — 7층 전시실", from: 11, to: 11 }
+      - { label: "프리뷰전" }
+      - { label: "오픈스튜디오", from: 6, to: 6, url: "/projects/2023-06-open-studio-chunghyun/" }
+      - { label: "오픈스튜디오", from: 11, to: 11, url: "/projects/2023-11-open-studio-4/" }
+      - { label: "입주작가전", from: 11, to: 11, url: "/projects/2023-11-open-studio-4/" }
+
   - year: 2022
     cohort: 3
     events:
-      - { label: "입주", from: 3, to: 12 }
-      - { label: "프리뷰" }
+      - { label: "입주", from: 3, to: 12, url: "/artists/#cohort-3" }
+      - { label: "프리뷰전" }
       - { label: "입주작가전" }
+
   - year: 2021
     cohort: 2
     events:
-      - { label: "입주 (–2022.02)", from: 5, to: 12 }
+      - { label: "입주", from: 5, to: 12, url: "/artists/#cohort-2" }
+      - { label: "프리뷰전" }
+      - { label: "입주작가전" }
+
   - year: 2020
     cohort: 1
     events:
       - { label: "창작스튜디오 개소" }
-      - { label: "1기 입주" }
+      - { label: "입주", url: "/artists/#cohort-1" }
+      - { label: "입주작가전" }
