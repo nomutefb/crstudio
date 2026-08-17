@@ -154,23 +154,6 @@ collections:
               - { name: year, label: 연도, widget: number, value_type: int }
               - { name: cohort, label: 기수, widget: number, value_type: int }
               - name: events
-                label: 행사·프로그램
+                label: 행사·프로그램 (전시 사이사이 오픈스튜디오 포함)
                 widget: list
-                summary: "{{fields.label}} — {{fields.from}}–{{fields.to}}월"
-                fields:
-                  - { name: label, label: 이름, widget: select, options: ["입주", "프리뷰전", "오픈스튜디오", "지역연계", "작가와의 대화", "평론가 매칭", "입주작가전", "창작스튜디오 개소"], hint: "항상 같은 이름만 씁니다 — 개별 전시 제목·장소는 넣지 마세요 (칸을 넘쳐 잘립니다)" }
-                  - { name: from, label: 시작 월 (1–12), widget: number, value_type: int, min: 1, max: 12, required: false, hint: "비워두면 '월 미상'으로 트랙 아래 칩에 표시됩니다" }
-                  - { name: to, label: 끝 월 (1–12), widget: number, value_type: int, min: 1, max: 12, required: false, hint: "한 달짜리면 비워두세요 — 선 대신 점으로 표시됩니다" }
-                  - { name: url, label: 클릭 시 이동할 주소, widget: string, required: false, default: "", hint: "예: /projects/2025-05-open-studio-6/ 또는 https://..." }
-                  - name: artists
-                    label: 작가별 기간
-                    widget: list
-                    required: false
-                    default: []
-                    summary: "{{fields.name}} — {{fields.from}}–{{fields.to}}월"
-                    hint: "입주작가전처럼 작가마다 기간이 다를 때. 바로 아래 얇은 줄로 붙습니다"
-                    fields:
-                      - { name: name, label: 작가·전시 이름, widget: string }
-                      - { name: from, label: 시작 월, widget: number, value_type: int, min: 1, max: 12 }
-                      - { name: to, label: 끝 월, widget: number, value_type: int, min: 1, max: 12, required: false }
-                      - { name: url, label: 주소, widget: string, required: false, default: "" }
+                field: { name: event, label: 항목, widget: string }

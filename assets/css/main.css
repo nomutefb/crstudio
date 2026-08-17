@@ -1013,13 +1013,11 @@ ul { list-style: none; }
   border: 0;
   color: var(--ink);
   font-family: var(--font-label);
-  /* 한 칸(1개월)에 "오픈스튜디오"가 잘리지 않고 들어가는 크기 */
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   text-align: center;
-  text-decoration: none;
   white-space: nowrap;
   min-width: 0;
 }
@@ -1056,8 +1054,8 @@ ul { list-style: none; }
   position: relative;
   z-index: 1;
   /* 양 끝 눈금은 라벨이 아무리 길어도 가리지 않는다 */
-  max-width: calc(100% - 16px);
-  padding: 0 4px;
+  max-width: calc(100% - 24px);
+  padding: 0 6px;
   background: var(--paper);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1085,19 +1083,8 @@ ul { list-style: none; }
   background: none;
 }
 
-/* 작가별 하위 줄 — 입주작가전처럼 작가마다 기간이 다를 때 바로 아래 붙는다 */
-.pg-pill--sub { font-size: 8.5px; font-weight: 500; }
-.pg-pill--sub .pg-l { color: var(--muted); }
-.pg-pill--sub::before { background: var(--line); }
-.pg-pill--sub::after { border-color: var(--line); }
-
 .pg-pill:hover::before { background: var(--ink); }
 .pg-pill:hover::after { border-color: var(--ink); }
-.pg-pill--sub:hover .pg-l { color: var(--ink); }
-
-/* 링크인 막대는 눌러진다는 걸 알려준다 */
-a.pg-pill { cursor: pointer; }
-a.pg-pill:hover .pg-l { text-decoration: underline; text-underline-offset: 3px; }
 
 /* 기간 텍스트 — 좁은 화면에서 타임라인이 목록으로 접힐 때만 쓴다 */
 .pg-m { display: none; }
@@ -1337,18 +1324,6 @@ html.js.gsap-on .reveal { transition: none; }
   .artist-photo, .detail-cols .side, .intro-label { position: static; }
   .quote-grid { grid-template-columns: 1fr; }
   .cursor-img { display: none; }
-
-  /* 좁은 화면: JS 페이지 플립이 꺼지는 대신 네이티브 스냅이 섹션 경계를 잡는다.
-     proximity라 긴 섹션 안에서는 자유롭게 스크롤되고, 경계 근처에서만 붙는다. */
-  html.snap-m {
-    scroll-snap-type: y proximity;
-    scroll-padding-top: 60px;
-  }
-
-  html.snap-m body.book .book-page,
-  html.snap-m body.book .site-foot {
-    scroll-snap-align: start;
-  }
 }
 
 @media (max-width: 640px) {
@@ -1383,13 +1358,7 @@ html.js.gsap-on .reveal { transition: none; }
   .cohort-tabs::-webkit-scrollbar { display: none; }
   .cohort-tab { flex: 0 0 auto; scroll-snap-align: start; padding: 8px 15px; letter-spacing: 0.14em; }
 
-  .pg-pill--sub { padding-left: 18px; }
-}
-
-/* 연례 프로그램 — 12칸 그리드에 한글 라벨이 들어갈 폭(칸당 ~55px)이 안 나오는
-   구간부터는 기간이 앞에 붙은 목록으로 접는다. 1280px에서는 안 잘리고
-   1024px에서는 "오픈스튜디오"가 잘리므로 경계를 1200px에 둔다. */
-@media (max-width: 1200px) {
+  /* 연례 프로그램 — 12칸 그리드는 폭이 안 나오므로 기간이 붙은 목록으로 접는다 */
   .pg-row { grid-template-columns: 1fr; gap: 10px; padding: 18px 0; align-items: start; }
   .pg-headrow { display: none; }
   .pg-info { gap: 14px; }
@@ -1447,7 +1416,6 @@ html.js.gsap-on .reveal { transition: none; }
     font-variant-numeric: tabular-nums;
   }
 
-  .pg-pill--sub { padding-left: 18px; }
   .pg-tip { display: none; }
   .pg-extra { margin-top: 10px; }
 }
