@@ -1383,7 +1383,13 @@ html.js.gsap-on .reveal { transition: none; }
   .cohort-tabs::-webkit-scrollbar { display: none; }
   .cohort-tab { flex: 0 0 auto; scroll-snap-align: start; padding: 8px 15px; letter-spacing: 0.14em; }
 
-  /* 연례 프로그램 — 12칸 그리드는 폭이 안 나오므로 기간이 붙은 목록으로 접는다 */
+  .pg-pill--sub { padding-left: 18px; }
+}
+
+/* 연례 프로그램 — 12칸 그리드에 한글 라벨이 들어갈 폭(칸당 ~55px)이 안 나오는
+   구간부터는 기간이 앞에 붙은 목록으로 접는다. 1280px에서는 안 잘리고
+   1024px에서는 "오픈스튜디오"가 잘리므로 경계를 1200px에 둔다. */
+@media (max-width: 1200px) {
   .pg-row { grid-template-columns: 1fr; gap: 10px; padding: 18px 0; align-items: start; }
   .pg-headrow { display: none; }
   .pg-info { gap: 14px; }
