@@ -5,15 +5,15 @@
 
 backend:
   name: github
-  repo: muteno/creative
+  repo: nomutefb/crstudio
   branch: main
   automatic_deployments: true
 
-site_url: https://muteno.github.io/creative
-display_url: https://muteno.github.io/creative
+site_url: https://nomutefb.github.io/crstudio
+display_url: https://nomutefb.github.io/crstudio
 
 media_folder: "assets/uploads"
-public_folder: "/creative/assets/uploads"
+public_folder: "/crstudio/assets/uploads"
 
 slug:
   encoding: ascii

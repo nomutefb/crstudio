@@ -4,15 +4,15 @@ The Cultivist 에이전시 페이지의 정보 구조(히어로 → 소개 → �
 2026 웨비어워즈 수상작 스타일의 대형 타이포그래피를 결합한 **자체 제작 디자인**입니다.
 콘텐츠(작가 명단·기수)는 예울마루 창작스튜디오 공개 정보를 기반으로 하고, 나머지 문구는 전부 교체 가능한 자리표시 문구입니다.
 
-- 배포 주소: **https://muteno.github.io/creative/**
-- 관리자 페이지: **https://muteno.github.io/creative/admin/**
+- 배포 주소: **https://nomutefb.github.io/crstudio/**
+- 관리자 페이지: **https://nomutefb.github.io/crstudio/admin/**
 
 ---
 
 ## 1. 처음 한 번만 하는 설정
 
 ### ① GitHub Pages 켜기
-1. GitHub → `muteno/creative` → **Settings → Pages**
+1. GitHub → `nomutefb/crstudio` → **Settings → Pages**
 2. **Source**를 **GitHub Actions**로 선택
    (첫 push 시 워크플로가 자동으로 활성화를 시도하지만, 안 되면 여기서 한 번만 선택해 주면 됩니다)
 
@@ -20,12 +20,12 @@ The Cultivist 에이전시 페이지의 정보 구조(히어로 → 소개 → �
 게시물을 올릴 사람(관리자)은 GitHub 토큰 하나만 있으면 됩니다.
 
 1. https://github.com/settings/personal-access-tokens → **Generate new token** (Fine-grained)
-2. Repository access: **Only select repositories → muteno/creative**
+2. Repository access: **Only select repositories → nomutefb/crstudio**
 3. Permissions → Repository permissions → **Contents: Read and write**
 4. 토큰 문자열 복사
 
 ### ③ 관리자 로그인
-1. `https://muteno.github.io/creative/admin/` 접속
+1. `https://nomutefb.github.io/crstudio/admin/` 접속
 2. **Sign In with Token** 클릭 → 복사한 토큰 붙여넣기
 3. 끝. (토큰은 브라우저에만 저장됩니다. 레포 쓰기 권한이 있는 계정만 게시 가능 = 관리자 인증)
 
