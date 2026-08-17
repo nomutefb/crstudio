@@ -8,3 +8,6 @@ _to_delete/
 _incoming*
 _v2b*
 _v8.tar.gz
+
+# 사진 묶음은 풀어서 assets/uploads/ 아래로 — 압축파일 자체는 배포되지 않게
+*.zip
