@@ -1391,7 +1391,14 @@ html.js.gsap-on .reveal { transition: none; }
     height: 1px;
   }
 
-  .pg-pill--pt::before { width: 5px; height: 5px; border-radius: 50%; }
+  /* 점도 선과 같은 14px 자리를 차지해야 기간·라벨 열이 어긋나지 않는다 */
+  .pg-pill--pt::before {
+    width: 5px;
+    height: 5px;
+    margin: 0 4.5px;
+    border-radius: 50%;
+  }
+
   .pg-pill::after { display: none; }
 
   .pg-pill .pg-l {
