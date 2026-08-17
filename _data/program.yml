@@ -19,6 +19,7 @@ years:
       - { label: "오픈스튜디오", from: 5, to: 5 }
       - { label: "지역연계", from: 5, to: 6 }
       - { label: "작가와의 대화", from: 8, to: 8 }
+      - { label: "참여작가전 — 금호미술관", from: 10, to: 11 }
   - year: 2024
     cohort: 5
     events:

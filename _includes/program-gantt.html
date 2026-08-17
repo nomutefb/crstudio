@@ -20,7 +20,9 @@
       <div class="pg-track">
         {% for ev in y.events %}{% if ev.from %}
         {% assign colend = ev.to | default: ev.from | plus: 1 %}
-        <span class="pg-pill" style="grid-column: {{ ev.from }} / {{ colend }};" title="{{ ev.label }}">{{ ev.label }}</span>
+        {% assign isspan = false %}{% if ev.to %}{% if ev.to > ev.from %}{% assign isspan = true %}{% endif %}{% endif %}
+        {% if isspan %}{% assign per = ev.from | append: "–" | append: ev.to | append: "월" %}{% else %}{% assign per = ev.from | append: "월" %}{% endif %}
+        <span class="pg-pill{% unless isspan %} pg-pill--pt{% endunless %}" style="grid-column: {{ ev.from }} / {{ colend }};"><span class="pg-l">{{ ev.label }}</span><span class="pg-tip" aria-hidden="true">{{ y.year }} · {{ per }} — {{ ev.label }}</span></span>
         {% endif %}{% endfor %}
       </div>
       {% capture undated %}{% for ev in y.events %}{% unless ev.from %}<span class="prog-chip">{{ ev.label }}</span>{% endunless %}{% endfor %}{% endcapture %}
