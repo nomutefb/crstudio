@@ -9,11 +9,11 @@ backend:
   branch: main
   automatic_deployments: true
 
-site_url: https://nomutefb.github.io/crstudio
-display_url: https://nomutefb.github.io/crstudio
+site_url: https://crstudio-3re.pages.dev
+display_url: https://crstudio-3re.pages.dev
 
 media_folder: "assets/uploads"
-public_folder: "/crstudio/assets/uploads"
+public_folder: "/assets/uploads"
 
 slug:
   encoding: ascii

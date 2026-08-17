@@ -4,17 +4,22 @@ The Cultivist 에이전시 페이지의 정보 구조(히어로 → 소개 → �
 2026 웨비어워즈 수상작 스타일의 대형 타이포그래피를 결합한 **자체 제작 디자인**입니다.
 콘텐츠(작가 명단·기수)는 예울마루 창작스튜디오 공개 정보를 기반으로 하고, 나머지 문구는 전부 교체 가능한 자리표시 문구입니다.
 
-- 배포 주소: **https://nomutefb.github.io/crstudio/**
-- 관리자 페이지: **https://nomutefb.github.io/crstudio/admin/**
+- 배포 주소: **https://crstudio-3re.pages.dev/**
+- 관리자 페이지: **https://crstudio-3re.pages.dev/admin/**
 
 ---
 
 ## 1. 처음 한 번만 하는 설정
 
-### ① GitHub Pages 켜기
-1. GitHub → `nomutefb/crstudio` → **Settings → Pages**
-2. **Source**를 **GitHub Actions**로 선택
-   (첫 push 시 워크플로가 자동으로 활성화를 시도하지만, 안 되면 여기서 한 번만 선택해 주면 됩니다)
+### ① 호스팅 (Cloudflare Pages)
+`nomutefb/crstudio` 저장소가 Cloudflare Pages 프로젝트 `crstudio`에 연결되어 있습니다.
+`main`에 push하면 자동으로 빌드·배포됩니다. 빌드 설정은 다음과 같습니다.
+
+| 항목 | 값 |
+|---|---|
+| 빌드 명령 | `bundle exec jekyll build --baseurl ""` |
+| 빌드 출력 디렉터리 | `_site` |
+| 프로덕션 분기 | `main` |
 
 ### ② 관리자 로그인용 토큰 만들기
 게시물을 올릴 사람(관리자)은 GitHub 토큰 하나만 있으면 됩니다.
@@ -25,7 +30,7 @@ The Cultivist 에이전시 페이지의 정보 구조(히어로 → 소개 → �
 4. 토큰 문자열 복사
 
 ### ③ 관리자 로그인
-1. `https://nomutefb.github.io/crstudio/admin/` 접속
+1. `https://crstudio-3re.pages.dev/admin/` 접속
 2. **Sign In with Token** 클릭 → 복사한 토큰 붙여넣기
 3. 끝. (토큰은 브라우저에만 저장됩니다. 레포 쓰기 권한이 있는 계정만 게시 가능 = 관리자 인증)
 
@@ -59,7 +64,7 @@ _layouts/, _includes/  템플릿
 assets/css, assets/js  디자인·인터랙션
 assets/img/ph  이미지 없을 때 나오는 기본 그래픽 6종
 admin/        관리자 페이지 (Sveltia CMS)
-.github/workflows/deploy.yml  push → 자동 빌드·배포
+Cloudflare Pages   push → 자동 빌드·배포 (대시보드에서 설정)
 ```
 
 ## 5. 알아두기
@@ -67,4 +72,5 @@ admin/        관리자 페이지 (Sveltia CMS)
 - 작가 29명의 프로필 사진·작업 이미지(총 200여 장)·장르·이력 요약은 예울마루 창작스튜디오 공식 아카이브 기준으로 채워져 있습니다. 수정·보완은 `/admin → 작가`에서 하면 됩니다.
 - 예술인연합AAA는 공식 영문 표기가 없어 국문 이름으로 표시됩니다.
 - 로컬 미리보기(선택): `bundle install` 후 `bundle exec jekyll serve --baseurl ""`
-- 레포 이름을 바꾸면 `admin/config.yml`의 `repo`/`public_folder`/`site_url`, `_config.yml`의 `baseurl`도 같이 바꿔야 합니다.
+- 레포 이름이나 배포 주소가 바뀌면 `admin/config.yml`의 `repo`/`site_url`/`display_url`, `_config.yml`의 `url`도 같이 바꿔야 합니다.
+- Cloudflare Pages는 루트(`/`)로 서빙되므로 `baseurl`은 빈 문자열입니다. GitHub Pages처럼 하위 경로로 옮길 경우에만 `baseurl`을 채우세요.
