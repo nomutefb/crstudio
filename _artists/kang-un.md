@@ -1,6 +1,6 @@
 ---
 title: "강운"
-ename: "KANG UN"
+ename: "UN KANG"
 cohort: 3
 year: 2022
 genre: "회화"

@@ -1,6 +1,6 @@
 ---
 title: "안민환"
-ename: "MIN HWAN AN"
+ename: "MINHWAN AN"
 cohort: 7
 year: 2026
 genre: "조각"
