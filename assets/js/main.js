@@ -363,26 +363,39 @@
     window.addEventListener("hashchange", fromHash);
   });
 
-  /* ── floating image on artist rows ───────── */
-  var float = document.createElement("div");
-  float.className = "cursor-img";
-  var floatImg = document.createElement("img");
-  floatImg.alt = "";
-  float.appendChild(floatImg);
-  document.body.appendChild(float);
+  /* ── artist row photo ────────────────────── */
+  /* 사진은 커서를 따라다니되 그 행 안에서만 움직인다. 행이 overflow:hidden
+     이라 위아래로 새지 않고, 좌우는 행 폭 안으로 가둔다. */
+  var rowPhoto = document.createElement("div");
+  rowPhoto.className = "row-photo";
+  var rowPhotoImg = document.createElement("img");
+  rowPhotoImg.alt = "";
+  rowPhoto.appendChild(rowPhotoImg);
 
   if (hasGsap && !reduced && window.matchMedia("(pointer: fine)").matches) {
-    var qx = window.gsap.quickTo(float, "x", { duration: 0.45, ease: "power3.out" });
-    var qy = window.gsap.quickTo(float, "y", { duration: 0.45, ease: "power3.out" });
-    window.gsap.set(float, { scale: 0.9, opacity: 0 });
-    window.addEventListener("mousemove", function (e) { qx(e.clientX + 26); qy(e.clientY - 150); });
+    var qx = window.gsap.quickTo(rowPhoto, "x", { duration: 0.45, ease: "power3.out" });
+
+    var clampX = function (row, clientX) {
+      var r = row.getBoundingClientRect();
+      var w = rowPhoto.offsetWidth;
+      return Math.min(Math.max(clientX - r.left - w / 2, 0), Math.max(0, r.width - w));
+    };
+
     document.querySelectorAll(".artist-row[data-img]").forEach(function (row) {
-      row.addEventListener("mouseenter", function () {
-        floatImg.src = row.getAttribute("data-img");
-        window.gsap.to(float, { opacity: 1, scale: 1, duration: 0.35, ease: "power3.out", overwrite: true });
+      row.addEventListener("mouseenter", function (e) {
+        rowPhotoImg.src = row.getAttribute("data-img");
+        row.appendChild(rowPhoto);
+        // 다른 행에서 넘어와도 미끄러져 오지 않도록 들어온 지점에 붙인다
+        var x = clampX(row, e.clientX);
+        window.gsap.set(rowPhoto, { x: x });
+        qx(x);
+        window.gsap.to(rowPhoto, { opacity: 1, duration: 0.35, ease: "power3.out", overwrite: "auto" });
       });
+
+      row.addEventListener("mousemove", function (e) { qx(clampX(row, e.clientX)); });
+
       row.addEventListener("mouseleave", function () {
-        window.gsap.to(float, { opacity: 0, scale: 0.9, duration: 0.3, ease: "power3.out", overwrite: true });
+        window.gsap.to(rowPhoto, { opacity: 0, duration: 0.3, ease: "power3.out", overwrite: "auto" });
       });
     });
   }

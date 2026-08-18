@@ -422,8 +422,12 @@ ul { list-style: none; }
   padding: clamp(18px, 3.2vh, 34px) 0;
   border-bottom: 1px solid var(--line);
   position: relative;
+  overflow: hidden;              /* 사진이 행 밖으로 새지 않게 */
   transition: opacity 0.3s ease;
 }
+
+/* 이름·기수는 항상 사진 위에 — 이름이 화면에서 가장 크다 */
+.artist-row > *:not(.row-photo) { position: relative; z-index: 1; }
 
 .artist-row .idx {
   font-family: var(--font-label);
@@ -471,19 +475,25 @@ ul { list-style: none; }
 
 /* floating hover image */
 
-.cursor-img {
-  position: fixed;
+/* 이름 칸 안에서 열리는 작가 사진 — 행 높이에 맞춘 4:5 카드 */
+.row-photo {
+  position: absolute;
   top: 0;
   left: 0;
-  z-index: var(--z-float);
-  width: 240px;
-  height: 300px;
-  pointer-events: none;
+  z-index: 0;
+  height: 100%;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
+  pointer-events: none;
   opacity: 0;
 }
 
-.cursor-img img { width: 100%; height: 100%; object-fit: cover; }
+.row-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;      /* 카드와 같은 기준 — 머리가 잘리지 않게 */
+}
 
 /* current cohort photo cards (home) */
 
@@ -1357,7 +1367,7 @@ html.js.gsap-on .reveal { transition: none; }
   .intro-grid, .project-cols, .detail-cols, .artist-grid { grid-template-columns: 1fr; }
   .artist-photo, .detail-cols .side, .intro-label { position: static; }
   .quote-grid { grid-template-columns: 1fr; }
-  .cursor-img { display: none; }
+  .row-photo { display: none; }   /* 좁은 화면에서는 행이 빠듯해 사진을 띄우지 않는다 */
 }
 
 @media (max-width: 640px) {
