@@ -1,5 +1,5 @@
 <header class="site-head">
-  <a class="wordmark" href="{{ '/' | relative_url }}">{{ site.data.settings.site_name }}{% if site.data.settings.site_name_dot %}<span>.</span>{% endif %}</a>
+  {% include wordmark.html %}
   <nav class="site-nav">
     <a href="{{ '/artists/' | relative_url }}" {% if page.nav == 'artists' %}class="is-active"{% endif %}>Artists</a>
     <a href="{{ '/projects/' | relative_url }}" {% if page.nav == 'projects' %}class="is-active"{% endif %}>Projects</a>

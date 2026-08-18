@@ -108,19 +108,27 @@ ul { list-style: none; }
 .site-head.is-scrolled {
   background: rgba(244, 241, 234, 0.92);
   backdrop-filter: blur(10px);
-  height: 60px;
+  height: var(--head-h-sm);
   box-shadow: 0 1px 0 var(--line);
 }
 
+/* 워드마크 — 둘째 줄의 첫 글자를 첫 줄 마지막 글자 아래 세로선에 맞춘다.
+   자간이 0.42em으로 넓어 ch 같은 근사치로는 안 맞으므로, 앞 글자들을
+   그대로 숨겨 깔아(.wm-lead) 자간까지 포함한 실제 폭만큼 들여쓴다. */
 .wordmark {
+  display: inline-block;
   font-family: var(--font-label);
   font-weight: 600;
   font-size: 15px;
   letter-spacing: 0.42em;
+  line-height: 1.15;
   text-transform: uppercase;
+  --wm-optical: -0.06em;   /* E(직선)와 S(곡선)의 사이드베어링 차 보정 */
 }
 
-.wordmark span { color: var(--muted); }
+.wordmark .wm-row { display: block; white-space: nowrap; }
+.wordmark .wm-row--2 { margin-left: var(--wm-optical); }
+.wordmark .wm-lead { visibility: hidden; }
 
 .site-nav { display: flex; gap: clamp(16px, 3vw, 40px); align-items: center; }
 
@@ -345,6 +353,37 @@ ul { list-style: none; }
 
 .section-link { white-space: nowrap; border-bottom: 1px solid var(--ink); padding-bottom: 3px; }
 
+/* 아카이브 타이틀 — 이름 뒤로 선이 그어지고 그 끝에 누적 인원이 선다 */
+.archive-title {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(16px, 3vw, 44px);
+  font-size: var(--fs-display-1);
+  line-height: 0.95;
+  margin: 0;
+}
+
+.archive-title .at-word { flex: none; }
+
+.archive-title .at-rule {
+  flex: 1 1 auto;
+  min-width: 40px;
+  height: 1px;
+  align-self: baseline;      /* 빈 상자의 베이스라인 = 아래 모서리 → 글자 베이스라인에 딱 앉는다 */
+  background: var(--ink);
+  transform-origin: left center;
+}
+
+.archive-title .at-count {
+  flex: none;
+  font-family: var(--font-label);
+  font-size: clamp(20px, 2.6vw, 38px);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
 /* ── intro ────────────────────────────────── */
 
 .intro-grid {
@@ -401,16 +440,37 @@ ul { list-style: none; }
 .cohort-tab b { font-weight: 500; letter-spacing: 0.1em; opacity: 0.45; margin-left: 5px; }
 .cohort-tab.is-active b { opacity: 0.7; }
 
-/* 작가 인덱스의 기수 탭은 스크롤해도 따라온다 — 목록이 길어 전환이 잦다 */
-.cohort-tabs[data-cohort-tabs] {
+/* 기수 번호 줄 — 목록이 길어 스크롤해도 따라온다. 고른 번호만 볼드 */
+.cohort-nums {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: clamp(14px, 2.4vw, 32px);
   position: sticky;
-  top: 56px;
+  top: var(--head-h-sm);
   z-index: 6;
   background: var(--paper);
-  padding: 12px 0;
+  padding: 14px 0;
   margin-bottom: clamp(24px, 4vh, 44px);
   border-bottom: 1px solid var(--line);
 }
+
+.cohort-num {
+  font-family: var(--font-label);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--dur-fast) ease;
+}
+
+.cohort-num:hover { color: var(--ink); }
+.cohort-num.is-active { color: var(--ink); font-weight: 700; }
 
 .artist-list { border-top: 1px solid var(--ink); }
 
@@ -452,38 +512,23 @@ ul { list-style: none; }
 
 .artist-meta .kname {
   display: block;
-  font-size: 14px;
+  font-size: 19px;            /* 14px에서 35% */
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
 }
 
+/* 장르만 남으므로 라틴 라벨 서체·대문자 규칙을 걷고 본문 서체로 */
 .artist-meta .sub {
   display: block;
-  font-family: var(--font-label);
-  font-size: 10px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+  font-size: 14px;            /* 10px에서 35% */
+  letter-spacing: 0.06em;
   color: var(--muted);
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 .artist-row.is-hidden { display: none; }
 
 /* floating hover image */
-
-.cursor-img {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: var(--z-float);
-  width: 240px;
-  height: 300px;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: 0;
-}
-
-.cursor-img img { width: 100%; height: 100%; object-fit: cover; }
 
 /* current cohort photo cards (home) */
 
@@ -534,14 +579,30 @@ ul { list-style: none; }
 .cohort-head {
   display: flex;
   align-items: baseline;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 0.55em;
   margin-bottom: 8px;
 }
 
-.cohort-head .year {
-  font-family: var(--font-display);
+/* 기수 헤딩 — "2026년도 7기 — 4인" 한 줄. 국문이 섞여 Anton을 쓰면 한 단어
+   안에서 서체가 갈리므로 본문 서체 굵게로 통일한다(DESIGN.md 국문 폴백). */
+.cohort-head .cohort-year,
+.cohort-head .cohort-no,
+.cohort-head .cohort-count {
   font-size: clamp(22px, 3vw, 36px);
-  text-transform: uppercase;
+  line-height: 1;
+}
+
+.cohort-head .cohort-year,
+.cohort-head .cohort-no {
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.cohort-head .cohort-count {
+  font-weight: 400;
+  color: var(--muted);
 }
 
 /* ── posts / projects cards ───────────────── */
@@ -1357,7 +1418,6 @@ html.js.gsap-on .reveal { transition: none; }
   .intro-grid, .project-cols, .detail-cols, .artist-grid { grid-template-columns: 1fr; }
   .artist-photo, .detail-cols .side, .intro-label { position: static; }
   .quote-grid { grid-template-columns: 1fr; }
-  .cursor-img { display: none; }
 }
 
 @media (max-width: 640px) {

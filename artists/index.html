@@ -8,26 +8,31 @@ permalink: /artists/
 
 <section class="page-hero wrap">
   <p class="label label--muted reveal">RESIDENCY ARCHIVE</p>
-  <h1 class="section-title display reveal" style="font-size:clamp(48px,10vw,140px)">Artists <span class="count">{{ site.artists | size }}</span></h1>
+  <h1 class="archive-title display reveal">
+    <span class="at-word">Artists</span>
+    <span class="at-rule" aria-hidden="true"></span>
+    <span class="at-count">{{ site.artists | size }}</span>
+  </h1>
   <p class="desc reveal">기수별 입주작가 아카이브. 이름을 누르면 작가의 소개와 작업을 볼 수 있습니다.</p>
 </section>
 
 <section class="section wrap" style="padding-top:0" id="artist-index">
-  <div class="cohort-tabs reveal" data-cohort-tabs data-target="#artist-index">
-    <button class="cohort-tab is-active" data-filter="all">전체 <b>{{ site.artists | size }}</b></button>
-    {% for c in cohorts %}
-    {% assign n = site.artists | where: "cohort", c | size %}
-    <button class="cohort-tab" data-filter="{{ c }}">{{ c }}기 <b>{{ n }}</b></button>
+  {% assign cohorts_asc = cohorts | sort %}
+  <nav class="cohort-nums reveal" data-cohort-tabs data-target="#artist-index" aria-label="기수 고르기">
+    <button class="cohort-num is-active" data-filter="all">All</button>
+    {% for c in cohorts_asc %}
+    <button class="cohort-num" data-filter="{{ c }}">{{ c }}</button>
     {% endfor %}
-  </div>
+  </nav>
 
   {% for c in cohorts %}
   {% assign group = site.artists | where: "cohort", c | sort: "ename" %}
   {% assign sample = group | first %}
   <div class="cohort-group" id="cohort-{{ c }}" data-cohort-group>
     <div class="cohort-head reveal">
-      <span class="year display">{{ sample.year }}</span>
-      <span class="label label--muted">COHORT {{ c }} · {{ c }}기 · {{ group | size }}인</span>
+      <span class="cohort-year">{{ sample.year }}년도</span>
+      <span class="cohort-no">{{ c }}기</span>
+      <span class="cohort-count">— {{ group | size }}인</span>
     </div>
     <div class="artist-list">
       {% for a in group %}

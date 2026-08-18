@@ -317,7 +317,7 @@
     if (!scope) return;
 
     function apply(val, animate) {
-      tabs.querySelectorAll(".cohort-tab").forEach(function (b) {
+      tabs.querySelectorAll("[data-filter]").forEach(function (b) {
         b.classList.toggle("is-active", b.getAttribute("data-filter") === val);
       });
       var rows = scope.querySelectorAll("[data-cohort]");
@@ -337,7 +337,7 @@
     }
 
     tabs.addEventListener("click", function (ev) {
-      var btn = ev.target.closest(".cohort-tab");
+      var btn = ev.target.closest("[data-filter]");
       if (!btn || !btn.hasAttribute("data-filter")) return;
       var val = btn.getAttribute("data-filter");
       apply(val, true);
@@ -363,29 +363,33 @@
     window.addEventListener("hashchange", fromHash);
   });
 
-  /* ── floating image on artist rows ───────── */
-  var float = document.createElement("div");
-  float.className = "cursor-img";
-  var floatImg = document.createElement("img");
-  floatImg.alt = "";
-  float.appendChild(floatImg);
-  document.body.appendChild(float);
+  /* ── archive title ───────────────────────── */
+  /* 이름이 서고 → 선이 그어지고 → 그 끝에서 누적 인원이 올라간다.
+     JS가 없거나 모션을 끈 경우엔 완성된 상태 그대로 보인다. */
+  (function () {
+    var title = document.querySelector(".archive-title");
+    if (!title || !hasGsap || reduced) return;
 
-  if (hasGsap && !reduced && window.matchMedia("(pointer: fine)").matches) {
-    var qx = window.gsap.quickTo(float, "x", { duration: 0.45, ease: "power3.out" });
-    var qy = window.gsap.quickTo(float, "y", { duration: 0.45, ease: "power3.out" });
-    window.gsap.set(float, { scale: 0.9, opacity: 0 });
-    window.addEventListener("mousemove", function (e) { qx(e.clientX + 26); qy(e.clientY - 150); });
-    document.querySelectorAll(".artist-row[data-img]").forEach(function (row) {
-      row.addEventListener("mouseenter", function () {
-        floatImg.src = row.getAttribute("data-img");
-        window.gsap.to(float, { opacity: 1, scale: 1, duration: 0.35, ease: "power3.out", overwrite: true });
-      });
-      row.addEventListener("mouseleave", function () {
-        window.gsap.to(float, { opacity: 0, scale: 0.9, duration: 0.3, ease: "power3.out", overwrite: true });
-      });
-    });
-  }
+    var rule = title.querySelector(".at-rule");
+    var count = title.querySelector(".at-count");
+    if (!rule || !count) return;
+
+    var end = parseInt((count.textContent || "").trim(), 10);
+    if (!isFinite(end)) return;
+
+    var n = { v: 0 };
+    window.gsap.set(rule, { scaleX: 0 });
+    count.textContent = "0";
+
+    window.gsap.timeline({ delay: 0.35 })
+      .to(rule, { scaleX: 1, duration: 0.9, ease: "power3.out" })
+      .to(n, {
+        v: end,
+        duration: 1.2,
+        ease: "power2.out",
+        onUpdate: function () { count.textContent = String(Math.round(n.v)); }
+      }, "-=0.45");
+  })();
 
   /* ── back to top ─────────────────────────── */
   /* 문서 끝에 닿았을 때만 올라온다. 홈 북모드는 페이지 플립이 스크롤을

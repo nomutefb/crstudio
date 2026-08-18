@@ -1,0 +1,9 @@
+{%- assign s = site.data.settings -%}
+{%- assign ghost_len = s.site_name | size | minus: 1 -%}
+{%- assign ghost = s.site_name | slice: 0, ghost_len -%}
+<a class="wordmark{% if include.class %} {{ include.class }}{% endif %}" href="{{ '/' | relative_url }}">
+  <span class="wm-row">{{ s.site_name }}</span>
+  {%- if s.site_name_2 and s.site_name_2 != "" %}
+  <span class="wm-row wm-row--2"><span class="wm-lead" aria-hidden="true">{{ ghost }}</span>{{ s.site_name_2 }}</span>
+  {%- endif %}
+</a>
