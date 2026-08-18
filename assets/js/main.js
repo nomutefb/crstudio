@@ -201,6 +201,7 @@
   if (menu) {
     var openMenu = function (open) {
       menu.classList.toggle("is-open", open);
+      document.body.classList.toggle("menu-open", open);
       menu.setAttribute("aria-hidden", open ? "false" : "true");
       if (lenis) { open ? lenis.stop() : lenis.start(); }
       document.body.style.overflow = open ? "hidden" : "";
@@ -222,6 +223,10 @@
     gsap.registerPlugin(window.ScrollTrigger);
     docEl.classList.add("gsap-on");
 
+    /* 아카이브 타이틀이 있는 화면은 선이 그어진 다음 내용이 아래로 펼쳐지게
+       첫 묶음만 기다렸다가 시작한다. 두 번째부터는 평소대로 즉시. */
+    var firstHold = document.querySelector(".archive-title") ? 0.55 : 0;
+
     gsap.set(".reveal", { opacity: 0, y: 34 });
     window.ScrollTrigger.batch(".reveal", {
       start: "top 88%",
@@ -230,11 +235,13 @@
         gsap.to(els, {
           opacity: 1, y: 0,
           duration: 1.0,
+          delay: firstHold,
           ease: "power3.out",
           stagger: 0.07,
           overwrite: true,
           onComplete: function () { els.forEach(function (el) { el.classList.add("is-in"); }); }
         });
+        firstHold = 0;
       }
     });
 
@@ -388,7 +395,7 @@
     window.gsap.set(rule, { scaleX: 0 });
     window.gsap.set(count, { "--at-wipe": "100%" });   /* 처음엔 완전히 가려 둔다 */
 
-    window.gsap.timeline({ delay: 0.35 })
+    window.gsap.timeline({ delay: 0.15 })
       .to(rule, { scaleX: 1, duration: 0.9, ease: "power3.out" })
       .to(count, { "--at-wipe": "0%", duration: 0.75, ease: "power2.out" }, "-=0.4")
       .to(n, {

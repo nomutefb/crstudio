@@ -160,20 +160,24 @@ ul { list-style: none; }
 
 /* mobile menu */
 
+/* 메뉴 여닫기 — 알약이 아니라 볼드 + 밑줄. 열리면 밑줄이 걷히며 펼쳐진다 */
 .nav-burger {
   display: none;
   font-family: var(--font-label);
   font-size: var(--fs-label);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: var(--ls-label-tight);
   text-transform: uppercase;
   background: none;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-pill);
+  border: 0;
+  border-bottom: 1.5px solid var(--ink);
   color: var(--ink);
-  padding: 8px 18px;
+  padding: 4px 1px;
   cursor: pointer;
+  transition: border-color var(--dur-fast) ease;
 }
+
+body.menu-open .nav-burger { border-bottom-color: transparent; }
 
 .mobile-menu {
   position: fixed;
@@ -184,7 +188,7 @@ ul { list-style: none; }
   flex-direction: column;
   justify-content: center;
   padding: var(--pad);
-  gap: 6px;
+  gap: 10px;
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--dur-med) var(--ease-out), visibility 0s linear var(--dur-med);
@@ -199,8 +203,8 @@ ul { list-style: none; }
 .mobile-menu a {
   font-family: var(--font-display);
   text-transform: uppercase;
-  font-size: clamp(44px, 13vw, 80px);
-  line-height: 1.05;
+  font-size: clamp(35px, 10.4vw, 64px);   /* 기존의 80% */
+  line-height: 1.26;                      /* 줄 간격 20% 더 */
   transform: translateY(24px);
   opacity: 0;
   transition: transform var(--dur-med) var(--ease-out), opacity var(--dur-med) var(--ease-out);
@@ -219,9 +223,10 @@ ul { list-style: none; }
   top: 20px;
   right: var(--pad);
   background: none;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-pill);
-  padding: 8px 18px;
+  border: 0;
+  border-bottom: 1.5px solid var(--ink);
+  padding: 4px 1px;
+  font-weight: 700;
   font-family: var(--font-label);
   font-size: var(--fs-label);
   letter-spacing: var(--ls-label-tight);
@@ -523,8 +528,15 @@ ul { list-style: none; }
   transition: color 0.25s ease, -webkit-text-stroke 0.25s ease, transform 0.35s ease;
 }
 
-/* 두 사람 이름이 붙은 콜렉티브 등 — 한 줄에 들어오도록 한 단계 줄인다 */
+/* 한 칸을 넘기는 긴 이름 — 한 단계 줄인다 */
 .artist-name--long { font-size: clamp(22px, 3.4vw, 46px); }
+
+/* 두 사람이 묶인 이름 — & 에서 접어 두 줄로. 두 줄이 한 줄 높이를 넘지 않게 잡는다 */
+.artist-name--two {
+  white-space: normal;
+  font-size: clamp(20px, 3vw, 40px);
+  line-height: 1.02;
+}
 
 .artist-row:hover .artist-name {
   color: transparent;
@@ -1698,8 +1710,18 @@ html.js.gsap-on .reveal { transition: none; }
 }
 
 @media (max-width: 700px) {
-  .artist-row { grid-template-columns: minmax(0, 1fr) auto; }
-  .artist-row .sub { grid-column: 2; text-align: right; }
+  /* 영문 이름이 두 줄을 걸쳐 서고, 오른쪽에 한글·장르가 붙어 선다.
+     전에는 이름 높이가 첫 줄을 늘려 장르가 한참 아래로 떨어졌다. */
+  .artist-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    row-gap: 2px;
+    column-gap: 14px;
+  }
+
+  .artist-row .artist-name { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+  .artist-row .kname { grid-column: 2; grid-row: 1; text-align: right; }
+  .artist-row .sub { grid-column: 2; grid-row: 2; text-align: right; }
 }
 
 /* 기수 스냅 — 휠을 굴리면 한 번에 한 기수씩 걸린다.

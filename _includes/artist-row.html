@@ -3,7 +3,14 @@
 {% if a.thumb and a.thumb != "" %}{% assign portrait = a.thumb %}{% else %}{% assign portrait = '/assets/img/ph/ph-' | append: a.ph | append: '.svg' %}{% endif %}
 <a class="artist-row" href="{{ a.url | relative_url }}" data-cohort="{{ a.cohort }}">
   <span class="idx">{{ include.idx }}</span>
-  <span class="artist-name{% if en.size > 16 %} artist-name--long{% endif %}">{{ en }}</span>
+  {%- comment -%} 두 사람이 묶인 이름은 & 에서 줄을 바꿔 두 줄로 세운다 {%- endcomment -%}
+  {% if en contains " & " %}
+  <span class="artist-name artist-name--two">{{ en | replace: " & ", " &amp;<br>" }}</span>
+  {% elsif en.size > 16 %}
+  <span class="artist-name artist-name--long">{{ en }}</span>
+  {% else %}
+  <span class="artist-name">{{ en }}</span>
+  {% endif %}
   <span class="kname{% if a.title.size > 4 %} kname--long{% endif %}">{{ a.title }}</span>
   <span class="sub">{% if a.genre and a.genre != "" %}{{ a.genre }}{% endif %}</span>
   <span class="artist-portrait" aria-hidden="true"><img src="{{ portrait | relative_url }}" alt="" loading="lazy"></span>
