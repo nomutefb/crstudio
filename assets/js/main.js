@@ -104,6 +104,94 @@
     docEl.classList.add("snap-on");
   }
 
+  /* ── 기수 플립 — 휠 한 번에 한 기수 ──────────
+     홈의 페이지 넘김과 같은 방식(제스처 1회 = 1면, 0.9s power2.inOut).
+     화면보다 긴 기수는 첫 휠이 그 아래끝까지 데려다 놓고, 다음 휠에 넘어간다. */
+  var cohortFlip = document.body.classList.contains("artists-index") &&
+                   window.matchMedia("(min-width: 901px)").matches;
+
+  if (cohortFlip && hasGsap && !reduced) {
+    /* 스크롤을 JS가 직접 모므로 브라우저 스무스 스크롤은 꺼야 한다.
+       켜 두면 매 프레임 scrollTo 가 브라우저 보간과 싸워 목표에 못 닿고
+       화면이 덜컥거린다. */
+    docEl.classList.add("snap-on");
+
+    var cs = getComputedStyle(docEl);
+    var stickyH = function () {
+      return parseFloat(cs.getPropertyValue("--head-h-sm")) +
+             parseFloat(cs.getPropertyValue("--cohort-nav-h"));
+    };
+
+    var fPages = Array.prototype.slice.call(
+      document.querySelectorAll(".page-hero, .cohort-group, .site-foot")
+    );
+
+    var fTop = function (el) {
+      var y = el.getBoundingClientRect().top + window.scrollY;
+      if (el.classList.contains("page-hero")) return 0;
+      if (el.classList.contains("cohort-group")) return Math.max(0, y - stickyH());
+      return y;
+    };
+
+    var maxY = function () {
+      return document.documentElement.scrollHeight - window.innerHeight;
+    };
+
+    var fBusy = false;
+    var fLastT = -1000;
+
+    var glideTo = function (y) {
+      y = Math.max(0, Math.min(maxY(), y));
+      if (Math.abs(window.scrollY - y) < 4) return;
+      fBusy = true;
+      var st = { y: window.scrollY };
+      window.gsap.to(st, {
+        y: y,
+        duration: 0.9,
+        ease: "power2.inOut",
+        overwrite: true,
+        onUpdate: function () { window.scrollTo(0, st.y); },
+        onComplete: function () { fBusy = false; }
+      });
+    };
+
+    /* 목표는 늘 지금 스크롤 위치에서 다시 계산한다 — 인덱스를 들고 있으면
+       스크롤바·앵커로 움직였을 때 어긋난다. */
+    var flipCohort = function (dir) {
+      var y = window.scrollY;
+      var tops = fPages.map(fTop).sort(function (a, b) { return a - b; });
+      var target = null;
+      var i;
+      if (dir > 0) {
+        for (i = 0; i < tops.length; i++) { if (tops[i] > y + 8) { target = tops[i]; break; } }
+      } else {
+        for (i = tops.length - 1; i >= 0; i--) { if (tops[i] < y - 8) { target = tops[i]; break; } }
+      }
+      if (target === null) return;
+      /* 다음 면이 한 화면보다 멀면(= 지금 면이 화면보다 길면) 한 화면씩 간다 */
+      if (Math.abs(target - y) > window.innerHeight) {
+        target = y + (dir > 0 ? 1 : -1) * window.innerHeight * 0.85;
+      }
+      glideTo(target);
+    };
+
+    window.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      var fresh = (e.timeStamp - fLastT) > 90;
+      fLastT = e.timeStamp;
+      if (fBusy || !fresh || Math.abs(e.deltaY) < 4) return;
+      flipCohort(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+
+    window.addEventListener("keydown", function (e) {
+      var tag = (e.target.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select") return;
+      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); flipCohort(1); }
+      else if (e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); flipCohort(-1); }
+      else if (e.key === "Home") { e.preventDefault(); glideTo(0); }
+    });
+  }
+
   /* ── poster belt: 첫 노출 2초 후 우→좌로 도는 컨베이어 ── */
   document.querySelectorAll("[data-belt]").forEach(function (belt) {
     var track = belt.querySelector("[data-belt-track]");
@@ -154,7 +242,7 @@
   });
 
   /* ── smooth scrolling (Lenis) — 스냅 모드에서는 비활성 ── */
-  if (!bookMode && !reduced && typeof window.Lenis !== "undefined") {
+  if (!bookMode && !cohortFlip && !reduced && typeof window.Lenis !== "undefined") {
     lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
     docEl.classList.add("lenis-on");
 

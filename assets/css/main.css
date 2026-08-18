@@ -1701,6 +1701,16 @@ html.js.gsap-on .reveal { transition: none; }
   .tide[open] .tide-panel { animation: none; }
 }
 
+/* 기수 한 묶음이 한 화면을 차지하게 — 휠 한 번에 한 기수로 넘어가는
+   플립과 짝이다. 행 여백은 화면 높이에 맞춰 조여 6인 기수까지 들어온다. */
+@media (min-width: 901px) {
+  body.artists-index .cohort-group {
+    min-height: calc(100svh - var(--head-h-sm) - var(--cohort-nav-h));
+  }
+
+  body.artists-index .artist-row { padding: clamp(8px, 1.9vh, 26px) 0; }
+}
+
 /* 폭이 모자라면 오른쪽부터 덜어낸다 — 대표 작품이 먼저, 작가 사진이 그 다음.
    이름·한글·장르는 끝까지 남는다. */
 @media (max-width: 1380px) {
