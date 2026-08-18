@@ -1,9 +1,16 @@
 {% assign a = include.artist %}
 <a class="artist-row" href="{{ a.url | relative_url }}" data-cohort="{{ a.cohort }}">
   <span class="idx">{{ include.idx }}</span>
-  <span class="artist-name">{% if a.ename and a.ename != "" %}{{ a.ename }}{% else %}{{ a.title }}{% endif %}</span>
-  <span class="artist-meta">
+  <span class="artist-id">
+    <span class="artist-name">{% if a.ename and a.ename != "" %}{{ a.ename }}{% else %}{{ a.title }}{% endif %}</span>
     <span class="kname">{{ a.title }}</span>
     {% if a.genre and a.genre != "" %}<span class="sub">{{ a.genre }}</span>{% endif %}
   </span>
+  {% if a.gallery and a.gallery != empty %}
+  <span class="artist-works" aria-hidden="true">
+    {% for g in a.gallery limit: 4 %}
+    <span class="aw"><img src="{{ g | relative_url }}" alt="" loading="lazy"></span>
+    {% endfor %}
+  </span>
+  {% endif %}
 </a>

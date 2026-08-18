@@ -154,7 +154,11 @@
   });
 
   /* ── smooth scrolling (Lenis) — 스냅 모드에서는 비활성 ── */
-  if (!bookMode && !reduced && typeof window.Lenis !== "undefined") {
+  /* 기수 스냅 페이지 — 네이티브 스크롤 스냅을 쓰므로 Lenis 는 물리지 않는다 */
+  var snapCohorts = document.body.classList.contains("artists-index");
+  if (snapCohorts && !reduced) docEl.classList.add("snap-cohorts");
+
+  if (!bookMode && !snapCohorts && !reduced && typeof window.Lenis !== "undefined") {
     lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
     docEl.classList.add("lenis-on");
 
@@ -396,18 +400,17 @@
      직접 몰기 때문에 대상에서 뺀다. */
   (function () {
     var btn = document.querySelector("[data-to-top]");
-    if (!btn || bookMode) return;
+    if (!btn) return;
 
-    var NEAR_END = 160;
     var shown = false;
 
     var sync = function () {
-      var atEnd = window.scrollY + window.innerHeight >=
-                  document.documentElement.scrollHeight - NEAR_END;
-      if (atEnd === shown) return;
-      shown = atEnd;
-      btn.hidden = !atEnd;
-      if (atEnd) { btn.classList.remove("is-in"); void btn.offsetWidth; btn.classList.add("is-in"); }
+      /* 두 화면을 지나 셋째 구간에 들어서면 올라온다 */
+      var deep = window.scrollY >= window.innerHeight * 2;
+      if (deep === shown) return;
+      shown = deep;
+      btn.hidden = !deep;
+      if (deep) { btn.classList.remove("is-in"); void btn.offsetWidth; btn.classList.add("is-in"); }
     };
 
     btn.addEventListener("click", function () {

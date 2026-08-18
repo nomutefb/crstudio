@@ -3,6 +3,7 @@ layout: default
 title: Artists
 nav: artists
 permalink: /artists/
+body_class: artists-index
 ---
 {% assign cohorts = site.artists | map: "cohort" | uniq | sort | reverse %}
 
@@ -30,9 +31,7 @@ permalink: /artists/
   {% assign sample = group | first %}
   <div class="cohort-group" id="cohort-{{ c }}" data-cohort-group>
     <div class="cohort-head reveal">
-      <span class="cohort-year">{{ sample.year }}년도</span>
-      <span class="cohort-no">{{ c }}기</span>
-      <span class="cohort-count">— {{ group | size }}인</span>
+      <span class="cohort-year">{{ sample.year }}<span class="cohort-no">({{ c }}기)</span></span>
     </div>
     <div class="artist-list">
       {% for a in group %}
