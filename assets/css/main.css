@@ -1289,6 +1289,13 @@ a.pg-pill:hover .pg-l { text-decoration: underline; text-underline-offset: 3px; 
   body.book .band { justify-content: safe center; }
 
   body.book .section-head { margin-bottom: clamp(18px, 4vh, 40px); }
+
+  /* 화면이 낮으면 사진 높이를 깎아 이름·소속이 항상 보이게 한다.
+     4:5보다 납작해지지만 object-position 20%라 얼굴은 상단에 남는다. */
+  body.book .artist-card .ac-photo {
+    width: 100%;                          /* 폭을 고정해야 4:5를 지키려 좁아지지 않는다 */
+    max-height: calc(100svh - 340px);
+  }
   body.book .pg-row { padding: 9px 0; }
   body.book .prog-note { margin-bottom: 14px; }
   body.book .pg-extra { margin-top: 5px; }
@@ -1439,22 +1446,29 @@ html.js.gsap-on .reveal { transition: none; }
 
 /* ── tide nav — 우측 하단 물때(입도 가능 시간) 내비 ─── */
 
-.tide {
+.float-nav {
   position: fixed;
   right: var(--float-gap);
   bottom: var(--float-gap);
   z-index: var(--z-tide);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
 }
 
+.tide { position: relative; }
+
 .tide-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  padding: 10px 17px 10px 14px;
+  padding: 12px 19px 12px 16px;
   border: 1px solid var(--ink);
   border-radius: var(--radius-pill);
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
   cursor: pointer;
   list-style: none;
   transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
@@ -1462,8 +1476,20 @@ html.js.gsap-on .reveal { transition: none; }
 
 .tide-btn::-webkit-details-marker { display: none; }
 .tide-btn::marker { content: ""; }
+
+/* 알약 안쪽을 한 번 더 감싸는 반투명 링 */
+.tide-btn::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-pill);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .tide-btn:hover,
-.tide[open] .tide-btn { background: var(--ink); color: var(--paper); }
+.tide[open] .tide-btn { background: var(--paper); color: var(--ink); }
 
 .tide-ico { width: 19px; height: 19px; flex: none; }
 .tide-btn-txt { line-height: 1; }
@@ -1502,7 +1528,14 @@ html.js.gsap-on .reveal { transition: none; }
 
 .tide-fig { margin: 0 0 14px; }
 .tide-fig figcaption { margin-bottom: 6px; }
-.tide-fig img { width: 100%; height: auto; background: var(--paper-2); }
+.tide-fig img {
+  width: 100%;
+  height: auto;
+  /* 예울마루 시간표는 흰 바탕 + 파랑이다. multiply 로 흰 바탕을 종이에 녹이고
+     grayscale 로 유채색을 걷어 페이퍼&잉크 톤에 맞춘다. */
+  filter: grayscale(1) contrast(1.08);
+  mix-blend-mode: multiply;
+}
 
 .tide-fallback,
 .tide-note {
@@ -1519,4 +1552,31 @@ html.js.gsap-on .reveal { transition: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .tide[open] .tide-panel { animation: none; }
+}
+
+/* 맨 위로 — 문서 끝에 닿으면 물때 버튼 위로 올라온다 */
+
+.to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 9px 13px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease,
+              opacity var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+.to-top[hidden] { display: none; }
+body.tide-open .to-top { visibility: hidden; }
+.to-top:hover { background: var(--ink); color: var(--paper); }
+.to-top-ico { width: 16px; height: 16px; flex: none; }
+
+.to-top.is-in { animation: tide-in var(--dur-fast) var(--ease-out) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .to-top.is-in { animation: none; }
 }

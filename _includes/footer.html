@@ -20,7 +20,10 @@
     <span class="label label--muted" style="letter-spacing:.2em">COHORT ARCHIVE — {{ site.artists | size }} ARTISTS</span>
   </div>
 </footer>
-{% include tide-nav.html %}
+<div class="float-nav">
+  {% include to-top.html %}
+  {% include tide-nav.html %}
+</div>
 
 <script src="{{ '/assets/vendor/lenis.min.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/vendor/gsap.min.js' | relative_url }}" defer></script>

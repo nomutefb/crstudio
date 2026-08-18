@@ -346,15 +346,23 @@
       if (!btn || !btn.hasAttribute("data-filter")) return;
       var val = btn.getAttribute("data-filter");
       apply(val, true);
-      // 주소에 남겨서 뒤로가기·공유·작가 페이지에서의 진입이 같은 화면을 연다
-      history.replaceState(null, "", val === "all" ? location.pathname : "#cohort-" + val);
     });
 
-    // 작가 상세에서 "#cohort-3" 으로 들어오면 해당 기수만 펼친 상태로 시작
+    /* 작가 상세에서 "#cohort-3" 으로 들어오면 전체를 펼쳐 둔 채 그 기수로 내려간다.
+       거기서부터 아래 기수까지 쭉 훑어볼 수 있어야 하므로 감추지 않는다.
+       탭을 직접 누른 경우에만 필터가 걸린다. */
     function fromHash() {
+      apply("all", false);
       var m = (location.hash || "").match(/^#cohort-(\d+)$/);
-      var val = m && tabs.querySelector('.cohort-tab[data-filter="' + m[1] + '"]') ? m[1] : "all";
-      apply(val, false);
+      if (!m) return;
+      var group = document.getElementById("cohort-" + m[1]);
+      if (!group) return;
+      var go = function () {
+        var y = group.getBoundingClientRect().top + window.scrollY - 96;
+        window.scrollTo(0, Math.max(0, y));
+      };
+      requestAnimationFrame(go);
+      window.addEventListener("load", go, { once: true });
     }
     fromHash();
     window.addEventListener("hashchange", fromHash);
@@ -384,6 +392,35 @@
     });
   }
 
+  /* ── back to top ─────────────────────────── */
+  /* 문서 끝에 닿았을 때만 올라온다. 홈 북모드는 페이지 플립이 스크롤을
+     직접 몰기 때문에 대상에서 뺀다. */
+  (function () {
+    var btn = document.querySelector("[data-to-top]");
+    if (!btn || bookMode) return;
+
+    var NEAR_END = 160;
+    var shown = false;
+
+    var sync = function () {
+      var atEnd = window.scrollY + window.innerHeight >=
+                  document.documentElement.scrollHeight - NEAR_END;
+      if (atEnd === shown) return;
+      shown = atEnd;
+      btn.hidden = !atEnd;
+      if (atEnd) { btn.classList.remove("is-in"); void btn.offsetWidth; btn.classList.add("is-in"); }
+    };
+
+    btn.addEventListener("click", function () {
+      if (lenis) lenis.scrollTo(0);
+      else window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    });
+
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    sync();
+  })();
+
   /* ── tide nav ────────────────────────────── */
   /* 패널을 열 때 2분 넘게 묵은 시간표는 다시 받아온다(서버 캐시 max-age=120s).
      이미지를 못 받으면 예울마루 링크 안내로 대체한다. JS 없이도 패널 자체는 동작한다. */
@@ -404,6 +441,8 @@
     });
 
     tide.addEventListener("toggle", function () {
+      /* 패널이 열리면 그 자리를 덮으므로 맨 위로 버튼은 잠시 숨긴다 */
+      document.body.classList.toggle("tide-open", tide.open);
       if (!tide.open || Date.now() - loadedAt < TTL) return;
       loadedAt = Date.now();
       var bust = "t=" + Math.floor(loadedAt / TTL);
