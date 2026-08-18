@@ -104,7 +104,7 @@ collections:
         file: "_data/settings.yml"
         fields:
           - { name: site_name, label: 사이트 이름(워드마크), widget: string }
-          - { name: site_name_dot, label: "워드마크 끝에 점(.) 표시", widget: boolean, default: true }
+          - { name: site_name_2, label: "워드마크 둘째 줄(비우면 한 줄)", widget: string, required: false, default: "STUDIO" }
           - name: hero
             label: 메인 히어로
             widget: object

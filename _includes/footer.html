@@ -11,7 +11,7 @@
   {% endif %}
   <div class="foot-grid">
     <div>
-      <a class="wordmark" href="{{ '/' | relative_url }}">{{ site.data.settings.site_name }}{% if site.data.settings.site_name_dot %}<span>.</span>{% endif %}</a>
+      {% include wordmark.html %}
       <p class="label label--muted" style="margin-top:14px">{{ site.data.settings.footer.org_line }}</p>
     </div>
     <nav class="foot-links">

@@ -317,7 +317,7 @@
     if (!scope) return;
 
     function apply(val, animate) {
-      tabs.querySelectorAll(".cohort-tab").forEach(function (b) {
+      tabs.querySelectorAll("[data-filter]").forEach(function (b) {
         b.classList.toggle("is-active", b.getAttribute("data-filter") === val);
       });
       var rows = scope.querySelectorAll("[data-cohort]");
@@ -337,7 +337,7 @@
     }
 
     tabs.addEventListener("click", function (ev) {
-      var btn = ev.target.closest(".cohort-tab");
+      var btn = ev.target.closest("[data-filter]");
       if (!btn || !btn.hasAttribute("data-filter")) return;
       var val = btn.getAttribute("data-filter");
       apply(val, true);
@@ -363,42 +363,33 @@
     window.addEventListener("hashchange", fromHash);
   });
 
-  /* ── artist row photo ────────────────────── */
-  /* 사진은 커서를 따라다니되 그 행 안에서만 움직인다. 행이 overflow:hidden
-     이라 위아래로 새지 않고, 좌우는 행 폭 안으로 가둔다. */
-  var rowPhoto = document.createElement("div");
-  rowPhoto.className = "row-photo";
-  var rowPhotoImg = document.createElement("img");
-  rowPhotoImg.alt = "";
-  rowPhoto.appendChild(rowPhotoImg);
+  /* ── archive title ───────────────────────── */
+  /* 이름이 서고 → 선이 그어지고 → 그 끝에서 누적 인원이 올라간다.
+     JS가 없거나 모션을 끈 경우엔 완성된 상태 그대로 보인다. */
+  (function () {
+    var title = document.querySelector(".archive-title");
+    if (!title || !hasGsap || reduced) return;
 
-  if (hasGsap && !reduced && window.matchMedia("(pointer: fine)").matches) {
-    var qx = window.gsap.quickTo(rowPhoto, "x", { duration: 0.45, ease: "power3.out" });
+    var rule = title.querySelector(".at-rule");
+    var count = title.querySelector(".at-count");
+    if (!rule || !count) return;
 
-    var clampX = function (row, clientX) {
-      var r = row.getBoundingClientRect();
-      var w = rowPhoto.offsetWidth;
-      return Math.min(Math.max(clientX - r.left - w / 2, 0), Math.max(0, r.width - w));
-    };
+    var end = parseInt((count.textContent || "").trim(), 10);
+    if (!isFinite(end)) return;
 
-    document.querySelectorAll(".artist-row[data-img]").forEach(function (row) {
-      row.addEventListener("mouseenter", function (e) {
-        rowPhotoImg.src = row.getAttribute("data-img");
-        row.appendChild(rowPhoto);
-        // 다른 행에서 넘어와도 미끄러져 오지 않도록 들어온 지점에 붙인다
-        var x = clampX(row, e.clientX);
-        window.gsap.set(rowPhoto, { x: x });
-        qx(x);
-        window.gsap.to(rowPhoto, { opacity: 1, duration: 0.35, ease: "power3.out", overwrite: "auto" });
-      });
+    var n = { v: 0 };
+    window.gsap.set(rule, { scaleX: 0 });
+    count.textContent = "0";
 
-      row.addEventListener("mousemove", function (e) { qx(clampX(row, e.clientX)); });
-
-      row.addEventListener("mouseleave", function () {
-        window.gsap.to(rowPhoto, { opacity: 0, duration: 0.3, ease: "power3.out", overwrite: "auto" });
-      });
-    });
-  }
+    window.gsap.timeline({ delay: 0.35 })
+      .to(rule, { scaleX: 1, duration: 0.9, ease: "power3.out" })
+      .to(n, {
+        v: end,
+        duration: 1.2,
+        ease: "power2.out",
+        onUpdate: function () { count.textContent = String(Math.round(n.v)); }
+      }, "-=0.45");
+  })();
 
   /* ── back to top ─────────────────────────── */
   /* 문서 끝에 닿았을 때만 올라온다. 홈 북모드는 페이지 플립이 스크롤을
