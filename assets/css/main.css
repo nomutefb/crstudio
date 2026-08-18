@@ -579,22 +579,30 @@ ul { list-style: none; }
 .cohort-head {
   display: flex;
   align-items: baseline;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 0.55em;
   margin-bottom: 8px;
 }
 
-.cohort-head .year {
-  font-family: var(--font-display);
+/* 기수 헤딩 — "2026년도 7기 — 4인" 한 줄. 국문이 섞여 Anton을 쓰면 한 단어
+   안에서 서체가 갈리므로 본문 서체 굵게로 통일한다(DESIGN.md 국문 폴백). */
+.cohort-head .cohort-year,
+.cohort-head .cohort-no,
+.cohort-head .cohort-count {
   font-size: clamp(22px, 3vw, 36px);
-  text-transform: uppercase;
+  line-height: 1;
 }
 
-/* 기수는 이 목록의 이정표 — 연도와 같은 크기로 세운다(기존 라벨의 약 2배) */
+.cohort-head .cohort-year,
 .cohort-head .cohort-no {
-  font-size: clamp(22px, 3vw, 36px);
   font-weight: 700;
-  line-height: 1;
   color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.cohort-head .cohort-count {
+  font-weight: 400;
+  color: var(--muted);
 }
 
 /* ── posts / projects cards ───────────────── */
