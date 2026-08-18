@@ -1,20 +1,27 @@
 ---
 layout: default
-title: Program
+title: History
 nav: program
 permalink: /program/
+body_class: has-flip
 ---
 {% assign s = site.data.settings %}
+{% assign years = site.data.program.years %}
 
-<section class="page-hero wrap">
-  <p class="label label--muted reveal">ANNUAL CYCLE — 연례 프로그램</p>
-  <h1 class="section-title display reveal" style="font-size:clamp(48px,10vw,140px)">Program</h1>
+<section class="page-hero wrap flip-page">
+  <p class="label label--muted reveal">ANNUAL CYCLE — 연혁</p>
+  <h1 class="archive-title display reveal">
+    <span class="at-word">History</span>
+    <span class="at-rule" aria-hidden="true"></span>
+    <span class="at-count">{{ years | size }}</span>
+  </h1>
   <p class="desc reveal">{{ site.data.program.note }}</p>
 </section>
 
-<section class="wrap" style="padding-bottom:clamp(48px,8vh,90px)">
+<section class="wrap flip-page hs-page">
+  <p class="label label--muted reveal hs-label">{{ s.intro.label }}</p>
   <div class="intro-grid">
-    <p class="intro-label label label--muted reveal">{{ s.intro.label }}</p>
+    <p class="intro-label label label--muted reveal">STUDIO</p>
     <div class="intro-body reveal">
       <h2 class="intro-heading">{{ s.intro.heading }}</h2>
       {% for p in s.intro.paragraphs %}<p>{{ p }}</p>{% endfor %}
@@ -23,8 +30,8 @@ permalink: /program/
   </div>
 </section>
 
-<section class="wrap" style="padding-bottom:clamp(48px,8vh,90px)">
-  <p class="label label--muted reveal" style="margin-bottom:24px">HOW IT WORKS — 운영 구조</p>
+<section class="wrap flip-page hs-page">
+  <p class="label label--muted reveal hs-label">HOW IT WORKS — 운영 구조</p>
   <div class="acc reveal">
     {% for pr in s.program %}
     <details {% if forloop.first %}open{% endif %}>
@@ -35,15 +42,15 @@ permalink: /program/
   </div>
 </section>
 
-<section class="wrap" id="timeline" style="padding-bottom:clamp(72px,12vh,140px)">
-  <p class="label label--muted reveal" style="margin-bottom:24px">TIMELINE — 연도별 흐름 (1–12월)</p>
+<section class="wrap flip-page hs-page" id="timeline">
+  <p class="label label--muted reveal hs-label">TIMELINE — 연도별 흐름 (1–12월)</p>
   <div class="reveal">
     {% include program-gantt.html %}
   </div>
-  <p class="label label--muted reveal" style="margin-top:28px">자료 기준 — GS칼텍스 예울마루 창작스튜디오 아카이브. 세부 일정은 관리자에서 계속 보완됩니다.</p>
+  <p class="label label--muted reveal" style="margin-top:22px">자료 기준 — GS칼텍스 예울마루 창작스튜디오 아카이브. 세부 일정은 관리자에서 계속 보완됩니다.</p>
 </section>
 
-<section class="band" id="residency">
+<section class="band flip-page" id="residency">
   <div class="wrap">
     <div class="section-head reveal">
       <h2 class="section-title display">Residency</h2>

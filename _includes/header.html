@@ -3,7 +3,7 @@
   <nav class="site-nav">
     <a href="{{ '/artists/' | relative_url }}" {% if page.nav == 'artists' %}class="is-active"{% endif %}>Artists</a>
     <a href="{{ '/projects/' | relative_url }}" {% if page.nav == 'projects' %}class="is-active"{% endif %}>Projects</a>
-    <a class="nav-hide-m" href="{{ '/program/' | relative_url }}" {% if page.nav == 'program' %}class="is-active"{% endif %}>Program</a>
+    <a class="nav-hide-m" href="{{ '/program/' | relative_url }}" {% if page.nav == 'program' %}class="is-active"{% endif %}>History</a>
     <a class="nav-admin" href="{{ '/admin/' | relative_url }}" title="관리자">Admin</a>
     <button class="nav-burger" type="button" aria-label="메뉴 열기" data-menu-open>Menu</button>
   </nav>
@@ -15,6 +15,6 @@
   <a href="{{ '/' | relative_url }}">Home</a>
   <a href="{{ '/artists/' | relative_url }}">Artists</a>
   <a href="{{ '/projects/' | relative_url }}">Projects</a>
-  <a href="{{ '/program/' | relative_url }}">Program</a>
+  <a href="{{ '/program/' | relative_url }}">History</a>
   <a href="{{ '/admin/' | relative_url }}">Admin</a>
 </div>

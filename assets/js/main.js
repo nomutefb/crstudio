@@ -107,7 +107,7 @@
   /* ── 기수 플립 — 휠 한 번에 한 기수 ──────────
      홈의 페이지 넘김과 같은 방식(제스처 1회 = 1면, 0.9s power2.inOut).
      화면보다 긴 기수는 첫 휠이 그 아래끝까지 데려다 놓고, 다음 휠에 넘어간다. */
-  var cohortFlip = document.body.classList.contains("artists-index") &&
+  var cohortFlip = document.body.classList.contains("has-flip") &&
                    window.matchMedia("(min-width: 901px)").matches;
 
   if (cohortFlip && hasGsap && !reduced) {
@@ -123,14 +123,14 @@
     };
 
     var fPages = Array.prototype.slice.call(
-      document.querySelectorAll(".page-hero, .cohort-group, .site-foot")
+      document.querySelectorAll(".flip-page, .site-foot")
     );
 
+    /* data-flip-sticky 가 붙은 면은 헤더 + 스티키 줄 아래에 걸린다 */
     var fTop = function (el) {
-      var y = el.getBoundingClientRect().top + window.scrollY;
       if (el.classList.contains("page-hero")) return 0;
-      if (el.classList.contains("cohort-group")) return Math.max(0, y - stickyH());
-      return y;
+      var y = el.getBoundingClientRect().top + window.scrollY;
+      return Math.max(0, y - (el.hasAttribute("data-flip-sticky") ? stickyH() : 0));
     };
 
     var maxY = function () {
