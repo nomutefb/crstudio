@@ -1436,3 +1436,87 @@ html.js.gsap-on .reveal { transition: none; }
   .pg-tip { display: none; }
   .pg-extra { margin-top: 10px; }
 }
+
+/* ── tide nav — 우측 하단 물때(입도 가능 시간) 내비 ─── */
+
+.tide {
+  position: fixed;
+  right: var(--float-gap);
+  bottom: var(--float-gap);
+  z-index: var(--z-tide);
+}
+
+.tide-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 17px 10px 14px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.tide-btn::-webkit-details-marker { display: none; }
+.tide-btn::marker { content: ""; }
+.tide-btn:hover,
+.tide[open] .tide-btn { background: var(--ink); color: var(--paper); }
+
+.tide-ico { width: 19px; height: 19px; flex: none; }
+.tide-btn-txt { line-height: 1; }
+
+.tide-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  width: min(620px, calc(100vw - var(--float-gap) * 2));
+  max-height: calc(100svh - var(--head-h) - var(--float-gap) * 3);
+  overflow-y: auto;
+  padding: var(--gap-sm);
+  background: var(--paper);
+  border: 1px solid var(--ink);
+}
+
+.tide[open] .tide-panel { animation: tide-in var(--dur-fast) var(--ease-out) both; }
+
+@keyframes tide-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.tide-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tide-head a { border-bottom: 1px solid var(--line); }
+.tide-head a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+.tide-fig { margin: 0 0 14px; }
+.tide-fig figcaption { margin-bottom: 6px; }
+.tide-fig img { width: 100%; height: auto; background: var(--paper-2); }
+
+.tide-fallback,
+.tide-note {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+  word-break: keep-all;
+  margin: 0;
+}
+
+.tide-fallback { margin-bottom: 12px; color: var(--ink-soft); }
+.tide-fallback a { border-bottom: 1px solid var(--line); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tide[open] .tide-panel { animation: none; }
+}

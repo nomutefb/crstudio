@@ -35,10 +35,27 @@ permalink: /program/
   </div>
 </section>
 
-<section class="wrap" style="padding-bottom:clamp(72px,12vh,140px)">
+<section class="wrap" id="timeline" style="padding-bottom:clamp(72px,12vh,140px)">
   <p class="label label--muted reveal" style="margin-bottom:24px">TIMELINE — 연도별 흐름 (1–12월)</p>
   <div class="reveal">
     {% include program-gantt.html %}
   </div>
   <p class="label label--muted reveal" style="margin-top:28px">자료 기준 — GS칼텍스 예울마루 창작스튜디오 아카이브. 세부 일정은 관리자에서 계속 보완됩니다.</p>
+</section>
+
+<section class="band" id="residency">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title display">Residency</h2>
+      <span class="label" style="color:rgba(244,241,234,.5)">JANGDO · YEOSU</span>
+    </div>
+    <div class="stat-grid reveal">
+      {% for st in s.stats %}
+      <div class="stat">
+        <div class="num">{{ st.num }}</div>
+        <div class="label">{{ st.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </section>

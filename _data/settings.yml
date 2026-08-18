@@ -42,6 +42,15 @@ program:
   - title: "COMMUNITY · 교류"
     desc: "시민 참여 프로그램과 워크숍으로 작가와 지역이 서로의 일상에 스며듭니다."
 
+# 우측 하단 물때(입도 가능 시간) 내비 — 끄려면 enabled: false
+tide:
+  enabled: true
+  label: "물때"
+  title: "장도 입도 가능 시간"
+  svg_url: "https://yeulmaru-promo-api.yeulmarumaster.workers.dev/api/public/jangdo.svg"
+  more_url: "https://promo.yeulmaru.org/jangdo.html"
+  note: "자료 — GS칼텍스 예울마루. 실시간 시간표를 그대로 불러옵니다."
+
 footer:
   org_line: "CREATIVE STUDIO — RESIDENCY ARCHIVE"
   copyright: "© 2026 CREATIVE STUDIO. All rights reserved."

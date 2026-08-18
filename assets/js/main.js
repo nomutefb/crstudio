@@ -384,6 +384,44 @@
     });
   }
 
+  /* ── tide nav ────────────────────────────── */
+  /* 패널을 열 때 2분 넘게 묵은 시간표는 다시 받아온다(서버 캐시 max-age=120s).
+     이미지를 못 받으면 예울마루 링크 안내로 대체한다. JS 없이도 패널 자체는 동작한다. */
+  (function () {
+    var tide = document.querySelector("[data-tide]");
+    if (!tide) return;
+
+    var imgs = Array.prototype.slice.call(tide.querySelectorAll("[data-tide-img]"));
+    var fallback = tide.querySelector("[data-tide-fallback]");
+    var TTL = 120000;
+    var loadedAt = Date.now();
+
+    imgs.forEach(function (img) {
+      img.addEventListener("error", function () {
+        img.closest(".tide-fig").hidden = true;
+        if (fallback) fallback.hidden = false;
+      });
+    });
+
+    tide.addEventListener("toggle", function () {
+      if (!tide.open || Date.now() - loadedAt < TTL) return;
+      loadedAt = Date.now();
+      var bust = "t=" + Math.floor(loadedAt / TTL);
+      imgs.forEach(function (img) {
+        var src = img.getAttribute("data-tide-src");
+        img.src = src + (src.indexOf("?") === -1 ? "?" : "&") + bust;
+      });
+    });
+
+    /* 패널 밖을 누르면 닫기 */
+    document.addEventListener("click", function (e) {
+      if (tide.open && !tide.contains(e.target)) tide.open = false;
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && tide.open) tide.open = false;
+    });
+  })();
+
   /* ── carousels ───────────────────────────── */
   document.querySelectorAll(".carousel").forEach(function (c) {
     var track = c.querySelector(".carousel-track");
