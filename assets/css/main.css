@@ -496,9 +496,8 @@ body.menu-open .nav-burger { border-bottom-color: transparent; }
   display: grid;
   grid-template-columns:
     clamp(34px, 4vw, 68px)          /* 번호 */
-    minmax(0, 1fr)                  /* 영문 이름 */
-    clamp(88px, 7.2vw, 138px)       /* 한글 이름 */
-    clamp(56px, 4.6vw, 88px)        /* 장르 */
+    minmax(0, 1fr)                  /* 영문 이름 — 왼쪽에서 시작 */
+    clamp(150px, 13vw, 240px)       /* 한글 이름 + 장르 */
     auto                            /* 작가 사진 */
     auto;                           /* 대표 작품 */
   align-items: center;
@@ -523,7 +522,6 @@ body.menu-open .nav-burger { border-bottom-color: transparent; }
   font-size: clamp(30px, 5.6vw, 76px);
   line-height: 1;
   letter-spacing: 0.01em;
-  text-align: center;        /* 이름마다 좌우가 달라도 같은 축에 선다 */
   white-space: nowrap;
   transition: color 0.25s ease, -webkit-text-stroke 0.25s ease, transform 0.35s ease;
 }
@@ -542,6 +540,15 @@ body.menu-open .nav-burger { border-bottom-color: transparent; }
   color: transparent;
   -webkit-text-stroke: 1.5px var(--ink);
   transform: translateX(clamp(6px, 1.5vw, 22px));
+}
+
+/* 한글 이름과 장르는 한 칸에 붙여 둔다. 칸이 고정이라 이름 시작점은
+   영문 길이와 무관하게 늘 같은 세로선이다. */
+.artist-ko {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
 }
 
 .artist-row .kname {
@@ -1698,14 +1705,14 @@ html.js.gsap-on .reveal { transition: none; }
    이름·한글·장르는 끝까지 남는다. */
 @media (max-width: 1380px) {
   .artist-row { grid-template-columns:
-    clamp(34px, 4vw, 68px) minmax(0, 1fr) clamp(88px, 7.2vw, 138px) clamp(56px, 4.6vw, 88px) auto; }
+    clamp(34px, 4vw, 68px) minmax(0, 1fr) clamp(150px, 13vw, 240px) auto; }
   .artist-works { display: none; }
   .artist-portrait { margin-right: 0; }
 }
 
 @media (max-width: 1080px) {
   .artist-row { grid-template-columns:
-    clamp(34px, 4vw, 68px) minmax(0, 1fr) clamp(88px, 7.2vw, 138px) clamp(56px, 4.6vw, 88px); }
+    clamp(34px, 4vw, 68px) minmax(0, 1fr) clamp(150px, 13vw, 240px); }
   .artist-portrait { display: none; }
 }
 
@@ -1714,31 +1721,17 @@ html.js.gsap-on .reveal { transition: none; }
      전에는 이름 높이가 첫 줄을 늘려 장르가 한참 아래로 떨어졌다. */
   .artist-row {
     grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    row-gap: 2px;
+    align-items: center;
     column-gap: 14px;
   }
 
-  .artist-row .artist-name { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
-  .artist-row .kname { grid-column: 2; grid-row: 1; text-align: right; }
-  .artist-row .sub { grid-column: 2; grid-row: 2; text-align: right; }
-}
-
-/* 기수 스냅 — 휠을 굴리면 한 번에 한 기수씩 걸린다.
-   proximity 라 6인 기수처럼 화면보다 긴 묶음도 안에서 자유롭게 훑을 수 있다. */
-@media (min-width: 901px) {
-  html.snap-cohorts { scroll-snap-type: y proximity; }
-
-  html.snap-cohorts .cohort-group {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    /* 헤더 + 스티키 번호 줄 아래에 기수 헤딩이 걸리도록 */
-    scroll-margin-top: calc(var(--head-h-sm) + var(--cohort-nav-h));
-    min-height: calc(100svh - var(--head-h-sm) - var(--cohort-nav-h));
+  .artist-row .artist-name { grid-column: 1; align-self: center; }
+  .artist-row .artist-ko {
+    grid-column: 2;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
   }
-
-  /* 가장 많은 6인 기수까지 한 화면에 들어오도록 행 여백을 화면 높이에 맞춰 조인다 */
-  html.snap-cohorts .artist-row { padding: clamp(8px, 1.9vh, 26px) 0; }
 }
 
 /* 맨 위로 — 셋째 화면부터 물때 버튼 위로 올라온다 */

@@ -154,11 +154,7 @@
   });
 
   /* ── smooth scrolling (Lenis) — 스냅 모드에서는 비활성 ── */
-  /* 기수 스냅 페이지 — 네이티브 스크롤 스냅을 쓰므로 Lenis 는 물리지 않는다 */
-  var snapCohorts = document.body.classList.contains("artists-index");
-  if (snapCohorts && !reduced) docEl.classList.add("snap-cohorts");
-
-  if (!bookMode && !snapCohorts && !reduced && typeof window.Lenis !== "undefined") {
+  if (!bookMode && !reduced && typeof window.Lenis !== "undefined") {
     lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
     docEl.classList.add("lenis-on");
 
@@ -223,21 +219,29 @@
     gsap.registerPlugin(window.ScrollTrigger);
     docEl.classList.add("gsap-on");
 
-    /* 아카이브 타이틀이 있는 화면은 선이 그어진 다음 내용이 아래로 펼쳐지게
-       첫 묶음만 기다렸다가 시작한다. 두 번째부터는 평소대로 즉시. */
-    var firstHold = document.querySelector(".archive-title") ? 0.55 : 0;
+    /* 아카이브 타이틀이 있는 화면은 선과 한 몸으로 위에서 아래로 펼쳐진다.
+       y 이동 없이 불투명도만 바꿔 위쪽 순서대로 흘려보낸다 — 아래에서
+       밀려 올라오는 느낌도 없고, 여러 요소를 동시에 옮기며 생기던
+       버벅임도 사라진다. */
+    var unfold = !!document.querySelector(".archive-title");
+    var firstHold = unfold ? 0.5 : 0;
 
-    gsap.set(".reveal", { opacity: 0, y: 34 });
+    gsap.set(".reveal", unfold ? { opacity: 0 } : { opacity: 0, y: 34 });
+
     window.ScrollTrigger.batch(".reveal", {
       start: "top 88%",
       once: true,
       onEnter: function (els) {
+        els.sort(function (a, b) {
+          return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+        });
         gsap.to(els, {
-          opacity: 1, y: 0,
-          duration: 1.0,
+          opacity: 1,
+          y: 0,
+          duration: unfold ? 0.55 : 1.0,
           delay: firstHold,
-          ease: "power3.out",
-          stagger: 0.07,
+          ease: unfold ? "power2.out" : "power3.out",
+          stagger: unfold ? 0.05 : 0.07,
           overwrite: true,
           onComplete: function () { els.forEach(function (el) { el.classList.add("is-in"); }); }
         });
@@ -371,6 +375,34 @@
       window.addEventListener("load", go, { once: true });
     }
     fromHash();
+
+    /* 지금 보고 있는 기수의 번호를 볼드로 — 필터를 직접 건 상태에서는
+       그 번호를 그대로 둔다 */
+    var groups = Array.prototype.slice.call(scope.querySelectorAll("[data-cohort-group]"));
+    if (groups.length) {
+      var filtered = false;
+      tabs.addEventListener("click", function (ev) {
+        var b = ev.target.closest("[data-filter]");
+        if (b) filtered = b.getAttribute("data-filter") !== "all";
+      });
+
+      var spy = function () {
+        if (filtered) return;
+        var line = window.scrollY + window.innerHeight * 0.35;
+        var cur = null;
+        groups.forEach(function (g) {
+          if (g.style.display === "none") return;
+          if (g.getBoundingClientRect().top + window.scrollY <= line) cur = g;
+        });
+        var val = cur ? cur.id.replace("cohort-", "") : "all";
+        tabs.querySelectorAll("[data-filter]").forEach(function (b) {
+          b.classList.toggle("is-active", b.getAttribute("data-filter") === val);
+        });
+      };
+      window.addEventListener("scroll", spy, { passive: true });
+      window.addEventListener("resize", spy);
+      spy();
+    }
     window.addEventListener("hashchange", fromHash);
   });
 
