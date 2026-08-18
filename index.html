@@ -78,39 +78,3 @@ body_class: book
     </div>
   </div>
 </section>
-
-<!-- 04 · PROGRAM 연례 프로그램 -->
-<section class="book-page wrap" id="program">
-  <div class="section-head reveal">
-    <h2 class="section-title display">Program</h2>
-    <div style="text-align:right">
-      <span class="label label--muted" style="display:block;margin-bottom:8px">ANNUAL CYCLE — 연례 프로그램</span>
-      <a class="section-link label" href="{{ '/program/' | relative_url }}">Full Timeline →</a>
-    </div>
-  </div>
-  <p class="prog-note reveal">{{ site.data.program.note }}</p>
-  <div class="reveal">
-    {% include program-gantt.html limit=4 %}
-  </div>
-</section>
-
-<!-- 05 · RESIDENCY -->
-<section class="book-page band" id="residency">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <h2 class="section-title display">Residency</h2>
-      <span class="label" style="color:rgba(244,241,234,.5)">JANGDO · YEOSU</span>
-    </div>
-    <div class="stat-grid reveal">
-      {% for st in s.stats %}
-      <div class="stat">
-        <div class="num">{{ st.num }}</div>
-        <div class="label">{{ st.label }}</div>
-      </div>
-      {% endfor %}
-    </div>
-    {% if s.facility and s.facility != "" %}
-    <p class="facility-line reveal">{{ s.facility }}</p>
-    {% endif %}
-  </div>
-</section>

@@ -24,7 +24,7 @@ permalink: /artists/
   {% for c in cohorts %}
   {% assign group = site.artists | where: "cohort", c | sort: "ename" %}
   {% assign sample = group | first %}
-  <div class="cohort-group" data-cohort-group>
+  <div class="cohort-group" id="cohort-{{ c }}" data-cohort-group>
     <div class="cohort-head reveal">
       <span class="year display">{{ sample.year }}</span>
       <span class="label label--muted">COHORT {{ c }} · {{ c }}기 · {{ group | size }}인</span>

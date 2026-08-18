@@ -1,6 +1,6 @@
 ---
 title: "예술인연합AAA"
-ename: ""
+ename: "AAA UNION"
 cohort: 1
 year: 2020
 genre: "영상·설치"

@@ -1,0 +1,40 @@
+{%- assign t = site.data.settings.tide -%}
+{%- if t and t.enabled -%}
+<details class="tide" data-tide>
+  <summary class="tide-btn" title="{{ t.title }}">
+    <svg class="tide-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M2 8.6c2 0 2-2.4 4-2.4s2 2.4 4 2.4 2-2.4 4-2.4 2 2.4 4 2.4 2-2.4 4-2.4"/>
+      <path d="M2 14.2c2 0 2-2.4 4-2.4s2 2.4 4 2.4 2-2.4 4-2.4 2 2.4 4 2.4 2-2.4 4-2.4"/>
+      <path d="M3 19.4h18" stroke-dasharray="2.4 2.6"/>
+    </svg>
+    <span class="label tide-btn-txt">{{ t.label }}</span>
+  </summary>
+
+  <div class="tide-panel">
+    <div class="tide-head">
+      <span class="label">{{ t.title }}</span>
+      <a class="label label--muted" href="{{ t.more_url }}" target="_blank" rel="noopener">다른 날짜 →</a>
+    </div>
+
+    <figure class="tide-fig">
+      <figcaption class="label label--muted">TODAY — 오늘</figcaption>
+      <img src="{{ t.svg_url }}" alt="오늘 {{ t.title }}" width="1300" height="447"
+           loading="lazy" data-tide-img data-tide-src="{{ t.svg_url }}">
+    </figure>
+
+    <figure class="tide-fig">
+      <figcaption class="label label--muted">TOMORROW — 내일</figcaption>
+      <img src="{{ t.svg_url }}?d=1" alt="내일 {{ t.title }}" width="1300" height="447"
+           loading="lazy" data-tide-img data-tide-src="{{ t.svg_url }}?d=1">
+    </figure>
+
+    <p class="tide-fallback" hidden data-tide-fallback>
+      지금은 시간표를 불러오지 못했습니다.
+      <a href="{{ t.more_url }}" target="_blank" rel="noopener">예울마루에서 확인 →</a>
+    </p>
+
+    <p class="tide-note">{{ t.note }}</p>
+  </div>
+</details>
+{%- endif -%}

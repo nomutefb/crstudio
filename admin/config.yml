@@ -134,6 +134,23 @@ collections:
             fields:
               - { name: title, label: 제목, widget: string }
               - { name: desc, label: 설명, widget: text }
+          - name: backcover
+            label: 홈 마지막 장(백커버)
+            widget: object
+            fields:
+              - { name: lead, label: "앞 단어(윤곽선)", widget: string, default: "JANGDO" }
+              - { name: tail, label: "뒷 단어(채움)", widget: string, default: "CREATIVE STUDIO" }
+              - { name: image, label: 배경 사진, widget: image, required: false, default: "" }
+          - name: tide
+            label: 물때 내비(우측 하단)
+            widget: object
+            fields:
+              - { name: enabled, label: 화면에 표시, widget: boolean, default: true }
+              - { name: label, label: 버튼 글자, widget: string, default: "물때" }
+              - { name: title, label: 패널 제목, widget: string, default: "장도 입도 가능 시간" }
+              - { name: svg_url, label: 시간표 이미지 주소, widget: string }
+              - { name: more_url, label: "\"다른 날짜\" 링크 주소", widget: string }
+              - { name: note, label: 하단 안내 문구, widget: text }
           - name: footer
             label: 푸터
             widget: object

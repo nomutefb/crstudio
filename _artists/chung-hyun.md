@@ -1,6 +1,6 @@
 ---
 title: "정현"
-ename: "CHUNG HYUN"
+ename: "HYUN CHUNG"
 cohort: 3
 year: 2022
 genre: "조각"

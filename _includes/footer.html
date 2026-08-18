@@ -1,6 +1,13 @@
 <footer class="site-foot wrap" id="contact-foot">
   {% if page.nav == 'home' %}
-  <div class="foot-cover" aria-hidden="true">{{ site.data.settings.site_name }}<span style="color:var(--muted)">.</span></div>
+  {% assign bc = site.data.settings.backcover %}
+  {% if bc.image and bc.image != "" %}
+  <img class="cover-bg" src="{{ bc.image | relative_url }}" alt="" aria-hidden="true">
+  {% endif %}
+  <p class="foot-cover" aria-hidden="true">
+    <span class="outline-text">{{ bc.lead }}</span>
+    <span>{{ bc.tail }}</span>
+  </p>
   {% endif %}
   <div class="foot-grid">
     <div>
@@ -20,6 +27,11 @@
     <span class="label label--muted" style="letter-spacing:.2em">COHORT ARCHIVE — {{ site.artists | size }} ARTISTS</span>
   </div>
 </footer>
+<div class="float-nav">
+  {% include to-top.html %}
+  {% include tide-nav.html %}
+</div>
+
 <script src="{{ '/assets/vendor/lenis.min.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/vendor/gsap.min.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/vendor/ScrollTrigger.min.js' | relative_url }}" defer></script>
