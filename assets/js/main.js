@@ -381,18 +381,24 @@
     var end = parseInt((count.textContent || "").trim(), 10);
     if (!isFinite(end)) return;
 
+    /* 자릿수를 고정해 두면 세는 동안 폭이 흔들리지 않아 선 길이도 그대로다 */
+    var pad = String(end).length;
     var n = { v: 0 };
+
     window.gsap.set(rule, { scaleX: 0 });
-    count.textContent = "0";
+    window.gsap.set(count, { "--at-wipe": "100%" });   /* 처음엔 완전히 가려 둔다 */
 
     window.gsap.timeline({ delay: 0.35 })
       .to(rule, { scaleX: 1, duration: 0.9, ease: "power3.out" })
+      .to(count, { "--at-wipe": "0%", duration: 0.75, ease: "power2.out" }, "-=0.4")
       .to(n, {
         v: end,
-        duration: 1.2,
+        duration: 1.1,
         ease: "power2.out",
-        onUpdate: function () { count.textContent = String(Math.round(n.v)); }
-      }, "-=0.45");
+        onUpdate: function () {
+          count.textContent = String(Math.round(n.v)).padStart(pad, "0");
+        }
+      }, "<");
   })();
 
   /* ── back to top ─────────────────────────── */
