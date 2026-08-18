@@ -134,6 +134,13 @@ collections:
             fields:
               - { name: title, label: 제목, widget: string }
               - { name: desc, label: 설명, widget: text }
+          - name: backcover
+            label: 홈 마지막 장(백커버)
+            widget: object
+            fields:
+              - { name: lead, label: "앞 단어(윤곽선)", widget: string, default: "JANGDO" }
+              - { name: tail, label: "뒷 단어(채움)", widget: string, default: "CREATIVE STUDIO" }
+              - { name: image, label: 배경 사진, widget: image, required: false, default: "" }
           - name: tide
             label: 물때 내비(우측 하단)
             widget: object

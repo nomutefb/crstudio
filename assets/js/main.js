@@ -184,15 +184,10 @@
     });
   }
 
-  /* ── header: 상태 + 방향 따라 숨김 ───────── */
+  /* ── header: 항상 떠 있고, 스크롤 상태만 반영 ─ */
   var head = document.querySelector(".site-head");
-  var lastY = 0;
   var onScroll = function () {
-    var y = window.scrollY;
-    head.classList.toggle("is-scrolled", y > 24);
-    if (y > 420 && y > lastY + 4) head.classList.add("is-hidden");
-    else if (y < lastY - 4 || y <= 420) head.classList.remove("is-hidden");
-    lastY = y;
+    head.classList.toggle("is-scrolled", window.scrollY > 24);
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();

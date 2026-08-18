@@ -104,7 +104,6 @@ ul { list-style: none; }
     height var(--dur-fast) ease, transform var(--dur-med) var(--ease-inout);
 }
 
-.site-head.is-hidden { transform: translateY(-110%); }
 
 .site-head.is-scrolled {
   background: rgba(244, 241, 234, 0.92);
@@ -746,10 +745,16 @@ ul { list-style: none; }
 /* ── footer ───────────────────────────────── */
 
 .site-foot {
+  position: relative;
+  overflow: hidden;
   border-top: 1px solid var(--ink);
   padding-top: clamp(40px, 7vh, 72px);
   padding-bottom: 32px;
 }
+
+/* 백커버 배경 — 커버와 같은 처리를 쓰되, 아래 링크·저작권 위로 덮지 않는다 */
+.site-foot > .cover-bg { z-index: 0; }
+.site-foot > *:not(.cover-bg) { position: relative; z-index: 1; }
 
 .foot-grid {
   display: flex;
@@ -1234,10 +1239,16 @@ a.pg-pill:hover .pg-l { text-decoration: underline; text-underline-offset: 3px; 
   word-break: keep-all;
 }
 
+/* 백커버 제목 — 첫 페이지와 같은 문체(윤곽선 + 채움)를 가로 한 줄로 */
 .foot-cover {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.22em;
   font-family: var(--font-display);
+  font-weight: 400;
   text-transform: uppercase;
-  font-size: clamp(56px, 11vw, 168px);
+  font-size: var(--fs-display-1);
   line-height: 0.95;
   margin: 0 0 clamp(24px, 6vh, 56px) -0.03em;
 }
