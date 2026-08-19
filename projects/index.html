@@ -6,9 +6,6 @@ permalink: /projects/
 body_class: projects-index
 ---
 {% assign posts = site.projects | sort: "date" | reverse %}
-{%- comment -%} 대표작은 가장 최근 것 중 커버가 있는 첫 항목 {%- endcomment -%}
-{% assign featured = nil %}
-{% for p in posts %}{% if featured == nil and p.cover and p.cover != "" %}{% assign featured = p %}{% endif %}{% endfor %}
 
 <section class="page-hero wrap projects-hero">
   <div class="pj-head">
@@ -20,16 +17,6 @@ body_class: projects-index
     </h1>
     <p class="desc reveal">전시, 프로그램, 소식. 포스터를 누르면 자세한 내용을 볼 수 있습니다.</p>
   </div>
-
-  {% if featured %}
-  <a class="pj-feature reveal" href="{{ featured.url | relative_url }}">
-    <figure><img src="{{ featured.cover | relative_url }}" alt="{{ featured.title }}"></figure>
-    <span class="pj-feature-meta">
-      <span class="label label--muted">LATEST — {{ featured.category }} · {{ featured.date | date: "%Y.%m" }}</span>
-      <span class="pj-feature-title">{{ featured.title }}</span>
-    </span>
-  </a>
-  {% endif %}
 </section>
 
 <section class="pj-belt-wrap">

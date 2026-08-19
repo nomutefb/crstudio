@@ -10,6 +10,10 @@
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var hasGsap = typeof window.gsap !== "undefined";
   var lenis = null;
+  var foot = document.querySelector(".site-foot");
+  var footH = function () {
+    return foot ? Math.round(foot.getBoundingClientRect().height) : 0;
+  };
 
   /* ── book(잡지) 모드: 휠 제스처 1회 = 1페이지 플립 ──
      페이지 내부 부분 스크롤 없음. "힘줘야 넘어가는" 느낌 방지를 위해
@@ -117,7 +121,6 @@
     docEl.classList.add("snap-on");
 
     var cs = getComputedStyle(docEl);
-    var foot = document.querySelector(".site-foot");
     var cohortNav = document.querySelector(".cohort-nums");
 
     /* 면이 걸리는 높이 = 줄어든 헤더 + (있다면) 기수 번호 줄.
@@ -135,14 +138,14 @@
        마지막 면을 딱 그만큼 줄여 두면 면의 정지점이 문서 맨 아래와 같아진다 —
        끝까지 내리면 마지막 기수와 푸터가 한 화면에 같이 선다. */
     var tailH = function () {
-      if (!lastPage) return foot ? Math.round(foot.getBoundingClientRect().height) : 0;
+      if (!lastPage) return footH();
       var r = lastPage.getBoundingClientRect();
       return Math.max(0, Math.round(docEl.scrollHeight - (r.top + window.scrollY + r.height)));
     };
 
     var syncVars = function () {
       docEl.style.setProperty("--flip-sticky", stickyH() + "px");
-      docEl.style.setProperty("--foot-h", tailH() + "px");
+      docEl.style.setProperty("--flip-tail", tailH() + "px");
     };
     syncVars();
     /* 웹폰트가 앉으면 스티키 줄·푸터 높이가 달라진다 — 자리가 잡힌 뒤 한 번 더 */
@@ -548,8 +551,10 @@
     var count = title.querySelector(".at-count");
     if (!rule || !count) return;
 
-    var end = parseInt((count.textContent || "").trim(), 10);
-    if (!isFinite(end)) return;
+    /* 숫자 하나면 세어 올리고, 연도 범위(2020-26)처럼 숫자가 아니면 번지기만 한다 */
+    var raw = (count.textContent || "").trim();
+    var counts = /^\d+$/.test(raw);
+    var end = counts ? parseInt(raw, 10) : 0;
 
     /* 자릿수를 고정해 두면 세는 동안 폭이 흔들리지 않아 선 길이도 그대로다 */
     var pad = String(end).length;
@@ -558,10 +563,12 @@
     window.gsap.set(rule, { scaleX: 0 });
     window.gsap.set(count, { "--at-wipe": "100%" });   /* 처음엔 완전히 가려 둔다 */
 
-    window.gsap.timeline({ delay: 0.15 })
+    var tl = window.gsap.timeline({ delay: 0.15 })
       .to(rule, { scaleX: 1, duration: 0.9, ease: "power3.out" })
-      .to(count, { "--at-wipe": "0%", duration: 0.75, ease: "power2.out" }, "-=0.4")
-      .to(n, {
+      .to(count, { "--at-wipe": "0%", duration: 0.75, ease: "power2.out" }, "-=0.4");
+
+    if (counts) {
+      tl.to(n, {
         v: end,
         duration: 1.1,
         ease: "power2.out",
@@ -569,6 +576,7 @@
           count.textContent = String(Math.round(n.v)).padStart(pad, "0");
         }
       }, "<");
+    }
   })();
 
   /* ── back to top ─────────────────────────── */
@@ -652,4 +660,56 @@
       });
     });
   });
+
+  /* ── projects: 타이틀 + 롤링 + 푸터를 한 화면에 ──────
+     대표작 칸을 걷어낸 만큼 포스터를 키워 남는 높이를 롤링이 다 쓴다.
+     JS가 없으면 CSS 의 svh 기준 크기가 그대로 남는다. */
+  (function () {
+    var wrap = document.querySelector(".projects-index .pj-belt-wrap");
+    if (!wrap) return;
+    var belt = wrap.querySelector(".poster-belt");
+    var caps = Array.prototype.slice.call(wrap.querySelectorAll(".poster-card .pcap"));
+    if (!belt || !caps.length) return;
+
+    /* 벨트 높이는 가장 높은 캡션이 정한다 — 첫 장만 재면 모자란다 */
+    var capMax = function () {
+      var h = 0;
+      caps.forEach(function (c) { h = Math.max(h, c.getBoundingClientRect().height); });
+      return h;
+    };
+
+    var px = function (v) { return parseFloat(v) || 0; };
+
+    /* 폭을 좁히면 캡션 제목이 한 줄 더 접히면서 캡션이 높아진다 —
+       재고 → 적용 → 다시 재기를 몇 번 돌려 수렴시킨다. */
+    var fit = function () {
+      docEl.style.removeProperty("--pj-card-w");     /* 재기 전에 원래 크기로 돌린다 */
+      if (!window.matchMedia("(min-width: 901px)").matches) return;
+
+      var bs = getComputedStyle(belt);
+      var ws = getComputedStyle(wrap);
+      var chrome = px(bs.paddingTop) + px(bs.paddingBottom) +
+                   px(bs.borderTopWidth) + px(bs.borderBottomWidth) +
+                   px(ws.paddingBottom);
+      var top = wrap.getBoundingClientRect().top + window.scrollY;
+      var capH = 0;
+      var w = 0;
+
+      for (var i = 0; i < 4; i++) {
+        capH = Math.max(capH, capMax());   /* 한 번 늘면 되돌리지 않는다 */
+        var figH = window.innerHeight - top - chrome - capH - footH();
+        /* 포스터는 3:4 — 높이에서 폭이 나온다 */
+        var next = Math.round(Math.max(96, Math.min(figH * 0.75, 330)));
+        if (next === w) break;
+        w = next;
+        docEl.style.setProperty("--pj-card-w", w + "px");
+      }
+    };
+
+    fit();
+    requestAnimationFrame(fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    window.addEventListener("load", fit);
+    window.addEventListener("resize", fit);
+  })();
 })();

@@ -14,7 +14,10 @@ body_class: has-flip
   <h1 class="archive-title display reveal">
     <span class="at-word">History</span>
     <span class="at-rule" aria-hidden="true"></span>
-    <span class="at-count">{{ years | size }}</span>
+    {%- assign yrs = years | map: "year" | sort -%}
+    {%- assign y_from = yrs | first -%}
+    {%- assign y_to = yrs | last | append: "" | slice: -2, 2 -%}
+    <span class="at-count">{{ y_from }}-{{ y_to }}</span>
   </h1>
   <p class="desc reveal">{{ site.data.program.note }}</p>
 </section>
