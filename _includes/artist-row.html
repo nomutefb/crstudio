@@ -1,9 +1,23 @@
 {% assign a = include.artist %}
+{% if a.ename and a.ename != "" %}{% assign en = a.ename %}{% else %}{% assign en = a.title %}{% endif %}
+{% if a.thumb and a.thumb != "" %}{% assign portrait = a.thumb %}{% else %}{% assign portrait = '/assets/img/ph/ph-' | append: a.ph | append: '.svg' %}{% endif %}
 <a class="artist-row" href="{{ a.url | relative_url }}" data-cohort="{{ a.cohort }}">
   <span class="idx">{{ include.idx }}</span>
-  <span class="artist-name">{% if a.ename and a.ename != "" %}{{ a.ename }}{% else %}{{ a.title }}{% endif %}</span>
-  <span class="artist-meta">
-    <span class="kname">{{ a.title }}</span>
+  {% if en contains " & " %}
+  <span class="artist-name artist-name--two">{{ en | replace: " & ", " &amp;<br>" }}</span>
+  {% elsif en.size > 16 %}
+  <span class="artist-name artist-name--long">{{ en }}</span>
+  {% else %}
+  <span class="artist-name">{{ en }}</span>
+  {% endif %}
+  <span class="artist-ko">
+    <span class="kname{% if a.title.size > 4 %} kname--long{% endif %}">{{ a.title }}</span>
     {% if a.genre and a.genre != "" %}<span class="sub">{{ a.genre }}</span>{% endif %}
+  </span>
+  <span class="artist-portrait" aria-hidden="true"><img src="{{ portrait | relative_url }}" alt="" loading="lazy"></span>
+  <span class="artist-works" aria-hidden="true">
+    {% for g in a.gallery limit: 4 %}
+    <span class="aw"><img src="{{ g | relative_url }}" alt="" loading="lazy"></span>
+    {% endfor %}
   </span>
 </a>

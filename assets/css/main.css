@@ -160,20 +160,24 @@ ul { list-style: none; }
 
 /* mobile menu */
 
+/* 메뉴 여닫기 — 알약이 아니라 볼드 + 밑줄. 열리면 밑줄이 걷히며 펼쳐진다 */
 .nav-burger {
   display: none;
   font-family: var(--font-label);
   font-size: var(--fs-label);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: var(--ls-label-tight);
   text-transform: uppercase;
   background: none;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-pill);
+  border: 0;
+  border-bottom: 1.5px solid var(--ink);
   color: var(--ink);
-  padding: 8px 18px;
+  padding: 4px 1px;
   cursor: pointer;
+  transition: border-color var(--dur-fast) ease;
 }
+
+body.menu-open .nav-burger { border-bottom-color: transparent; }
 
 .mobile-menu {
   position: fixed;
@@ -184,7 +188,7 @@ ul { list-style: none; }
   flex-direction: column;
   justify-content: center;
   padding: var(--pad);
-  gap: 6px;
+  gap: 10px;
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--dur-med) var(--ease-out), visibility 0s linear var(--dur-med);
@@ -199,8 +203,8 @@ ul { list-style: none; }
 .mobile-menu a {
   font-family: var(--font-display);
   text-transform: uppercase;
-  font-size: clamp(44px, 13vw, 80px);
-  line-height: 1.05;
+  font-size: clamp(35px, 10.4vw, 64px);   /* 기존의 80% */
+  line-height: 1.26;                      /* 줄 간격 20% 더 */
   transform: translateY(24px);
   opacity: 0;
   transition: transform var(--dur-med) var(--ease-out), opacity var(--dur-med) var(--ease-out);
@@ -219,9 +223,10 @@ ul { list-style: none; }
   top: 20px;
   right: var(--pad);
   background: none;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-pill);
-  padding: 8px 18px;
+  border: 0;
+  border-bottom: 1.5px solid var(--ink);
+  padding: 4px 1px;
+  font-weight: 700;
   font-family: var(--font-label);
   font-size: var(--fs-label);
   letter-spacing: var(--ls-label-tight);
@@ -380,8 +385,23 @@ ul { list-style: none; }
   font-size: clamp(20px, 2.6vw, 38px);
   font-weight: 500;
   letter-spacing: 0.06em;
+  /* 자간은 마지막 글자 뒤에도 붙는다 — 그만큼 당겨야 오른쪽 여백이
+     사진·내비와 같은 선에 선다(광학 정렬). */
+  margin-right: -0.06em;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
+  /* 선이 도착하는 방향(좌→우)으로 번지며 드러난다.
+     0%면 다 보이는 상태 — JS가 없으면 그대로 완성된 모습이다. */
+  --at-wipe: 0%;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 34%, rgba(0, 0, 0, 0) 66%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 34%, rgba(0, 0, 0, 0) 66%);
+  -webkit-mask-size: 280% 100%;
+  mask-size: 280% 100%;
+  -webkit-mask-position: var(--at-wipe) 0;
+  mask-position: var(--at-wipe) 0;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 /* ── intro ────────────────────────────────── */
@@ -474,11 +494,18 @@ ul { list-style: none; }
 
 .artist-list { border-top: 1px solid var(--ink); }
 
+/* 열을 고정해 한글 이름·장르가 영문 길이와 무관하게 같은 세로선에 선다.
+   영문은 남는 폭을 받아 그 안에서 가운데로 선다. */
 .artist-row {
   display: grid;
-  grid-template-columns: clamp(40px, 6vw, 90px) 1fr auto;
-  align-items: baseline;
-  gap: clamp(12px, 3vw, 40px);
+  grid-template-columns:
+    clamp(34px, 4vw, 68px)          /* 번호 */
+    minmax(0, 1fr)                  /* 영문 이름 — 왼쪽에서 시작 */
+    clamp(150px, 13vw, 240px)       /* 한글 이름 + 장르 */
+    auto                            /* 작가 사진 */
+    auto;                           /* 대표 작품 */
+  align-items: center;
+  gap: clamp(10px, 1.6vw, 26px);
   padding: clamp(18px, 3.2vh, 34px) 0;
   border-bottom: 1px solid var(--line);
   position: relative;
@@ -499,7 +526,18 @@ ul { list-style: none; }
   font-size: clamp(30px, 5.6vw, 76px);
   line-height: 1;
   letter-spacing: 0.01em;
+  white-space: nowrap;
   transition: color 0.25s ease, -webkit-text-stroke 0.25s ease, transform 0.35s ease;
+}
+
+/* 한 칸을 넘기는 긴 이름 — 한 단계 줄인다 */
+.artist-name--long { font-size: clamp(22px, 3.4vw, 46px); }
+
+/* 두 사람이 묶인 이름 — & 에서 접어 두 줄로. 두 줄이 한 줄 높이를 넘지 않게 잡는다 */
+.artist-name--two {
+  white-space: normal;
+  font-size: clamp(20px, 3vw, 40px);
+  line-height: 1.02;
 }
 
 .artist-row:hover .artist-name {
@@ -508,23 +546,72 @@ ul { list-style: none; }
   transform: translateX(clamp(6px, 1.5vw, 22px));
 }
 
-.artist-meta { text-align: right; }
-
-.artist-meta .kname {
-  display: block;
-  font-size: 19px;            /* 14px에서 35% */
-  font-weight: 600;
-  letter-spacing: 0.04em;
+/* 한글 이름과 장르는 한 칸에 붙여 둔다. 칸이 고정이라 이름 시작점은
+   영문 길이와 무관하게 늘 같은 세로선이다. */
+.artist-ko {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
 }
 
-/* 장르만 남으므로 라틴 라벨 서체·대문자 규칙을 걷고 본문 서체로 */
-.artist-meta .sub {
-  display: block;
-  font-size: 14px;            /* 10px에서 35% */
+.artist-row .kname {
+  min-width: 0;
+  font-size: 29px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* 콜렉티브처럼 긴 이름은 한 칸에 들어오도록 한 단계 줄인다 */
+.artist-row .kname--long { font-size: 21px; }
+
+/* 장르는 한글만 남으므로 라틴 라벨 서체·대문자 규칙을 걷고 본문 서체로 */
+.artist-row .sub {
+  font-size: 14px;
   letter-spacing: 0.06em;
   color: var(--muted);
-  margin-top: 5px;
+  min-width: 0;
+  word-break: keep-all;      /* 좁아지면 칸 안에서 접히게 — 행을 밀지 않는다 */
 }
+
+/* 작가 사진 — 작품보다 한 칸 떨어뜨리고, 얇은 테두리 안에 여백을 준다 */
+.artist-portrait {
+  width: var(--cell);
+  aspect-ratio: 1;
+  padding: 3px;
+  border: 1px solid var(--line-strong);
+  margin-right: calc(var(--cell-gap) * 2);
+}
+
+.artist-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+
+/* 대표 작품 — 같은 크기 칸으로 늘어선다 */
+.artist-works {
+  display: grid;
+  grid-template-columns: repeat(4, var(--cell));
+  gap: var(--cell-gap);
+}
+
+.artist-works .aw {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+
+.artist-works img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.artist-row:hover .artist-works img { transform: scale(1.06); }
 
 .artist-row.is-hidden { display: none; }
 
@@ -586,24 +673,15 @@ ul { list-style: none; }
 
 /* 기수 헤딩 — "2026년도 7기 — 4인" 한 줄. 국문이 섞여 Anton을 쓰면 한 단어
    안에서 서체가 갈리므로 본문 서체 굵게로 통일한다(DESIGN.md 국문 폴백). */
-.cohort-head .cohort-year,
-.cohort-head .cohort-no,
-.cohort-head .cohort-count {
+.cohort-head .cohort-year {
   font-size: clamp(22px, 3vw, 36px);
   line-height: 1;
-}
-
-.cohort-head .cohort-year,
-.cohort-head .cohort-no {
   font-weight: 700;
   color: var(--ink);
   letter-spacing: -0.01em;
 }
 
-.cohort-head .cohort-count {
-  font-weight: 400;
-  color: var(--muted);
-}
+.cohort-head .cohort-no { margin-left: 0.12em; }
 
 /* ── posts / projects cards ───────────────── */
 
@@ -1230,7 +1308,7 @@ a.pg-pill:hover .pg-l { text-decoration: underline; text-underline-offset: 3px; 
   width: 100%;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  padding: clamp(16px, 3vh, 28px) 0;
+  padding: clamp(12px, 2.2vh, 24px) 0;
   cursor: grab;
 }
 
@@ -1424,9 +1502,11 @@ html.js.gsap-on .reveal { transition: none; }
   .site-nav a { display: none; }
   .site-nav .nav-burger { display: inline-block; }
   .card-grid { grid-template-columns: 1fr; }
-  .artist-row { grid-template-columns: 1fr auto; }
   .artist-row .idx { display: none; }
-  .artist-meta .kname { font-size: 12px; }
+  .artist-row .kname { font-size: 19px; }
+  .artist-row .kname--long { font-size: 15px; }
+  .artist-row .sub { font-size: 12px; }
+  .artist-name { text-align: left; }
   .hero { min-height: 82vh; }
   .hero-sub { flex-direction: column; align-items: flex-start; gap: 14px; }
   .gallery-grid { grid-template-columns: 1fr; }
@@ -1625,7 +1705,75 @@ html.js.gsap-on .reveal { transition: none; }
   .tide[open] .tide-panel { animation: none; }
 }
 
-/* 맨 위로 — 문서 끝에 닿으면 물때 버튼 위로 올라온다 */
+/* 기수 한 묶음이 한 화면을 차지하게 — 휠 한 번에 한 기수로 넘어가는
+   플립과 짝이다. 행 여백은 화면 높이에 맞춰 조여 6인 기수까지 들어온다. */
+@media (min-width: 901px) {
+  body.has-flip .cohort-group.flip-page {
+    min-height: calc(100svh - var(--flip-sticky));
+    padding-top: var(--flip-gap);   /* 번호 줄에 바짝 붙지 않게 */
+  }
+
+  /* 마지막 면은 푸터와 한 화면을 나눠 쓴다 — 끝까지 내리면 둘이 같이 선다.
+     --flip-tail 은 이 면 아래에 남는 전부(푸터 + 여백)를 JS 가 실측한 값이다. */
+  body.has-flip .flip-page.flip-last {
+    min-height: calc(100svh - var(--flip-sticky) - var(--flip-tail));
+    margin-bottom: 0;               /* 아래 여백은 푸터 몫 — 정지점이 문서 끝과 어긋나지 않게 */
+  }
+
+  body.has-flip .section:has(.flip-last) { padding-bottom: 0; }
+
+  /* 첫 화면은 타이틀과 최신 기수가 나눠 쓴다 — 히어로를 그만큼 조인다 */
+  .artists-hero {
+    padding-top: calc(var(--head-h) + clamp(14px, 2.6vh, 34px));
+    padding-bottom: clamp(12px, 2vh, 24px);
+  }
+
+  .artists-hero .desc { margin-top: 12px; }
+
+  body.has-flip .artist-row { padding: clamp(8px, 1.9vh, 26px) 0; }
+}
+
+/* 화면이 낮으면 6인 기수가 한 면을 넘겨 휠이 한 번 헛돈다.
+   이름 크기는 건드리지 않고(작가가 주인공) 행 사이와 윗숨만 조인다. */
+@media (min-width: 901px) and (max-height: 840px) {
+  body.has-flip .artist-row { padding: clamp(6px, 1.25vh, 26px) 0; }
+  body.has-flip .cohort-group.flip-page { padding-top: clamp(14px, 2.4vh, 44px); }
+}
+
+/* 폭이 모자라면 오른쪽부터 덜어낸다 — 대표 작품이 먼저, 작가 사진이 그 다음.
+   이름·한글·장르는 끝까지 남는다. */
+@media (max-width: 1380px) {
+  .artist-row { grid-template-columns:
+    clamp(34px, 4vw, 68px) minmax(0, 1fr) clamp(150px, 13vw, 240px) auto; }
+  .artist-works { display: none; }
+  .artist-portrait { margin-right: 0; }
+}
+
+@media (max-width: 1080px) {
+  .artist-row { grid-template-columns:
+    clamp(34px, 4vw, 68px) minmax(0, 1fr) clamp(150px, 13vw, 240px); }
+  .artist-portrait { display: none; }
+}
+
+@media (max-width: 700px) {
+  /* 영문 이름이 두 줄을 걸쳐 서고, 오른쪽에 한글·장르가 붙어 선다.
+     전에는 이름 높이가 첫 줄을 늘려 장르가 한참 아래로 떨어졌다. */
+  .artist-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 14px;
+  }
+
+  .artist-row .artist-name { grid-column: 1; align-self: center; }
+  .artist-row .artist-ko {
+    grid-column: 2;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+}
+
+/* 맨 위로 — 셋째 화면부터 물때 버튼 위로 올라온다 */
 
 .to-top {
   display: inline-flex;
@@ -1650,4 +1798,135 @@ body.tide-open .to-top { visibility: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .to-top.is-in { animation: none; }
+}
+
+/* ── projects — 타이틀 + 포스터 롤링을 한 화면에 ── */
+
+.projects-hero {
+  padding-top: calc(var(--head-h) + clamp(14px, 3.5vh, 44px));
+  padding-bottom: clamp(14px, 2.4vh, 30px);
+}
+
+.pj-head .desc { max-width: 46ch; color: var(--muted); margin-top: 16px; word-break: keep-all; }
+
+.pj-belt-wrap { padding-bottom: clamp(20px, 3.5vh, 44px); }
+
+/* 포스터 폭은 남는 높이에서 나온다 — JS 가 --pj-card-w 로 넘긴다.
+   JS 가 없으면 화면 높이에 비례한 기본값이 그대로 쓰인다. */
+.projects-index .poster-card { width: var(--pj-card-w, calc(min(27svh, 330px) * 0.72)); }
+
+/* 큰 화면에서 포스터가 최대 크기에 닿아도 푸터는 화면 맨 아래에 붙는다 */
+@media (min-width: 901px) {
+  body.projects-index { min-height: 100svh; display: flex; flex-direction: column; }
+  body.projects-index main { flex: 1 1 auto; display: flex; flex-direction: column; }
+
+  .projects-index .pj-belt-wrap {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .projects-index .poster-belt { width: 100%; }
+}
+
+/* 화면이 낮으면 타이틀 둘레와 벨트 여백부터 조인다 — 포스터가 더 남는다 */
+@media (min-width: 901px) and (max-height: 840px) {
+  .projects-hero {
+    padding-top: calc(var(--head-h) + clamp(6px, 1.2vh, 20px));
+    padding-bottom: clamp(8px, 1.4vh, 18px);
+  }
+
+  .pj-head .desc { margin-top: 10px; }
+  .projects-index .poster-belt { padding: clamp(8px, 1.4vh, 16px) 0; }
+  .pj-belt-wrap { padding-bottom: clamp(10px, 1.8vh, 24px); }
+}
+
+/* 아주 낮은 화면(720p)에서는 타이틀 둘레를 한 번 더 조여 포스터를 지킨다 */
+@media (min-width: 901px) and (max-height: 760px) {
+  .projects-hero { padding-bottom: 6px; }
+  .pj-head .desc { margin-top: 6px; }
+  .pj-belt-wrap { padding-bottom: 10px; }
+}
+
+/* ── history — 다른 화면과 같은 결로 한 면씩 넘긴다 ── */
+
+.hs-page {
+  padding-top: clamp(20px, 4vh, 48px);
+  padding-bottom: clamp(24px, 4vh, 56px);
+}
+
+.hs-label { margin-bottom: clamp(14px, 2.4vh, 26px); }
+
+@media (min-width: 901px) {
+  body.has-flip .hs-page {
+    min-height: calc(100svh - var(--flip-sticky));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* 레지던시 밴드는 화면을 다 먹지 않는다 — 이 면에서 푸터까지 같이 보이게 */
+  body.has-flip .band.flip-page {
+    padding-top: clamp(40px, 6vh, 76px);
+    padding-bottom: clamp(40px, 6vh, 76px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* History 첫 화면 — 타이틀과 소개가 한 면을 나눠 쓴다.
+     한 화면을 통째로 차지해야 다음 면이 아래로 비어져 나오지 않는다. */
+  body.has-flip .hs-first {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hs-hero {
+    padding-top: calc(var(--head-h) + clamp(14px, 2.6vh, 34px));
+    padding-bottom: clamp(12px, 2vh, 24px);
+  }
+
+  .hs-hero .desc { margin-top: 12px; }
+
+  /* 소개는 타이틀이 쓰고 남은 높이 한가운데에 앉는다 */
+  .hs-about--first {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: clamp(20px, 4vh, 48px);
+  }
+
+  .hs-about--first .hs-about-img { height: clamp(190px, 32svh, 380px); }
+}
+
+/* History 소개 — 글은 왼쪽, 사진은 오른쪽 */
+
+.hs-about-copy > p { margin-top: 14px; }
+.hs-about-copy .intro-heading { margin-bottom: 4px; }
+.hs-facility { margin-top: 16px; line-height: 2; }
+
+.hs-about-img {
+  margin: 0;
+  overflow: hidden;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+}
+
+.hs-about-img img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (min-width: 901px) {
+  .hs-about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(280px, 34vw, 560px);
+    align-items: center;
+    gap: clamp(28px, 4vw, 72px);
+  }
+
+  .hs-about-img { height: clamp(220px, 40svh, 440px); }
+}
+
+@media (max-width: 900px) {
+  .hs-about-img { aspect-ratio: 3 / 2; margin-top: clamp(20px, 4vh, 36px); }
 }

@@ -3,10 +3,11 @@ layout: default
 title: Artists
 nav: artists
 permalink: /artists/
+body_class: artists-index has-flip
 ---
 {% assign cohorts = site.artists | map: "cohort" | uniq | sort | reverse %}
 
-<section class="page-hero wrap">
+<section class="page-hero wrap artists-hero">
   <p class="label label--muted reveal">RESIDENCY ARCHIVE</p>
   <h1 class="archive-title display reveal">
     <span class="at-word">Artists</span>
@@ -28,11 +29,9 @@ permalink: /artists/
   {% for c in cohorts %}
   {% assign group = site.artists | where: "cohort", c | sort: "ename" %}
   {% assign sample = group | first %}
-  <div class="cohort-group" id="cohort-{{ c }}" data-cohort-group>
+  <div class="cohort-group{% unless forloop.first %} flip-page{% endunless %}{% if forloop.last %} flip-last{% endif %}" id="cohort-{{ c }}" data-cohort-group>
     <div class="cohort-head reveal">
-      <span class="cohort-year">{{ sample.year }}년도</span>
-      <span class="cohort-no">{{ c }}기</span>
-      <span class="cohort-count">— {{ group | size }}인</span>
+      <span class="cohort-year">{{ sample.year }}<span class="cohort-no">({{ c }}기)</span></span>
     </div>
     <div class="artist-list">
       {% for a in group %}

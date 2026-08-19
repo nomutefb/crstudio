@@ -3,41 +3,40 @@ layout: default
 title: Projects
 nav: projects
 permalink: /projects/
+body_class: projects-index
 ---
 {% assign posts = site.projects | sort: "date" | reverse %}
 
-<section class="page-hero wrap">
-  <p class="label label--muted reveal">POSTS · 게시물</p>
-  <h1 class="section-title display reveal" style="font-size:clamp(48px,10vw,140px)">Projects <span class="count">{{ posts | size }}</span></h1>
-  <p class="desc reveal">전시, 프로그램, 소식. 관리자 페이지에서 새 게시물을 올리면 이 목록에 자동으로 추가됩니다.</p>
+<section class="page-hero wrap projects-hero">
+  <div class="pj-head">
+    <p class="label label--muted reveal">POSTS · 게시물</p>
+    <h1 class="archive-title display reveal">
+      <span class="at-word">Projects</span>
+      <span class="at-rule" aria-hidden="true"></span>
+      <span class="at-count">{{ posts | size }}</span>
+    </h1>
+    <p class="desc reveal">전시, 프로그램, 소식. 포스터를 누르면 자세한 내용을 볼 수 있습니다.</p>
+  </div>
 </section>
 
-<section class="wrap" style="padding-bottom:clamp(72px,12vh,140px)">
-  {% for p in posts %}
-  {% assign phn = forloop.index | modulo: 6 | plus: 1 %}
-  {% if p.cover and p.cover != "" %}{% assign pimg = p.cover | relative_url %}{% else %}{% assign pimg = '/assets/img/ph/ph-' | append: phn | append: '.svg' | relative_url %}{% endif %}
-  <article class="project-block">
-    <a class="project-cover reveal" href="{{ p.url | relative_url }}"><img src="{{ pimg }}" alt="{{ p.title }}" loading="lazy"></a>
-    <div class="project-cols">
-      <div class="reveal">
-        <div class="meta" style="display:flex;gap:14px;margin-bottom:10px">
-          <span class="label label--muted">{{ p.category }}</span>
-          <span class="label label--muted">{{ p.date | date: "%Y.%m.%d" }}</span>
-        </div>
-        <h2 class="project-title display"><a href="{{ p.url | relative_url }}">{{ p.title }}</a></h2>
-        {% if p.artists and p.artists != empty %}
-        <p class="label label--muted" style="margin-top:6px">WITH — {{ p.artists | join: ", " }}</p>
-        {% endif %}
-      </div>
-      <div class="reveal">
-        <p class="project-desc">{{ p.excerpt_text | default: p.excerpt | strip_html | truncate: 160 }}</p>
-        <a class="project-more label" href="{{ p.url | relative_url }}">Read More →</a>
-      </div>
+<section class="pj-belt-wrap">
+  <div class="poster-belt reveal" data-belt>
+    <div class="poster-track" data-belt-track>
+      {% for p in posts %}
+      {% assign phn = forloop.index | modulo: 6 | plus: 1 %}
+      {% if p.cover and p.cover != "" %}{% assign pimg = p.cover | relative_url %}{% else %}{% assign pimg = '/assets/img/ph/ph-' | append: phn | append: '.svg' | relative_url %}{% endif %}
+      <a class="poster-card" href="{{ p.url | relative_url }}">
+        <figure><img src="{{ pimg }}" alt="{{ p.title }}" loading="lazy"></figure>
+        <span class="pcap">
+          <span class="label label--muted">{{ p.category }} · {{ p.date | date: "%Y.%m" }}</span>
+          <span class="pt">{{ p.title }}</span>
+        </span>
+      </a>
+      {% endfor %}
     </div>
-  </article>
-  {% endfor %}
-
-  {% if posts == empty %}
-  <p class="desc">아직 게시물이 없습니다. <a href="{{ '/admin/' | relative_url }}" style="border-bottom:1px solid var(--ink)">관리자 페이지</a>에서 첫 게시물을 올려보세요.</p>
-  {% endif %}
+  </div>
 </section>
+
+{% if posts == empty %}
+<section class="wrap"><p class="desc">아직 게시물이 없습니다. <a href="{{ '/admin/' | relative_url }}" style="border-bottom:1px solid var(--ink)">관리자 페이지</a>에서 첫 게시물을 올려보세요.</p></section>
+{% endif %}

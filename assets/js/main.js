@@ -10,6 +10,10 @@
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var hasGsap = typeof window.gsap !== "undefined";
   var lenis = null;
+  var foot = document.querySelector(".site-foot");
+  var footH = function () {
+    return foot ? Math.round(foot.getBoundingClientRect().height) : 0;
+  };
 
   /* ── book(잡지) 모드: 휠 제스처 1회 = 1페이지 플립 ──
      페이지 내부 부분 스크롤 없음. "힘줘야 넘어가는" 느낌 방지를 위해
@@ -104,6 +108,136 @@
     docEl.classList.add("snap-on");
   }
 
+  /* ── 기수 플립 — 휠 한 번에 한 기수 ──────────
+     홈의 페이지 넘김과 같은 방식(제스처 1회 = 1면, 0.9s power2.inOut).
+     화면보다 긴 기수는 첫 휠이 그 아래끝까지 데려다 놓고, 다음 휠에 넘어간다. */
+  var cohortFlip = document.body.classList.contains("has-flip") &&
+                   window.matchMedia("(min-width: 901px)").matches;
+
+  if (cohortFlip && hasGsap && !reduced) {
+    /* 스크롤을 JS가 직접 모므로 브라우저 스무스 스크롤은 꺼야 한다.
+       켜 두면 매 프레임 scrollTo 가 브라우저 보간과 싸워 목표에 못 닿고
+       화면이 덜컥거린다. */
+    docEl.classList.add("snap-on");
+
+    var cs = getComputedStyle(docEl);
+    var cohortNav = document.querySelector(".cohort-nums");
+
+    /* 면이 걸리는 높이 = 줄어든 헤더 + (있다면) 기수 번호 줄.
+       CSS 도 같은 값을 써야 면 높이가 정확히 한 화면이 된다. */
+    var stickyH = function () {
+      var h = parseFloat(cs.getPropertyValue("--head-h-sm")) || 0;
+      if (cohortNav) h += cohortNav.getBoundingClientRect().height;
+      return Math.round(h);
+    };
+
+    var fPages = Array.prototype.slice.call(document.querySelectorAll(".flip-page"));
+    var lastPage = fPages[fPages.length - 1];
+
+    /* 마지막 면 아래에 남는 것(푸터 + 그 사이 여백) 높이.
+       마지막 면을 딱 그만큼 줄여 두면 면의 정지점이 문서 맨 아래와 같아진다 —
+       끝까지 내리면 마지막 기수와 푸터가 한 화면에 같이 선다. */
+    var tailH = function () {
+      if (!lastPage) return footH();
+      var r = lastPage.getBoundingClientRect();
+      return Math.max(0, Math.round(docEl.scrollHeight - (r.top + window.scrollY + r.height)));
+    };
+
+    var syncVars = function () {
+      docEl.style.setProperty("--flip-sticky", stickyH() + "px");
+      docEl.style.setProperty("--flip-tail", tailH() + "px");
+    };
+    syncVars();
+    /* 웹폰트가 앉으면 스티키 줄·푸터 높이가 달라진다 — 자리가 잡힌 뒤 한 번 더 */
+    var settle = function () {
+      syncVars();
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    };
+    requestAnimationFrame(settle);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+    window.addEventListener("load", settle);
+    window.addEventListener("resize", syncVars);
+
+    var fTop = function (el) {
+      if (el.classList.contains("page-hero")) return 0;
+      return el.getBoundingClientRect().top + window.scrollY - stickyH();
+    };
+
+    var maxY = function () {
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    };
+
+    /* 설 자리 목록. 면 목록에 없는 맨 위(0)와 맨 아래도 정거장이다 —
+       첫 화면은 타이틀이 첫 면과 한 화면을 나눠 쓰기 때문에 면이 아니다. */
+    var fStops = function () {
+      var vh = window.innerHeight;
+      var mx = maxY();
+      var list = [0, mx];
+      fPages.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        var y = fTop(el);
+        list.push(y);
+        /* 화면보다 긴 면은 아래끝도 한 정거장 — 잘린 채로 넘어가지 않게 */
+        var tail = r.top + window.scrollY + r.height - vh;
+        if (tail > y + 8) list.push(tail);
+      });
+      list = list
+        .map(function (v) { return Math.max(0, Math.min(mx, Math.round(v))); })
+        .sort(function (a, b) { return a - b; });
+      return list.filter(function (v, i) { return i === 0 || v - list[i - 1] > 8; });
+    };
+
+    var fBusy = false;
+    var fLastT = -1000;
+
+    var glideTo = function (y) {
+      y = Math.max(0, Math.min(maxY(), y));
+      if (Math.abs(window.scrollY - y) < 4) return;
+      fBusy = true;
+      var st = { y: window.scrollY };
+      window.gsap.to(st, {
+        y: y,
+        duration: 0.9,
+        ease: "power2.inOut",
+        overwrite: true,
+        onUpdate: function () { window.scrollTo(0, st.y); },
+        onComplete: function () { fBusy = false; }
+      });
+    };
+
+    /* 목표는 늘 지금 스크롤 위치에서 다시 계산한다 — 인덱스를 들고 있으면
+       스크롤바·앵커로 움직였을 때 어긋난다. */
+    var flipCohort = function (dir) {
+      var y = window.scrollY;
+      var stops = fStops();
+      var target = null;
+      var i;
+      if (dir > 0) {
+        for (i = 0; i < stops.length; i++) { if (stops[i] > y + 8) { target = stops[i]; break; } }
+      } else {
+        for (i = stops.length - 1; i >= 0; i--) { if (stops[i] < y - 8) { target = stops[i]; break; } }
+      }
+      if (target === null) return;
+      glideTo(target);
+    };
+
+    window.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      var fresh = (e.timeStamp - fLastT) > 90;
+      fLastT = e.timeStamp;
+      if (fBusy || !fresh || Math.abs(e.deltaY) < 4) return;
+      flipCohort(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+
+    window.addEventListener("keydown", function (e) {
+      var tag = (e.target.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea" || tag === "select") return;
+      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); flipCohort(1); }
+      else if (e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); flipCohort(-1); }
+      else if (e.key === "Home") { e.preventDefault(); glideTo(0); }
+    });
+  }
+
   /* ── poster belt: 첫 노출 2초 후 우→좌로 도는 컨베이어 ── */
   document.querySelectorAll("[data-belt]").forEach(function (belt) {
     var track = belt.querySelector("[data-belt-track]");
@@ -154,7 +288,7 @@
   });
 
   /* ── smooth scrolling (Lenis) — 스냅 모드에서는 비활성 ── */
-  if (!bookMode && !reduced && typeof window.Lenis !== "undefined") {
+  if (!bookMode && !cohortFlip && !reduced && typeof window.Lenis !== "undefined") {
     lenis = new window.Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
     docEl.classList.add("lenis-on");
 
@@ -197,6 +331,7 @@
   if (menu) {
     var openMenu = function (open) {
       menu.classList.toggle("is-open", open);
+      document.body.classList.toggle("menu-open", open);
       menu.setAttribute("aria-hidden", open ? "false" : "true");
       if (lenis) { open ? lenis.stop() : lenis.start(); }
       document.body.style.overflow = open ? "hidden" : "";
@@ -218,19 +353,33 @@
     gsap.registerPlugin(window.ScrollTrigger);
     docEl.classList.add("gsap-on");
 
-    gsap.set(".reveal", { opacity: 0, y: 34 });
+    /* 아카이브 타이틀이 있는 화면은 선과 한 몸으로 위에서 아래로 펼쳐진다.
+       y 이동 없이 불투명도만 바꿔 위쪽 순서대로 흘려보낸다 — 아래에서
+       밀려 올라오는 느낌도 없고, 여러 요소를 동시에 옮기며 생기던
+       버벅임도 사라진다. */
+    var unfold = !!document.querySelector(".archive-title");
+    var firstHold = unfold ? 0.5 : 0;
+
+    gsap.set(".reveal", unfold ? { opacity: 0 } : { opacity: 0, y: 34 });
+
     window.ScrollTrigger.batch(".reveal", {
       start: "top 88%",
       once: true,
       onEnter: function (els) {
+        els.sort(function (a, b) {
+          return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+        });
         gsap.to(els, {
-          opacity: 1, y: 0,
-          duration: 1.0,
-          ease: "power3.out",
-          stagger: 0.07,
+          opacity: 1,
+          y: 0,
+          duration: unfold ? 0.55 : 1.0,
+          delay: firstHold,
+          ease: unfold ? "power2.out" : "power3.out",
+          stagger: unfold ? 0.05 : 0.07,
           overwrite: true,
           onComplete: function () { els.forEach(function (el) { el.classList.add("is-in"); }); }
         });
+        firstHold = 0;
       }
     });
 
@@ -360,6 +509,34 @@
       window.addEventListener("load", go, { once: true });
     }
     fromHash();
+
+    /* 지금 보고 있는 기수의 번호를 볼드로 — 필터를 직접 건 상태에서는
+       그 번호를 그대로 둔다 */
+    var groups = Array.prototype.slice.call(scope.querySelectorAll("[data-cohort-group]"));
+    if (groups.length) {
+      var filtered = false;
+      tabs.addEventListener("click", function (ev) {
+        var b = ev.target.closest("[data-filter]");
+        if (b) filtered = b.getAttribute("data-filter") !== "all";
+      });
+
+      var spy = function () {
+        if (filtered) return;
+        var line = window.scrollY + window.innerHeight * 0.55;
+        var cur = null;
+        groups.forEach(function (g) {
+          if (g.style.display === "none") return;
+          if (g.getBoundingClientRect().top + window.scrollY <= line) cur = g;
+        });
+        var val = cur ? cur.id.replace("cohort-", "") : "all";
+        tabs.querySelectorAll("[data-filter]").forEach(function (b) {
+          b.classList.toggle("is-active", b.getAttribute("data-filter") === val);
+        });
+      };
+      window.addEventListener("scroll", spy, { passive: true });
+      window.addEventListener("resize", spy);
+      spy();
+    }
     window.addEventListener("hashchange", fromHash);
   });
 
@@ -374,21 +551,32 @@
     var count = title.querySelector(".at-count");
     if (!rule || !count) return;
 
-    var end = parseInt((count.textContent || "").trim(), 10);
-    if (!isFinite(end)) return;
+    /* 숫자 하나면 세어 올리고, 연도 범위(2020-26)처럼 숫자가 아니면 번지기만 한다 */
+    var raw = (count.textContent || "").trim();
+    var counts = /^\d+$/.test(raw);
+    var end = counts ? parseInt(raw, 10) : 0;
 
+    /* 자릿수를 고정해 두면 세는 동안 폭이 흔들리지 않아 선 길이도 그대로다 */
+    var pad = String(end).length;
     var n = { v: 0 };
-    window.gsap.set(rule, { scaleX: 0 });
-    count.textContent = "0";
 
-    window.gsap.timeline({ delay: 0.35 })
+    window.gsap.set(rule, { scaleX: 0 });
+    window.gsap.set(count, { "--at-wipe": "100%" });   /* 처음엔 완전히 가려 둔다 */
+
+    var tl = window.gsap.timeline({ delay: 0.15 })
       .to(rule, { scaleX: 1, duration: 0.9, ease: "power3.out" })
-      .to(n, {
+      .to(count, { "--at-wipe": "0%", duration: 0.75, ease: "power2.out" }, "-=0.4");
+
+    if (counts) {
+      tl.to(n, {
         v: end,
-        duration: 1.2,
+        duration: 1.1,
         ease: "power2.out",
-        onUpdate: function () { count.textContent = String(Math.round(n.v)); }
-      }, "-=0.45");
+        onUpdate: function () {
+          count.textContent = String(Math.round(n.v)).padStart(pad, "0");
+        }
+      }, "<");
+    }
   })();
 
   /* ── back to top ─────────────────────────── */
@@ -396,18 +584,17 @@
      직접 몰기 때문에 대상에서 뺀다. */
   (function () {
     var btn = document.querySelector("[data-to-top]");
-    if (!btn || bookMode) return;
+    if (!btn) return;
 
-    var NEAR_END = 160;
     var shown = false;
 
     var sync = function () {
-      var atEnd = window.scrollY + window.innerHeight >=
-                  document.documentElement.scrollHeight - NEAR_END;
-      if (atEnd === shown) return;
-      shown = atEnd;
-      btn.hidden = !atEnd;
-      if (atEnd) { btn.classList.remove("is-in"); void btn.offsetWidth; btn.classList.add("is-in"); }
+      /* 두 화면을 지나 셋째 구간에 들어서면 올라온다 */
+      var deep = window.scrollY >= window.innerHeight * 2;
+      if (deep === shown) return;
+      shown = deep;
+      btn.hidden = !deep;
+      if (deep) { btn.classList.remove("is-in"); void btn.offsetWidth; btn.classList.add("is-in"); }
     };
 
     btn.addEventListener("click", function () {
@@ -473,4 +660,56 @@
       });
     });
   });
+
+  /* ── projects: 타이틀 + 롤링 + 푸터를 한 화면에 ──────
+     대표작 칸을 걷어낸 만큼 포스터를 키워 남는 높이를 롤링이 다 쓴다.
+     JS가 없으면 CSS 의 svh 기준 크기가 그대로 남는다. */
+  (function () {
+    var wrap = document.querySelector(".projects-index .pj-belt-wrap");
+    if (!wrap) return;
+    var belt = wrap.querySelector(".poster-belt");
+    var caps = Array.prototype.slice.call(wrap.querySelectorAll(".poster-card .pcap"));
+    if (!belt || !caps.length) return;
+
+    /* 벨트 높이는 가장 높은 캡션이 정한다 — 첫 장만 재면 모자란다 */
+    var capMax = function () {
+      var h = 0;
+      caps.forEach(function (c) { h = Math.max(h, c.getBoundingClientRect().height); });
+      return h;
+    };
+
+    var px = function (v) { return parseFloat(v) || 0; };
+
+    /* 폭을 좁히면 캡션 제목이 한 줄 더 접히면서 캡션이 높아진다 —
+       재고 → 적용 → 다시 재기를 몇 번 돌려 수렴시킨다. */
+    var fit = function () {
+      docEl.style.removeProperty("--pj-card-w");     /* 재기 전에 원래 크기로 돌린다 */
+      if (!window.matchMedia("(min-width: 901px)").matches) return;
+
+      var bs = getComputedStyle(belt);
+      var ws = getComputedStyle(wrap);
+      var chrome = px(bs.paddingTop) + px(bs.paddingBottom) +
+                   px(bs.borderTopWidth) + px(bs.borderBottomWidth) +
+                   px(ws.paddingBottom);
+      var top = wrap.getBoundingClientRect().top + window.scrollY;
+      var capH = 0;
+      var w = 0;
+
+      for (var i = 0; i < 4; i++) {
+        capH = Math.max(capH, capMax());   /* 한 번 늘면 되돌리지 않는다 */
+        var figH = window.innerHeight - top - chrome - capH - footH();
+        /* 포스터는 3:4 — 높이에서 폭이 나온다 */
+        var next = Math.round(Math.max(96, Math.min(figH * 0.75, 330)));
+        if (next === w) break;
+        w = next;
+        docEl.style.setProperty("--pj-card-w", w + "px");
+      }
+    };
+
+    fit();
+    requestAnimationFrame(fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    window.addEventListener("load", fit);
+    window.addEventListener("resize", fit);
+  })();
 })();
