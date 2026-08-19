@@ -7,7 +7,7 @@ body_class: artists-index has-flip
 ---
 {% assign cohorts = site.artists | map: "cohort" | uniq | sort | reverse %}
 
-<section class="page-hero wrap flip-page">
+<section class="page-hero wrap artists-hero">
   <p class="label label--muted reveal">RESIDENCY ARCHIVE</p>
   <h1 class="archive-title display reveal">
     <span class="at-word">Artists</span>
@@ -29,7 +29,7 @@ body_class: artists-index has-flip
   {% for c in cohorts %}
   {% assign group = site.artists | where: "cohort", c | sort: "ename" %}
   {% assign sample = group | first %}
-  <div class="cohort-group flip-page" id="cohort-{{ c }}" data-cohort-group data-flip-sticky>
+  <div class="cohort-group{% unless forloop.first %} flip-page{% endunless %}" id="cohort-{{ c }}" data-cohort-group{% unless forloop.first %} data-flip-sticky{% endunless %}>
     <div class="cohort-head reveal">
       <span class="cohort-year">{{ sample.year }}<span class="cohort-no">({{ c }}기)</span></span>
     </div>

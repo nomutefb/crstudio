@@ -18,15 +18,19 @@ body_class: has-flip
   <p class="desc reveal">{{ site.data.program.note }}</p>
 </section>
 
-<section class="wrap flip-page hs-page">
+<section class="wrap flip-page hs-page hs-about">
   <p class="label label--muted reveal hs-label">{{ s.intro.label }}</p>
-  <div class="intro-grid">
-    <p class="intro-label label label--muted reveal">STUDIO</p>
-    <div class="intro-body reveal">
+  <div class="hs-about-grid">
+    <div class="hs-about-copy reveal">
       <h2 class="intro-heading">{{ s.intro.heading }}</h2>
       {% for p in s.intro.paragraphs %}<p>{{ p }}</p>{% endfor %}
-      {% if s.facility and s.facility != "" %}<p class="label label--muted" style="margin-top:8px;line-height:2">{{ s.facility }}</p>{% endif %}
+      {% if s.facility and s.facility != "" %}<p class="label label--muted hs-facility">{{ s.facility }}</p>{% endif %}
     </div>
+    {% if s.backcover.image and s.backcover.image != "" %}
+    <figure class="hs-about-img reveal">
+      <img src="{{ s.backcover.image | relative_url }}" alt="" loading="lazy">
+    </figure>
+    {% endif %}
   </div>
 </section>
 
@@ -34,7 +38,7 @@ body_class: has-flip
   <p class="label label--muted reveal hs-label">HOW IT WORKS — 운영 구조</p>
   <div class="acc reveal">
     {% for pr in s.program %}
-    <details {% if forloop.first %}open{% endif %}>
+    <details open>
       <summary><span class="chev"></span><span class="acc-title">{{ pr.title }}</span></summary>
       <p class="acc-body">{{ pr.desc }}</p>
     </details>

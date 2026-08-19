@@ -1704,9 +1704,18 @@ html.js.gsap-on .reveal { transition: none; }
 /* 기수 한 묶음이 한 화면을 차지하게 — 휠 한 번에 한 기수로 넘어가는
    플립과 짝이다. 행 여백은 화면 높이에 맞춰 조여 6인 기수까지 들어온다. */
 @media (min-width: 901px) {
-  body.has-flip .cohort-group {
+  body.has-flip .cohort-group.flip-page {
     min-height: calc(100svh - var(--head-h-sm) - var(--cohort-nav-h));
+    padding-top: var(--flip-gap);   /* 번호 줄에 바짝 붙지 않게 */
   }
+
+  /* 첫 화면은 타이틀과 최신 기수가 나눠 쓴다 — 히어로를 그만큼 조인다 */
+  .artists-hero {
+    padding-top: calc(var(--head-h) + clamp(14px, 2.6vh, 34px));
+    padding-bottom: clamp(12px, 2vh, 24px);
+  }
+
+  .artists-hero .desc { margin-top: 12px; }
 
   body.has-flip .artist-row { padding: clamp(8px, 1.9vh, 26px) 0; }
 }
@@ -1843,11 +1852,46 @@ body.tide-open .to-top { visibility: hidden; }
 .hs-label { margin-bottom: clamp(14px, 2.4vh, 26px); }
 
 @media (min-width: 901px) {
-  body.has-flip .hs-page,
-  body.has-flip .band.flip-page {
+  body.has-flip .hs-page {
     min-height: calc(100svh - var(--head-h-sm));
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
+
+  /* 레지던시 밴드는 화면을 다 먹지 않는다 — 이 면에서 푸터까지 같이 보이게 */
+  body.has-flip .band.flip-page {
+    padding-top: clamp(48px, 7vh, 88px);
+    padding-bottom: clamp(48px, 7vh, 88px);
+  }
+}
+
+/* History 소개 — 글은 왼쪽, 사진은 오른쪽 */
+
+.hs-about-copy > p { margin-top: 14px; }
+.hs-about-copy .intro-heading { margin-bottom: 4px; }
+.hs-facility { margin-top: 16px; line-height: 2; }
+
+.hs-about-img {
+  margin: 0;
+  overflow: hidden;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+}
+
+.hs-about-img img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (min-width: 901px) {
+  .hs-about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(280px, 34vw, 560px);
+    align-items: center;
+    gap: clamp(28px, 4vw, 72px);
+  }
+
+  .hs-about-img { height: clamp(220px, 40svh, 440px); }
+}
+
+@media (max-width: 900px) {
+  .hs-about-img { aspect-ratio: 3 / 2; margin-top: clamp(20px, 4vh, 36px); }
 }

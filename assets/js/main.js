@@ -476,7 +476,7 @@
 
       var spy = function () {
         if (filtered) return;
-        var line = window.scrollY + window.innerHeight * 0.35;
+        var line = window.scrollY + window.innerHeight * 0.55;
         var cur = null;
         groups.forEach(function (g) {
           if (g.style.display === "none") return;
