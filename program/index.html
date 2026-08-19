@@ -8,7 +8,8 @@ body_class: has-flip
 {% assign s = site.data.settings %}
 {% assign years = site.data.program.years %}
 
-<section class="page-hero wrap flip-page">
+<div class="hs-first">
+<section class="page-hero wrap hs-hero">
   <p class="label label--muted reveal">ANNUAL CYCLE — 연혁</p>
   <h1 class="archive-title display reveal">
     <span class="at-word">History</span>
@@ -18,7 +19,7 @@ body_class: has-flip
   <p class="desc reveal">{{ site.data.program.note }}</p>
 </section>
 
-<section class="wrap flip-page hs-page hs-about">
+<section class="wrap hs-about hs-about--first">
   <p class="label label--muted reveal hs-label">{{ s.intro.label }}</p>
   <div class="hs-about-grid">
     <div class="hs-about-copy reveal">
@@ -33,6 +34,7 @@ body_class: has-flip
     {% endif %}
   </div>
 </section>
+</div>
 
 <section class="wrap flip-page hs-page">
   <p class="label label--muted reveal hs-label">HOW IT WORKS — 운영 구조</p>
@@ -54,7 +56,7 @@ body_class: has-flip
   <p class="label label--muted reveal" style="margin-top:22px">자료 기준 — GS칼텍스 예울마루 창작스튜디오 아카이브. 세부 일정은 관리자에서 계속 보완됩니다.</p>
 </section>
 
-<section class="band flip-page" id="residency">
+<section class="band flip-page flip-last" id="residency">
   <div class="wrap">
     <div class="section-head reveal">
       <h2 class="section-title display">Residency</h2>

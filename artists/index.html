@@ -29,7 +29,7 @@ body_class: artists-index has-flip
   {% for c in cohorts %}
   {% assign group = site.artists | where: "cohort", c | sort: "ename" %}
   {% assign sample = group | first %}
-  <div class="cohort-group{% unless forloop.first %} flip-page{% endunless %}" id="cohort-{{ c }}" data-cohort-group{% unless forloop.first %} data-flip-sticky{% endunless %}>
+  <div class="cohort-group{% unless forloop.first %} flip-page{% endunless %}{% if forloop.last %} flip-last{% endif %}" id="cohort-{{ c }}" data-cohort-group>
     <div class="cohort-head reveal">
       <span class="cohort-year">{{ sample.year }}<span class="cohort-no">({{ c }}기)</span></span>
     </div>

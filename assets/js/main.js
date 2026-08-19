@@ -117,24 +117,71 @@
     docEl.classList.add("snap-on");
 
     var cs = getComputedStyle(docEl);
+    var foot = document.querySelector(".site-foot");
+    var cohortNav = document.querySelector(".cohort-nums");
+
+    /* 면이 걸리는 높이 = 줄어든 헤더 + (있다면) 기수 번호 줄.
+       CSS 도 같은 값을 써야 면 높이가 정확히 한 화면이 된다. */
     var stickyH = function () {
-      return parseFloat(cs.getPropertyValue("--head-h-sm")) +
-             parseFloat(cs.getPropertyValue("--cohort-nav-h"));
+      var h = parseFloat(cs.getPropertyValue("--head-h-sm")) || 0;
+      if (cohortNav) h += cohortNav.getBoundingClientRect().height;
+      return Math.round(h);
     };
 
-    var fPages = Array.prototype.slice.call(
-      document.querySelectorAll(".flip-page, .site-foot")
-    );
+    var fPages = Array.prototype.slice.call(document.querySelectorAll(".flip-page"));
+    var lastPage = fPages[fPages.length - 1];
 
-    /* data-flip-sticky 가 붙은 면은 헤더 + 스티키 줄 아래에 걸린다 */
+    /* 마지막 면 아래에 남는 것(푸터 + 그 사이 여백) 높이.
+       마지막 면을 딱 그만큼 줄여 두면 면의 정지점이 문서 맨 아래와 같아진다 —
+       끝까지 내리면 마지막 기수와 푸터가 한 화면에 같이 선다. */
+    var tailH = function () {
+      if (!lastPage) return foot ? Math.round(foot.getBoundingClientRect().height) : 0;
+      var r = lastPage.getBoundingClientRect();
+      return Math.max(0, Math.round(docEl.scrollHeight - (r.top + window.scrollY + r.height)));
+    };
+
+    var syncVars = function () {
+      docEl.style.setProperty("--flip-sticky", stickyH() + "px");
+      docEl.style.setProperty("--foot-h", tailH() + "px");
+    };
+    syncVars();
+    /* 웹폰트가 앉으면 스티키 줄·푸터 높이가 달라진다 — 자리가 잡힌 뒤 한 번 더 */
+    var settle = function () {
+      syncVars();
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    };
+    requestAnimationFrame(settle);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+    window.addEventListener("load", settle);
+    window.addEventListener("resize", syncVars);
+
     var fTop = function (el) {
       if (el.classList.contains("page-hero")) return 0;
-      var y = el.getBoundingClientRect().top + window.scrollY;
-      return Math.max(0, y - (el.hasAttribute("data-flip-sticky") ? stickyH() : 0));
+      return el.getBoundingClientRect().top + window.scrollY - stickyH();
     };
 
     var maxY = function () {
-      return document.documentElement.scrollHeight - window.innerHeight;
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    };
+
+    /* 설 자리 목록. 면 목록에 없는 맨 위(0)와 맨 아래도 정거장이다 —
+       첫 화면은 타이틀이 첫 면과 한 화면을 나눠 쓰기 때문에 면이 아니다. */
+    var fStops = function () {
+      var vh = window.innerHeight;
+      var mx = maxY();
+      var list = [0, mx];
+      fPages.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        var y = fTop(el);
+        list.push(y);
+        /* 화면보다 긴 면은 아래끝도 한 정거장 — 잘린 채로 넘어가지 않게 */
+        var tail = r.top + window.scrollY + r.height - vh;
+        if (tail > y + 8) list.push(tail);
+      });
+      list = list
+        .map(function (v) { return Math.max(0, Math.min(mx, Math.round(v))); })
+        .sort(function (a, b) { return a - b; });
+      return list.filter(function (v, i) { return i === 0 || v - list[i - 1] > 8; });
     };
 
     var fBusy = false;
@@ -159,19 +206,15 @@
        스크롤바·앵커로 움직였을 때 어긋난다. */
     var flipCohort = function (dir) {
       var y = window.scrollY;
-      var tops = fPages.map(fTop).sort(function (a, b) { return a - b; });
+      var stops = fStops();
       var target = null;
       var i;
       if (dir > 0) {
-        for (i = 0; i < tops.length; i++) { if (tops[i] > y + 8) { target = tops[i]; break; } }
+        for (i = 0; i < stops.length; i++) { if (stops[i] > y + 8) { target = stops[i]; break; } }
       } else {
-        for (i = tops.length - 1; i >= 0; i--) { if (tops[i] < y - 8) { target = tops[i]; break; } }
+        for (i = stops.length - 1; i >= 0; i--) { if (stops[i] < y - 8) { target = stops[i]; break; } }
       }
       if (target === null) return;
-      /* 다음 면이 한 화면보다 멀면(= 지금 면이 화면보다 길면) 한 화면씩 간다 */
-      if (Math.abs(target - y) > window.innerHeight) {
-        target = y + (dir > 0 ? 1 : -1) * window.innerHeight * 0.85;
-      }
       glideTo(target);
     };
 
