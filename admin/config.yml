@@ -5,7 +5,7 @@
 
 backend:
   name: github
-  repo: nomutefb/crstudio
+  repo: yeulmaru/crstudio
   branch: main
   automatic_deployments: true
 

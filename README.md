@@ -12,7 +12,7 @@ The Cultivist 에이전시 페이지의 정보 구조(히어로 → 소개 → �
 ## 1. 처음 한 번만 하는 설정
 
 ### ① 호스팅 (Cloudflare Pages)
-`nomutefb/crstudio` 저장소가 Cloudflare Pages 프로젝트 `crstudio`에 연결되어 있습니다.
+`yeulmaru/crstudio` 저장소가 Cloudflare Pages 프로젝트 `crstudio`(배포 주소 `crstudio-3re.pages.dev`)에 연결됩니다.
 `main`에 push하면 자동으로 빌드·배포됩니다. 빌드 설정은 다음과 같습니다.
 
 | 항목 | 값 |
@@ -25,7 +25,7 @@ The Cultivist 에이전시 페이지의 정보 구조(히어로 → 소개 → �
 게시물을 올릴 사람(관리자)은 GitHub 토큰 하나만 있으면 됩니다.
 
 1. https://github.com/settings/personal-access-tokens → **Generate new token** (Fine-grained)
-2. Repository access: **Only select repositories → nomutefb/crstudio**
+2. Repository access: **Only select repositories → yeulmaru/crstudio**
 3. Permissions → Repository permissions → **Contents: Read and write**
 4. 토큰 문자열 복사
 
